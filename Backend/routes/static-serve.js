@@ -72,6 +72,7 @@ const setupFileServing = (app, cacheMiddleware) => {
             "..",
             "..",
             "Frontend",
+            "Portal",
             "Home",
             "home.html",
         );
