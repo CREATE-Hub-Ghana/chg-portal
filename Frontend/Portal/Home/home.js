@@ -75,23 +75,43 @@ window.addEventListener("scroll", function () {
     console.log('[hero rotator] visible=a, next index=', idx, 'nextImage=', images[idx]);
 
     // Cross-fade to next image by placing it on the hidden layer and toggling opacities
+    const TRANSITION_MS = 1000; // should match CSS transition duration
+    let isTransitioning = false;
+    let transitionTimeout = null;
+
     function crossFadeTo(nextImage) {
+        if (isTransitioning) {
+            console.log('[hero rotator] crossFade skipped (in-progress)');
+            return;
+        }
+
         const hidden = visible === 'a' ? 'b' : 'a';
+
         console.log('[hero rotator] crossFadeTo nextImage=', nextImage, 'hidden=', hidden, 'visible=', visible);
 
-        // set hidden layer to next image and ensure it's hidden
+        isTransitioning = true;
+        if (transitionTimeout) clearTimeout(transitionTimeout);
+
+        // set hidden layer background and ensure it's fully hidden first
         setLayer(hidden, nextImage, 0);
 
-        // give the browser a tick to apply background change
+        // force a reflow so the browser registers the new background before transition
+        // eslint-disable-next-line no-unused-expressions
+        root.offsetWidth;
+
+        // start cross-fade: show hidden layer and hide visible layer in same frame
         requestAnimationFrame(() => {
-            // start cross-fade: bring hidden layer up, hide visible layer
             setLayer(hidden, nextImage, 0.42);
             setLayer(visible, null, 0);
-
-            // after transition completes, swap visible marker
-            visible = hidden;
-            console.log('[hero rotator] now visible=', visible);
         });
+
+        // After transition duration, finalize swap
+        transitionTimeout = setTimeout(() => {
+            visible = hidden;
+            isTransitioning = false;
+            transitionTimeout = null;
+            console.log('[hero rotator] now visible=', visible);
+        }, TRANSITION_MS + 80);
     }
 
     // Start interval (10 seconds)
@@ -100,4 +120,60 @@ window.addEventListener("scroll", function () {
         console.log('[hero rotator] tick, idx=', idx, 'image=', images[idx]);
         crossFadeTo(images[idx]);
     }, 10000);
+})();
+
+// Counters: increment .gns-value elements from 0 to data-target on page load
+(() => {
+    function animateCounters() {
+        const counters = document.querySelectorAll('.gns-value');
+        if (!counters || counters.length === 0) return;
+
+        counters.forEach(el => {
+            // If already animated, skip
+            if (el.dataset.animated === 'true') return;
+
+            const target = parseInt(el.getAttribute('data-target') || '0', 10);
+            const suffix = el.getAttribute('data-suffix') || '';
+
+            // Set initial display to 0 plus suffix inside the bold tag if present, else directly
+            const bold = el.querySelector('b');
+            if (bold) bold.textContent = '0' + suffix;
+            else el.textContent = '0' + suffix;
+
+            if (target <= 0) {
+                el.dataset.animated = 'true';
+                return;
+            }
+
+            // Duration and step calculation: make it fast but smooth
+            const duration = 900; // ms total for counting
+            const fps = 60;
+            const totalFrames = Math.round((duration / 850) * fps);
+            const increment = Math.max(1, Math.floor(target / totalFrames));
+
+            let current = 0;
+
+            const tick = () => {
+                current += increment;
+                if (current >= target) current = target;
+
+                if (bold) bold.textContent = current + suffix;
+                else el.textContent = current + suffix;
+
+                if (current < target) {
+                    // schedule next frame
+                    requestAnimationFrame(tick);
+                } else {
+                    el.dataset.animated = 'true';
+                }
+            };
+
+            // Start the first frame
+            requestAnimationFrame(tick);
+        });
+    }
+
+    // Run on load (defer script already used) and also when coming back via bfcache/navigation
+    window.addEventListener('load', animateCounters);
+    window.addEventListener('pageshow', (e) => { if (e.persisted) animateCounters(); });
 })();
