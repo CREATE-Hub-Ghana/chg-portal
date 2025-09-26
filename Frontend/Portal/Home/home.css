@@ -948,7 +948,7 @@ nav {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 520px) {
     nav {
         height: 48px;
         /* background-color: red; */

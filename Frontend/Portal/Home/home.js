@@ -50,6 +50,68 @@ window.addEventListener("scroll", function () {
         }
     });
 
+    // Desktop nav buttons: mirror behavior of mobile menu (scroll + update selection)
+    (function setupDesktopNavButtons() {
+        const navBtns = Array.from(document.querySelectorAll('.nav-btn'));
+        if (!navBtns || navBtns.length === 0) return;
+
+        function clearDesktopSelection() {
+            navBtns.forEach(b => b.classList.remove('selected'));
+        }
+
+        function clearMobileSelection() {
+            const mobileBtns = document.querySelectorAll('.m-btn');
+            mobileBtns.forEach(b => b.classList.remove('selected'));
+        }
+
+        const servicesEl = document.querySelector('.second-sec');
+
+        navBtns.forEach((btn, idx) => {
+            // determine logical role by textContent (robust to markup)
+            const text = (btn.textContent || '').trim().toLowerCase();
+
+            function activate() {
+                clearDesktopSelection();
+                clearMobileSelection();
+                btn.classList.add('selected');
+                const mobileHome = document.getElementById('home-m-btn');
+                const mobileServices = document.getElementById('services-m-btn');
+
+                // Close mobile overlay if open
+                try {
+                    menuOpen = false; // parent scope variable
+                    updateMenu();
+                } catch (e) {
+                    // ignore if not in scope
+                }
+
+                if (text === 'home') {
+                    if (mobileHome) mobileHome.classList.add('selected');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (text === 'services') {
+                    if (mobileServices) mobileServices.classList.add('selected');
+                    // compute target locally to avoid relying on outer-scope function
+                    const servicesElement = document.querySelector('.second-sec');
+                    const navbarEl = document.querySelector('#navbar');
+                    const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
+                    const target = servicesElement ? Math.max(0, servicesElement.offsetTop - navHeight) : window.innerHeight;
+                    window.scrollTo({ top: target, behavior: 'smooth' });
+                }
+            }
+
+            btn.addEventListener('click', (e) => {
+                activate();
+            });
+
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    activate();
+                }
+            });
+        });
+    })();
+
     let idx = 0;
     const root = hero;
 
@@ -154,6 +216,16 @@ window.addEventListener("scroll", function () {
         }
     }
 
+    // Compute scroll target for the services section so it sits fully under the navbar
+    function computeServicesTarget() {
+        const servicesEl = document.querySelector('.second-sec');
+        if (!servicesEl) return window.innerHeight;
+        const navbarEl = document.querySelector('#navbar');
+        const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
+        // offsetTop is distance from document top; subtract navbar height so the section appears below it
+        return Math.max(0, servicesEl.offsetTop - navHeight);
+    }
+
     menuBtn.addEventListener('click', () => {
         menuOpen = !menuOpen;
         updateMenu();
@@ -207,8 +279,13 @@ window.addEventListener("scroll", function () {
                 // optional: close menu when an item is chosen
                 // Close menu when an item is chosen and scroll for specific IDs
                 if (btn.id === 'services-m-btn') {
-                    // scroll to 100vh from top smoothly
-                    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                    // scroll so the services section sits below the navbar
+                    const target = computeServicesTarget();
+                    window.scrollTo({ top: target, behavior: 'smooth' });
+                }
+                if (btn.id === 'home-m-btn') {
+                    // scroll to top smoothly
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
                 menuOpen = false;
                 updateMenu();
@@ -219,13 +296,69 @@ window.addEventListener("scroll", function () {
                     e.preventDefault();
                     selectButton(btn);
                     if (btn.id === 'services-m-btn') {
-                        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                        const target = computeServicesTarget();
+                        window.scrollTo({ top: target, behavior: 'smooth' });
+                    }
+                    if (btn.id === 'home-m-btn') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                     menuOpen = false;
                     updateMenu();
                 }
             });
         });
+
+        // Highlight Home or Services in the mobile menu using IntersectionObserver for smoother thresholding
+        const servicesEl = document.querySelector('.second-sec');
+        const homeBtn = document.getElementById('home-m-btn');
+        const servicesBtn = document.getElementById('services-m-btn');
+
+        // also find desktop nav buttons to sync selection
+        const desktopHome = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'home');
+        const desktopServices = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'services');
+
+        if (servicesEl && homeBtn && servicesBtn && 'IntersectionObserver' in window) {
+            // When services section is at least 40% visible, mark Services selected
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                        // mobile
+                        homeBtn.classList.remove('selected');
+                        servicesBtn.classList.add('selected');
+                        // desktop
+                        if (desktopHome) desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices.classList.add('selected');
+                    } else if (entry.intersectionRatio < 0.5) {
+                        servicesBtn.classList.remove('selected');
+                        homeBtn.classList.add('selected');
+                        if (desktopServices) desktopServices.classList.remove('selected');
+                        if (desktopHome) desktopHome.classList.add('selected');
+                    }
+                });
+            }, { threshold: [0, 0.25, 0.4, 0.5, 0.75, 1] });
+
+            observer.observe(servicesEl);
+        } else if (homeBtn && servicesBtn) {
+            // Fallback: simple threshold based on scrollY
+            function fallbackUpdate() {
+                const scrollY = window.scrollY || window.pageYOffset;
+                const threshold = servicesEl ? (servicesEl.getBoundingClientRect().top + window.scrollY) - 50 : window.innerHeight / 2;
+                if (scrollY >= threshold) {
+                    homeBtn.classList.remove('selected');
+                    servicesBtn.classList.add('selected');
+                    if (desktopHome) desktopHome.classList.remove('selected');
+                    if (desktopServices) desktopServices.classList.add('selected');
+                } else {
+                    servicesBtn.classList.remove('selected');
+                    homeBtn.classList.add('selected');
+                    if (desktopServices) desktopServices.classList.remove('selected');
+                    if (desktopHome) desktopHome.classList.add('selected');
+                }
+            }
+
+            fallbackUpdate();
+            window.addEventListener('scroll', () => { fallbackUpdate(); });
+        }
     })();
 })();
 
