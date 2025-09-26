@@ -126,6 +126,7 @@ window.addEventListener("scroll", function () {
 (() => {
     const menuBtn = document.querySelector('.menu-btn');
     const menuContainer = document.querySelector('.menu-container');
+    const mBtnContainer = document.querySelector('.m-btn-container');
     if (!menuBtn) return;
 
     const img = menuBtn.querySelector('img');
@@ -143,11 +144,13 @@ window.addEventListener("scroll", function () {
             if (img) img.src = CLOSE_ICON;
             menuBtn.style.backgroundColor = 'rgba(59, 131, 246, 0.25)';
             menuContainer.classList.add('shown');
+            if (mBtnContainer) mBtnContainer.classList.add('shown');
         } else {
             document.body.classList.remove('menu-open');
             if (img) img.src = MENU_ICON;
             menuBtn.style.backgroundColor = '';
             menuContainer.classList.remove('shown');
+            if (mBtnContainer) mBtnContainer.classList.remove('shown');
         }
     }
 
@@ -165,6 +168,37 @@ window.addEventListener("scroll", function () {
             updateMenu();
         }
     });
+
+    // Mobile menu item selection: toggle .selected on .m-btn
+    (function setupMobileMenuSelection() {
+        if (!mBtnContainer) return;
+        const mBtns = Array.from(mBtnContainer.querySelectorAll('.m-btn'));
+        if (!mBtns || mBtns.length === 0) return;
+
+        function selectButton(btn) {
+            mBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        mBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                selectButton(btn);
+                // optional: close menu when an item is chosen
+                // menuOpen = false;
+                // updateMenu();
+            });
+
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectButton(btn);
+                    // optional: close menu on selection
+                    // menuOpen = false;
+                    // updateMenu();
+                }
+            });
+        });
+    })();
 })();
 
 // Counters: increment .gns-value elements from 0 to data-target on page load

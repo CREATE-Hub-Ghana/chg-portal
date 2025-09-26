@@ -171,7 +171,9 @@ nav {
         position: absolute;
         top: 55px;
         right: 10px;
+        display: flex;
         flex-direction: column;
+        align-items: center;
         width: 50px;
         height: 50px;
         /* height: auto; */
@@ -182,16 +184,93 @@ nav {
         backdrop-filter: blur(4px);
         opacity: 0;
         pointer-events: none;
-        transition: all 0.15s ease-out;
+        transition: all 0.2s ease-out;
         z-index: 100000;
+
+        padding: 15px;
+
+        .m-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: max-content;
+            background-color: transparent;
+            transition: all 0.15s ease-out;
+            gap: 5px;
+
+            .m-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                width: 100%;
+                height: 50px;
+                border-radius: 8px;
+                background-color: rgba(22, 15, 54, 0.005);
+                border: none;
+                outline: none;
+
+                transition: all 0.15s ease-out;
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    width: max-content;
+                    height: max-content;
+                    font-family: 'Poppins', Arial, sans-serif;
+                    font-size: 1.25em;
+                    font-weight: 550;
+                    color: #160f36;
+                    letter-spacing: 0.5px;
+                }
+
+                &:hover,
+                &:focus {
+                    background-color: rgba(0, 0, 0, 0.03);
+                    color: #160f36;
+                    font-weight: 550;
+                    transition: transform 180ms ease, color 180ms ease, background-color 180ms ease, font-weight 180ms ease;
+                    outline: none;
+                }
+
+                &:focus-visible {
+                    box-shadow: 0 0 0 4px rgba(4, 175, 152, 0.12);
+                }
+
+                &:active {
+                    transform: scale(0.97);
+                    transition: all 0.2s ease;
+                }
+            }
+
+            .m-btn.selected {
+                background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
+
+                span {
+                    color: #fff;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .m-btn-container.shown {
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.15s ease-out;
+        }
     }
 
     .menu-container.shown {
         opacity: 1;
         pointer-events: auto;
-        width: 70%;
+        width: calc(75% - 30px);
         min-width: 200px;
-        height: 350px;
+        height: max-content;
+        transition: all 0.2s ease-out;
     }
 }
 
