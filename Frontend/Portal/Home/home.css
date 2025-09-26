@@ -972,7 +972,25 @@ nav {
     }
 
     .first-sect-inner {
-        display: none;
+        display: flex;
+        width: 90vw;
+
+        .main-title {
+            height: max-content;
+            background-color: transparent;
+        }
+
+        .subtitle {
+            display: none;
+        }
+
+        .general-stats {
+            display: none;
+        }
+
+        .fs-btn-c {
+            display: none;
+        }
     }
 
     .second-sec {
