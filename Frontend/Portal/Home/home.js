@@ -205,17 +205,24 @@ window.addEventListener("scroll", function () {
             btn.addEventListener('click', (e) => {
                 selectButton(btn);
                 // optional: close menu when an item is chosen
-                // menuOpen = false;
-                // updateMenu();
+                // Close menu when an item is chosen and scroll for specific IDs
+                if (btn.id === 'services-m-btn') {
+                    // scroll to 100vh from top smoothly
+                    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                }
+                menuOpen = false;
+                updateMenu();
             });
 
             btn.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     selectButton(btn);
-                    // optional: close menu on selection
-                    // menuOpen = false;
-                    // updateMenu();
+                    if (btn.id === 'services-m-btn') {
+                        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                    }
+                    menuOpen = false;
+                    updateMenu();
                 }
             });
         });
