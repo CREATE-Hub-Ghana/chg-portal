@@ -132,6 +132,70 @@ nav {
             transition: all 0.3s ease;
         }
     }
+
+    .menu-btn {
+        display: none;
+        position: absolute;
+        right: 15px;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border: none;
+        outline: none;
+        border-radius: 8px;
+        background-color: rgba(59, 131, 246, 0.05);
+        transition: all 0.4s ease;
+
+        img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            filter: invert(0);
+            transition: all 0.3s ease;
+        }
+
+        &:hover {
+            /* background-color: rgba(0, 0, 0, 0.05); */
+            cursor: pointer;
+
+            img {
+                filter: invert(0.3);
+            }
+        }
+
+        &:active {
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+        }
+    }
+
+    .menu-container {
+        position: absolute;
+        top: 55px;
+        right: 10px;
+        flex-direction: column;
+        width: 50px;
+        height: 50px;
+        /* height: auto; */
+        background-color: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 2px 6px rgba(0, 123, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        overflow: hidden;
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.15s ease-out;
+        z-index: 100000;
+    }
+
+    .menu-container.shown {
+        opacity: 1;
+        pointer-events: auto;
+        width: 70%;
+        min-width: 200px;
+        height: 350px;
+    }
 }
 
 .first-sec {
@@ -803,10 +867,13 @@ nav {
 @media (max-width: 480px) {
     nav {
         height: 48px;
-        background-color: red;
+        /* background-color: red; */
 
         .logo-text-container {
-            display: none;
+            display: flex;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .nav-btn-container {
@@ -816,9 +883,25 @@ nav {
         .donate {
             display: none;
         }
+
+        .menu-btn {
+            display: flex;
+        }
+
+        /* .menu-container {
+            display: none;
+        } */
     }
 
     .first-sect-inner {
+        display: none;
+    }
+
+    .second-sec {
+        display: none;
+    }
+
+    .third-sec {
         display: none;
     }
 

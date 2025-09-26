@@ -122,6 +122,51 @@ window.addEventListener("scroll", function () {
     }, 10000);
 })();
 
+// Menu button: track open/closed state and swap icon src
+(() => {
+    const menuBtn = document.querySelector('.menu-btn');
+    const menuContainer = document.querySelector('.menu-container');
+    if (!menuBtn) return;
+
+    const img = menuBtn.querySelector('img');
+    // initial state
+    let menuOpen = false;
+    menuBtn.setAttribute('aria-expanded', 'false');
+
+    const MENU_ICON = "../../Universal/Icons/menu_black.svg";
+    const CLOSE_ICON = "../../Universal/Icons/close_black.svg";
+
+    function updateMenu() {
+        menuBtn.setAttribute('aria-expanded', String(menuOpen));
+        if (menuOpen) {
+            document.body.classList.add('menu-open');
+            if (img) img.src = CLOSE_ICON;
+            menuBtn.style.backgroundColor = 'rgba(59, 131, 246, 0.25)';
+            menuContainer.classList.add('shown');
+        } else {
+            document.body.classList.remove('menu-open');
+            if (img) img.src = MENU_ICON;
+            menuBtn.style.backgroundColor = '';
+            menuContainer.classList.remove('shown');
+        }
+    }
+
+    menuBtn.addEventListener('click', () => {
+        menuOpen = !menuOpen;
+        updateMenu();
+        console.log('[menu] toggled, open=', menuOpen);
+    });
+
+    // support keyboard activation (Enter / Space)
+    menuBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            menuOpen = !menuOpen;
+            updateMenu();
+        }
+    });
+})();
+
 // Counters: increment .gns-value elements from 0 to data-target on page load
 (() => {
     function animateCounters() {
