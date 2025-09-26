@@ -992,6 +992,7 @@ nav {
 
             span {
                 text-align: left;
+                font-size: xx-large;
             }
         }
 
@@ -1004,8 +1005,8 @@ nav {
 
             span {
                 text-align: left;
-                font-size: 0.8em;
-
+                font-size: 0.85em;
+                /* font-size: medium; */
             }
         }
 
