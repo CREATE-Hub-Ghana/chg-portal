@@ -187,7 +187,7 @@ nav {
         transition: all 0.2s ease-out;
         z-index: 100000;
 
-        padding: 15px;
+        padding: 15px 10px;
 
         .m-btn-container {
             display: flex;
@@ -226,11 +226,12 @@ nav {
                     font-weight: 550;
                     color: #160f36;
                     letter-spacing: 0.5px;
+                    margin-left: 5px;
                 }
 
                 &:hover,
                 &:focus {
-                    background-color: rgba(0, 0, 0, 0.03);
+                    /* background-color: rgba(0, 0, 0, 0.03); */
                     color: #160f36;
                     font-weight: 550;
                     transition: transform 180ms ease, color 180ms ease, background-color 180ms ease, font-weight 180ms ease;

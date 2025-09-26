@@ -143,13 +143,13 @@ window.addEventListener("scroll", function () {
             document.body.classList.add('menu-open');
             if (img) img.src = CLOSE_ICON;
             menuBtn.style.backgroundColor = 'rgba(59, 131, 246, 0.25)';
-            menuContainer.classList.add('shown');
+            if (menuContainer) menuContainer.classList.add('shown');
             if (mBtnContainer) mBtnContainer.classList.add('shown');
         } else {
             document.body.classList.remove('menu-open');
             if (img) img.src = MENU_ICON;
             menuBtn.style.backgroundColor = '';
-            menuContainer.classList.remove('shown');
+            if (menuContainer) menuContainer.classList.remove('shown');
             if (mBtnContainer) mBtnContainer.classList.remove('shown');
         }
     }
@@ -166,6 +166,27 @@ window.addEventListener("scroll", function () {
             e.preventDefault();
             menuOpen = !menuOpen;
             updateMenu();
+        }
+    });
+
+    // Close menu when clicking/tapping outside of it (or pressing Escape)
+    document.addEventListener('pointerdown', (e) => {
+        if (!menuOpen) return;
+        const target = e.target;
+        // if click is inside menu button or container, do nothing
+        if (menuBtn.contains(target)) return;
+        if (menuContainer && menuContainer.contains(target)) return;
+        // otherwise close
+        menuOpen = false;
+        updateMenu();
+        console.log('[menu] closed by outside click');
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menuOpen) {
+            menuOpen = false;
+            updateMenu();
+            console.log('[menu] closed by Escape');
         }
     });
 
