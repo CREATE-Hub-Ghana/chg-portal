@@ -452,7 +452,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 630px;
+    max-width: 630px;
     /* width: 65%; */
     height: 78px;
     background-color: transparent;
@@ -971,29 +971,62 @@ nav {
         } */
     }
 
+    .hashtag {
+        left: 5vw;
+    }
+
     .first-sect-inner {
         display: flex;
+        align-items: start;
         width: 90vw;
 
         .main-title {
             height: max-content;
             background-color: transparent;
+
+            span {
+                text-align: left;
+            }
         }
 
         .subtitle {
             display: flex;
             height: max-content;
+            width: 100%;
             background-color: transparent;
             margin-top: 2%;
 
             span {
+                text-align: left;
                 font-size: 0.8em;
 
             }
         }
 
         .general-stats {
-            display: none;
+            display: flex;
+            width: 100%;
+            background-color: transparent;
+            margin-top: 10%;
+
+            .gns-c { 
+                justify-content: center;
+                height: 95%;
+                width: 25%;
+                background-color: transparent;
+                gap: 5px;
+
+                .gns-value {
+                    width: max-content;
+                    font-size: 2em;
+                }
+
+                .gns-description {
+                    text-align: center;
+                    font-size: 0.79em;
+                    background-color: transparent;
+                }
+            }
         }
 
         .fs-btn-c {
