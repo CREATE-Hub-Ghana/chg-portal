@@ -1073,7 +1073,35 @@ nav {
     }
 
     .second-sec {
-        display: none;
+        display: flex;
+        width: 98%;
+        height: 1300px;
+        background-color: transparent;
+
+        .sc-header {
+            background-color: transparent;
+
+            span {
+                font-size: 2.6em;
+            }
+        }
+
+        .sc-sub {
+            top: 135px;
+            width: calc(90vw - 4px);
+            font-size: 1.05em;
+        }
+
+        .services-display-container {
+            flex-direction: column;
+            justify-content: space-between;
+            height: 75%;
+            background-color: transparent;
+
+            .service-card {
+                width: 100%;
+            }
+        }
     }
 
     .third-sec {
