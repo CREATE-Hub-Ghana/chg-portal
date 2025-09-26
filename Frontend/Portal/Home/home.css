@@ -981,7 +981,15 @@ nav {
         }
 
         .subtitle {
-            display: none;
+            display: flex;
+            height: max-content;
+            background-color: transparent;
+            margin-top: 2%;
+
+            span {
+                font-size: 0.8em;
+
+            }
         }
 
         .general-stats {
