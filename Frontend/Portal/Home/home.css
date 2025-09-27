@@ -1322,7 +1322,39 @@ nav {
     }
 
     .third-sec {
-        display: none;
+        display: flex;
+        height: 100vh;
+        background-color: transparent;
+
+        .support-org-container {
+            display: flex;
+            background-color: transparent;
+
+            .soc-header {
+                span {
+                    font-size: 1.25em;
+                }
+            }
+
+            .support-org-strip {
+                display: grid;
+                grid-template-columns: repeat(3, auto);
+                gap: 18px;
+                background-color: transparent;
+
+                .so-container {
+                    background-color: transparent;
+
+                    img {
+                        scale: 1.35;
+                    }
+                }
+            }
+        }
+
+        .ts-bottom-container {
+            display: none;
+        }
     }
 
     /* .first-sec {
