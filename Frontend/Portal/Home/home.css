@@ -883,7 +883,7 @@ nav {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    height: 635px;
     background-color: transparent;
 }
 
@@ -893,8 +893,9 @@ nav {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 185px;
+    height: 223px;
     background-color: transparent;
+    gap: 45px;
 
     .soc-header {
         display: flex;
@@ -915,17 +916,233 @@ nav {
             letter-spacing: 0.3px;
         }
     }
+
+    .support-org-strip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: max-content;
+        background-color: transparent;
+        gap: 32px;
+
+        transition: all 0.15s ease;
+
+        .so-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 110px;
+            height: 80px;
+            background-color: transparent;
+            overflow: hidden;
+            transition: all 0.15s ease;
+
+
+            padding: 10px 0;
+            /* box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.09); */
+            border-radius: 6px;
+
+            img {
+                width: 80%;
+                height: 60%;
+                object-fit: contain;
+            }
+
+            span {
+                display: none;
+                justify-content: center;
+                align-items: end;
+                text-align: center;
+                width: 100%;
+                height: max-content;
+                font-family: 'Manrope', sans-serif;
+                font-size: 0.82em;
+                font-weight: 550;
+                color: #160f36;
+                letter-spacing: 0.2px;
+                opacity: 0.98;
+            }
+
+            &:hover {
+                /* box-shadow: 0 10px 30px rgba(22, 15, 54, 0.08), 0 6px 12px rgba(22, 15, 54, 0.06), 0 2px 4px rgba(22, 15, 54, 0.04); */
+                /* box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.09); */
+                transition: all 0.15s ease;
+            }
+        }
+
+        .sc-two,
+        .sc-five,
+        .sc-eight,
+        .sc-nine {
+            img {
+                /* background-color: red; */
+                scale: 1.5;
+            }
+        }
+    }
 }
 
 .ts-bottom-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    width: 80%;
-    height: 290px;
+    width: 90%;
+    height: 315px;
     border-radius: 20px;
     background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+
+    .tbc-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: max-content;
+        height: max-content;
+        background-color: transparent;
+        margin-top: 65px;
+
+        span {
+            display: flex;
+            text-align: center;
+            width: max-content;
+            height: max-content;
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #fff;
+            /* letter-spacing: 0.3px; */
+        }
+    }
+
+    .tbc-sub {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70%;
+        height: max-content;
+        background-color: transparent;
+        margin-top: 15px;
+
+        span {
+            display: flex;
+            text-align: center;
+            width: max-content;
+            height: max-content;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.05em;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.95);
+            letter-spacing: 0.2px;
+            line-height: 1.5;
+        }
+    }
+
+    .tbc-btn-c {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 50%;
+        height: 65px;
+        background-color: transparent;
+        margin-top: 35px;
+
+        .tbc-gst-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 47.5%;
+            height: 100%;
+            border: none;
+            outline: none;
+            border-radius: 9999px;
+            overflow: hidden;
+
+            gap: 15px;
+
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #2563eb;
+            letter-spacing: 0.5px;
+            background-color: #fff;
+            transition: all 0.3s ease;
+
+            /* background: url("../../Universal/Icons/arrow_right_blue_2.svg") no-repeat 10px center; */
+
+            img {
+                width: 27px;
+                height: 27px;
+                object-fit: contain;
+            }
+
+
+            &:hover {
+                transform: scale(1.015);
+                background-color: #fff;
+                cursor: pointer;
+                transition: all 0.4s ease;
+            }
+
+            &:active {
+                transform: scale(0.98);
+                transition: all 0.3s ease;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -75%;
+                width: 35%;
+                height: 100%;
+                background: linear-gradient(120deg,
+                        rgba(255, 255, 255, 0.3) 0%,
+                        rgba(255, 255, 255, 0.6) 50%,
+                        rgba(255, 255, 255, 0.3) 100%);
+                transform: skewX(-25deg);
+                opacity: 0;
+            }
+
+            &:hover::before {
+                animation: shine 1s forwards;
+            }
+        }
+
+        .tbc-vop-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 47.5%;
+            height: 100%;
+            border: 3px solid rgba(255, 255, 255, 0.95);
+            outline: none;
+            border-radius: 9999px;
+            background-color: transparent;
+
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.9em;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                transform: scale(1.01);
+                background-color: #fff;
+                color: #2563eb;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            &:active {
+                transform: scale(0.98);
+                transition: all 0.3s ease;
+            }
+        }
+    }
 }
 
 @keyframes shine {
