@@ -1339,14 +1339,14 @@ nav {
             .support-org-strip {
                 display: grid;
                 grid-template-columns: repeat(3, auto);
-                gap: 18px;
+                gap: 20px;
                 background-color: transparent;
 
                 .so-container {
                     background-color: transparent;
 
                     img {
-                        scale: 1.35;
+                        scale: 1.325;
                     }
                 }
             }
