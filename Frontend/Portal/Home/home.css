@@ -968,7 +968,8 @@ nav {
             &:hover {
                 /* box-shadow: 0 10px 30px rgba(22, 15, 54, 0.08), 0 6px 12px rgba(22, 15, 54, 0.06), 0 2px 4px rgba(22, 15, 54, 0.04); */
                 /* box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.09); */
-                transition: all 0.15s ease;
+                transform: translateY(-8px);
+                transition: all 0.25s ease;
             }
         }
 
@@ -1323,12 +1324,15 @@ nav {
 
     .third-sec {
         display: flex;
-        height: 100vh;
+        height: 900px;
         background-color: transparent;
 
         .support-org-container {
             display: flex;
+            width: 250%;
             background-color: transparent;
+
+            gap: 35px;
 
             .soc-header {
                 span {
@@ -1337,12 +1341,12 @@ nav {
             }
 
             .support-org-strip {
-                display: grid;
-                grid-template-columns: repeat(3, auto);
                 gap: 20px;
+                overflow: hidden;
                 background-color: transparent;
 
                 .so-container {
+                    justify-content: center;
                     background-color: transparent;
 
                     img {
@@ -1356,34 +1360,4 @@ nav {
             display: none;
         }
     }
-
-    /* .first-sec {
-        --bg-a-opacity: 0.46;
-        --bg-b-opacity: 0;
-
-        .first-sect-inner {
-            width: 72vw;
-            height: 62vh;
-        }
-
-        .main-title span {
-            font-size: clamp(1.4rem, 5vw + 0.2em, 6.5rem);
-        }
-
-        .subtitle span {
-            font-size: clamp(0.95rem, 2.2vw, 1.1rem);
-        }
-
-        .general-stats {
-            width: 520px;
-        }
-    }
-
-    .services-display-container {
-        gap: 28px;
-
-        .service-card {
-            width: 360px;
-        }
-    } */
 }
