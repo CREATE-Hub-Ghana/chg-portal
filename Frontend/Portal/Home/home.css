@@ -1268,7 +1268,8 @@ nav {
 
             span {
                 text-align: left;
-                font-size: xx-large;
+                /* font-size: xx-large; */
+                font-size: 2.5em;
             }
         }
 
@@ -1281,7 +1282,8 @@ nav {
 
             span {
                 text-align: left;
-                font-size: 0.85em;
+                /* font-size: 0.85em; */
+                font-size: 0.95em;
                 /* font-size: medium; */
             }
         }
@@ -1402,7 +1404,7 @@ nav {
 
             .support-org-strip {
                 width: max-content;
-                gap: 20px;
+                gap: 5px;
                 overflow: hidden;
                 background-color: transparent;
                 white-space: nowrap;
