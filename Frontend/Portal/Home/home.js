@@ -362,6 +362,90 @@ window.addEventListener("scroll", function () {
     })();
 })();
 
+// Organization logos infinite scroll for mobile
+(() => {
+    function initLogoScroll() {
+        const strip = document.querySelector('.support-org-strip');
+        if (!strip) return;
+
+        // Only run on mobile screens
+        const isMobile = () => window.innerWidth < 520;
+        if (!isMobile()) return;
+
+        // Grab original items (before cloning) and clone them for seamlessness
+        const originalItems = Array.from(strip.children);
+        // If already cloned (init ran before), avoid cloning again
+        const alreadyCloned = originalItems.length > 0 && originalItems.some((n, i) => i >= originalItems.length / 2 && n.dataset.__cloned === 'true');
+        if (!alreadyCloned) {
+            const clones = originalItems.map(item => {
+                const c = item.cloneNode(true);
+                c.dataset.__cloned = 'true';
+                return c;
+            });
+            clones.forEach(c => strip.appendChild(c));
+        }
+
+        let isPaused = false;
+        const speed = 1.0; // pixels per frame
+
+        // Pause interactions
+        strip.addEventListener('mouseenter', () => isPaused = true, { passive: true });
+        strip.addEventListener('mouseleave', () => isPaused = false, { passive: true });
+        strip.addEventListener('touchstart', () => isPaused = true, { passive: true });
+        strip.addEventListener('touchend', () => isPaused = false, { passive: true });
+
+        // Variables to compute widths
+        let totalOriginalWidth = 0; // width of one full set
+        let scrollPos = 0;
+
+        function recomputeWidths() {
+            const items = Array.from(strip.querySelectorAll('.so-container'));
+            // original count is half when already cloned
+            const half = Math.floor(items.length / 2) || items.length;
+            totalOriginalWidth = 0;
+            for (let i = 0; i < half; i++) {
+                totalOriginalWidth += items[i].getBoundingClientRect().width + parseFloat(getComputedStyle(items[i]).marginLeft || 0) + parseFloat(getComputedStyle(items[i]).marginRight || 0);
+            }
+            // ensure we have a non-zero width
+            if (totalOriginalWidth === 0) totalOriginalWidth = strip.scrollWidth / 2 || strip.scrollWidth || 1;
+        }
+
+        // Force a recompute now
+        recomputeWidths();
+
+        // Recompute on resize with debounce
+        let resizeTimeout = null;
+        window.addEventListener('resize', () => {
+            if (resizeTimeout) clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (!isMobile()) {
+                    strip.style.transform = '';
+                    scrollPos = 0;
+                    return;
+                }
+                recomputeWidths();
+            }, 120);
+        });
+
+        // Continuous animation using modulo of totalOriginalWidth so there's no jump
+        function animate() {
+            if (!isPaused && isMobile()) {
+                scrollPos = (scrollPos - speed) % totalOriginalWidth;
+                // normalize to negative value for translateX
+                const translate = scrollPos > 0 ? scrollPos - totalOriginalWidth : scrollPos;
+                strip.style.transform = `translateX(${translate}px)`;
+            }
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Run on load and page show
+    window.addEventListener('load', initLogoScroll);
+    window.addEventListener('pageshow', (e) => { if (e.persisted) initLogoScroll(); });
+})();
+
 // Counters: increment .gns-value elements from 0 to data-target on page load
 (() => {
     function animateCounters() {
@@ -417,3 +501,5 @@ window.addEventListener("scroll", function () {
     window.addEventListener('load', animateCounters);
     window.addEventListener('pageshow', (e) => { if (e.persisted) animateCounters(); });
 })();
+
+
