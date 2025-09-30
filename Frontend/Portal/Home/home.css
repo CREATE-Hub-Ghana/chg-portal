@@ -1,3 +1,8 @@
+body {
+    background-color: rgba(0, 0, 0, 0.025);
+    /* background-color: #dc2626; */
+}
+
 nav {
     z-index: 99999;
     position: sticky;
@@ -1190,6 +1195,174 @@ nav {
     }
 }
 
+.forth-sec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 200vh;
+    background-color: #fff;
+}
+
+.fs-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 730px;
+    background-color: transparent;
+
+    .fs-top-header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 522px;
+        background-color: transparent;
+
+        .fsth-heart-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background-color: rgba(220, 38, 38, 0.25);
+            margin-top: 80px;
+
+            img {
+                /* position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -45%); */
+                width: 34px;
+                height: 34px;
+                object-fit: contain;
+                margin-top: 4px;
+                /* margin-left: -0.5px; */
+
+                animation: heartbeat 1.5s infinite;
+            }
+        }
+
+        .fsth-main {
+            width: max-content;
+            height: max-content;
+            margin-top: 22px;
+            text-align: center;
+
+            font-size: 2.7em;
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            b {
+                background: linear-gradient(90deg, #ef4444 0%, #db2777 100%);
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .fsth-sub {
+            margin-top: 18px;
+            text-align: center;
+            width: 50%;
+            height: auto;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.04em;
+            font-weight: 500;
+            color: rgba(22, 15, 54, 0.9);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+
+        .fst-rates-container {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 82%;
+            height: 32%;
+            background-color: transparent;
+            /* gap: 80px; */
+
+            .fstr {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100%;
+                width: 185px;
+                background-color: transparent;
+
+                .fstr-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 15px;
+                    background: linear-gradient(120deg, #ef4444 0%, #db2777 100%);
+                    transition: all 0.3s ease;
+
+                    img {
+                        width: 32px;
+                        height: 32px;
+                        object-fit: contain;
+                    }
+
+                    &:hover {
+                        scale: 1.02;
+                        box-shadow: 0 10px 30px rgba(22, 15, 54, 0.08), 0 6px 12px rgba(22, 15, 54, 0.06), 0 2px 4px rgba(22, 15, 54, 0.04);
+                        transform: translateY(-2px);
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                    }
+                }
+
+                .fstr-value {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: max-content;
+                    text-align: center;
+                    font-family: 'Manrope', sans-serif;
+                    font-size: 2.25em;
+                    font-weight: 800;
+                    color: #160f36;
+                    /* color: rgba(255, 255, 255, 0.9); */
+                    /* letter-spacing: 0.2px; */
+                    background-color: transparent;
+
+                    margin-top: 15px;
+                }
+
+                .fstr-text {
+                    position: absolute;
+                    bottom: 6px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: max-content;
+                    text-align: center;
+                    font-family: 'Manrope', sans-serif;
+                    font-size: 0.925em;
+                    font-weight: 600;
+                    color: rgba(22, 15, 54, 0.8);
+                    /* color: rgba(255, 255, 255, 0.9); */
+                    /* letter-spacing: 0.2px; */
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+}
+
 @keyframes shine {
     0% {
         left: -75%;
@@ -1207,6 +1380,28 @@ nav {
     100% {
         left: 125%;
         opacity: 0;
+    }
+}
+
+@keyframes heartbeat {
+    0% {
+        scale: 0.95;
+    }
+
+    25% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.05;
+    }
+
+    75% {
+        scale: 1;
+    }
+
+    100% {
+        scale: 0.95;
     }
 }
 
@@ -1384,9 +1579,9 @@ nav {
 
     .third-sec {
         display: flex;
-        height: 900px;
+        height: 740px;
         overflow: hidden;
-        /* background-color: red; */
+        background-color: transparent;
 
         .support-org-container {
             display: flex;
@@ -1424,7 +1619,7 @@ nav {
         .ts-bottom-container {
             display: flex;
             width: 92%;
-            height: calc(50% - 15px);
+            height: 435px;
 
             .tbc-header {
                 width: 85%;
@@ -1469,4 +1664,45 @@ nav {
             }
         }
     }
+
+    .forth-sec {
+        background-color: transparent;
+        height: 1000px;
+
+        .fs-top {
+            height: 750px;
+
+            .fs-top-header {
+                /* display: none; */
+                background-color: transparent;
+                height: 750px;
+
+                .fsth-main {
+                    /* display: flex; */
+                    font-size: 2em;
+                }
+
+                .fsth-sub {
+                    /* display: none; */
+                    font-size: 0.88em;
+                    width: 90%;
+                }
+
+                .fst-rates-container {
+                    /* display: none; */
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    background-color: transparent;
+                    height: 55%;
+                    width: max-content;
+
+                    .fstr {
+                        height: 160px;
+                        background-color: transparent;
+                    }
+                }
+            }
+        }
+    }
+
 }
