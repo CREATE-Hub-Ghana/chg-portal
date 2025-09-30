@@ -1699,18 +1699,18 @@ nav {
                     width: max-content;
 
                     .fstr {
-                        height: 160px;
+                        height: 170px;
                         background-color: transparent;
 
                         .fstr-value {
-                            font-size: 2em;
-                            margin-top: 5px;
+                            font-size: 1.7em;
+                            margin-top: 12px;
                         }
 
                         .fstr-text {
                             position: relative;
-                            font-size: 0.895em;
-                            bottom: 0;
+                            font-size: 0.86em;
+                            margin-top: 8px;
                         }
                     }
                 }
