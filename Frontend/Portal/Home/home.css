@@ -1675,30 +1675,43 @@ nav {
             .fs-top-header {
                 /* display: none; */
                 background-color: transparent;
-                height: 750px;
+                height: 650px;
 
                 .fsth-main {
                     /* display: flex; */
-                    font-size: 2em;
+                    font-size: clamp(1.8em, 2em, 2.2em);
                 }
 
                 .fsth-sub {
                     /* display: none; */
                     font-size: 0.88em;
-                    width: 90%;
+                    width: calc(90% - 5px);
                 }
 
                 .fst-rates-container {
                     /* display: none; */
                     display: grid;
                     grid-template-columns: repeat(2, 1fr);
+                    row-gap: 15px;
+                    column-gap: -20px;
                     background-color: transparent;
-                    height: 55%;
+                    height: 48%;
                     width: max-content;
 
                     .fstr {
                         height: 160px;
                         background-color: transparent;
+
+                        .fstr-value {
+                            font-size: 2em;
+                            margin-top: 5px;
+                        }
+
+                        .fstr-text {
+                            position: relative;
+                            font-size: 0.895em;
+                            bottom: 0;
+                        }
                     }
                 }
             }
