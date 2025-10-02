@@ -1200,7 +1200,7 @@ nav {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 1585px;
+    height: max-content;
     background-color: #fff;
 }
 
@@ -1368,8 +1368,10 @@ nav {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: calc(100% - 610px);
+    /* height: calc(100% - 610px); */
+    height: max-content;
     background-color: transparent;
+    gap: 75px;
 
     .fsb-card-container {
         display: flex;
@@ -1378,7 +1380,7 @@ nav {
         width: 100%;
         height: 538px;
         background-color: transparent;
-        gap: 55px;
+        gap: 65px;
 
         .fsbc-prog {
             display: flex;
@@ -1508,7 +1510,7 @@ nav {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                width: 270px;
+                width: 290px;
                 height: max-content;
                 background-color: transparent;
 
@@ -1564,6 +1566,12 @@ nav {
                 height: 100%;
                 object-fit: inherit;
                 z-index: 0;
+
+                transition: all 0.4s ease-out;
+
+                &:hover {
+                    scale: 1.04;
+                }
             }
 
             .nav-fsbc-gallery {
@@ -1608,6 +1616,21 @@ nav {
                     height: 12px;
                     background-color: rgba(255, 255, 255, 0.95);
                 }
+            }
+        }
+    }
+
+    .fsbcc-two,
+    .fsbcc-three {
+        .fsbc-prog {
+            height: 95%;
+
+            .fsbc-prog-sub {
+                margin-top: -15px;
+            }
+
+            .fsbc-prog-capsule {
+                margin-top: 20px;
             }
         }
     }
