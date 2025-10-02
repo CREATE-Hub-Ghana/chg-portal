@@ -1642,6 +1642,176 @@ nav {
     }
 }
 
+.fs-foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 540px;
+    background-color: transparent;
+
+    .fs-foot-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90%;
+        height: 380px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #dc2626 0%, #db2777 100%);
+
+        .ffc-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: max-content;
+            height: max-content;
+            background-color: transparent;
+            margin-top: 65px;
+
+            span {
+                display: flex;
+                text-align: center;
+                width: max-content;
+                height: max-content;
+                font-family: 'Manrope', sans-serif;
+                font-size: 2.5em;
+                font-weight: 700;
+                color: #fff;
+                /* letter-spacing: 0.3px; */
+            }
+        }
+
+        .ffc-sub {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 70%;
+            height: max-content;
+            background-color: transparent;
+            margin-top: 15px;
+
+            span {
+                display: flex;
+                text-align: center;
+                width: max-content;
+                height: max-content;
+                font-family: 'Manrope', sans-serif;
+                font-size: 1.05em;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.95);
+                letter-spacing: 0.2px;
+                line-height: 1.5;
+            }
+        }
+
+        .ffc-btn-c {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 50%;
+            height: 65px;
+            background-color: transparent;
+            margin-top: 35px;
+
+            .ffc-vwu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                width: 47.5%;
+                height: 100%;
+                border: none;
+                outline: none;
+                border-radius: 9999px;
+                overflow: hidden;
+
+                gap: 15px;
+
+                font-family: 'Poppins', Arial, sans-serif;
+                font-size: 0.95em;
+                font-weight: bold;
+                color: #dc2626;
+                letter-spacing: 0.5px;
+                background-color: #fff;
+                transition: all 0.3s ease;
+
+                /* background: url("../../Universal/Icons/arrow_right_blue_2.svg") no-repeat 10px center; */
+
+                img {
+                    width: 27px;
+                    height: 27px;
+                    object-fit: contain;
+                }
+
+
+                &:hover {
+                    transform: scale(1.015);
+                    background-color: #fff;
+                    cursor: pointer;
+                    transition: all 0.4s ease;
+                }
+
+                &:active {
+                    transform: scale(0.98);
+                    transition: all 0.3s ease;
+                }
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: -75%;
+                    width: 35%;
+                    height: 100%;
+                    background: linear-gradient(120deg,
+                            rgba(255, 255, 255, 0.3) 0%,
+                            rgba(255, 255, 255, 0.6) 50%,
+                            rgba(255, 255, 255, 0.3) 100%);
+                    transform: skewX(-25deg);
+                    opacity: 0;
+                }
+
+                &:hover::before {
+                    animation: shine 1s forwards;
+                }
+            }
+
+            .ffc-alr-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                width: 47.5%;
+                height: 100%;
+                border: 3px solid rgba(255, 255, 255, 0.95);
+                outline: none;
+                border-radius: 9999px;
+                background-color: transparent;
+
+                font-family: 'Poppins', Arial, sans-serif;
+                font-size: 0.9em;
+                font-weight: 700;
+                color: rgba(255, 255, 255, 0.95);
+                letter-spacing: 0.5px;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    transform: scale(1.01);
+                    background-color: #fff;
+                    color: #dc2626;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+
+                &:active {
+                    transform: scale(0.98);
+                    transition: all 0.3s ease;
+                }
+            }
+        }
+    }
+}
+
 @keyframes shine {
     0% {
         left: -75%;
