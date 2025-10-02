@@ -1580,13 +1580,16 @@ nav {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 100px;
-                height: 12px;
-                background-color: transparent;
+                width: max-content;
+                height: 18px;
+                background-color: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(4px);
+                border-radius: 15px;
                 z-index: 1000;
                 transition: all 0.4s ease;
 
                 gap: 4px;
+                padding: 0 6px;
 
                 button {
                     display: flex;
@@ -1596,10 +1599,12 @@ nav {
                     outline: none;
                     cursor: pointer;
                     border-radius: 50%;
-                    background-color: rgba(255, 255, 255, 0.75);
+                    background-color: rgba(255, 255, 255, 0.55);
                     padding: 0;
 
                     transition: all 0.3s ease;
+
+                    backdrop-filter: blur(4px);
 
                     &:hover:not(.in-view) {
                         scale: 1.2;
@@ -1615,7 +1620,7 @@ nav {
                     display: flex;
                     width: 12px;
                     height: 12px;
-                    background-color: rgba(255, 255, 255, 0.95);
+                    background-color: rgba(255, 255, 255, 0.85);
                 }
             }
         }
