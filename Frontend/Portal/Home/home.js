@@ -502,4 +502,159 @@ window.addEventListener("scroll", function () {
     window.addEventListener('pageshow', (e) => { if (e.persisted) animateCounters(); });
 })();
 
+// Image galleries: auto-rotate and manual controls for .fsbc-gallery
+(function setupFsbcGalleries() {
+    const GALLERY_INTERVAL_MS = 4000; // 4 seconds
+    const TRANSITION_MS = 600; // crossfade duration (ms)
+    const galleries = Array.from(document.querySelectorAll('.fsbc-gallery'));
+    if (!galleries || galleries.length === 0) return;
+
+    galleries.forEach(gallery => {
+        const imgEl = gallery.querySelector('img');
+        const nav = gallery.querySelector('.nav-fsbc-gallery');
+        if (!imgEl || !nav) return;
+
+        // Build image list from nav buttons' data-src attributes
+        const buttons = Array.from(nav.querySelectorAll('button'));
+        const imgs = buttons.map(b => b.getAttribute('data-src')).filter(Boolean);
+        if (imgs.length === 0) return;
+
+        // Prepare a crossfade layer: use two stacked img elements (a and b)
+        // Ensure gallery is position-relative so absolute imgs overlap
+        const computedPos = window.getComputedStyle(gallery).position;
+        if (computedPos === 'static') gallery.style.position = 'relative';
+        gallery.style.overflow = 'hidden';
+
+        // Use the existing imgEl as imgA and create imgB
+        const imgA = imgEl;
+        const imgB = imgA.cloneNode(true);
+        // ensure both occupy full area and overlap
+        [imgA, imgB].forEach(img => {
+            img.style.position = 'absolute';
+            img.style.top = '0';
+            img.style.left = '0';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = img.style.objectFit || 'inherit';
+            // include transform transition so hover scaling is smooth
+            img.style.transition = `opacity ${TRANSITION_MS}ms ease, transform 420ms ease`;
+            img.style.willChange = 'opacity, transform';
+            img.style.transform = 'scale(1)';
+            // leave pointer events on images disabled so interactive controls beneath still work;
+            // hover/scale is applied via gallery listeners so pointerEvents none is acceptable
+            img.style.pointerEvents = 'none';
+        });
+
+        // Insert imgB on top of imgA (so we can fade it in)
+        imgA.style.zIndex = '0';
+        imgB.style.zIndex = '1';
+        imgB.style.opacity = '0';
+        if (imgA.nextSibling) gallery.insertBefore(imgB, imgA.nextSibling);
+        else gallery.appendChild(imgB);
+
+        // Find initial index matching current img src, fallback to 0
+        let current = imgs.findIndex(s => s === (imgA.getAttribute('src') || ''));
+        if (current < 0) {
+            current = 0;
+            imgA.setAttribute('src', imgs[0]);
+        }
+
+        // track which layer currently visible: 0 => imgA, 1 => imgB
+        let visibleLayer = 0;
+
+        function updateNav() {
+            buttons.forEach((b, i) => {
+                if (i === current) b.classList.add('in-view');
+                else b.classList.remove('in-view');
+            });
+        }
+
+        updateNav();
+
+        let timer = null;
+        let isPaused = false;
+
+        // crossfade to specified index
+        function showIndex(idx, { resetTimer = true } = {}) {
+            if (idx < 0) idx = imgs.length - 1;
+            if (idx >= imgs.length) idx = 0;
+            if (idx === current) {
+                if (resetTimer) restartTimer();
+                return;
+            }
+
+            current = idx;
+            updateNav();
+
+            const visibleImg = visibleLayer === 0 ? imgA : imgB;
+            const hiddenImg = visibleLayer === 0 ? imgB : imgA;
+
+            // place next image on hidden layer
+            hiddenImg.setAttribute('src', imgs[current]);
+            hiddenImg.style.opacity = '0';
+
+            // force reflow so browser registers src change before transition
+            // eslint-disable-next-line no-unused-expressions
+            hiddenImg.offsetWidth;
+
+            // start crossfade: fade hidden in, visible out
+            hiddenImg.style.opacity = '1';
+            visibleImg.style.opacity = '0';
+
+            // after transition completes, swap visibleLayer
+            setTimeout(() => {
+                visibleLayer = visibleLayer === 0 ? 1 : 0;
+                if (resetTimer) restartTimer();
+            }, TRANSITION_MS + 40);
+        }
+
+        function next() { showIndex((current + 1) % imgs.length); }
+        function prev() { showIndex((current - 1 + imgs.length) % imgs.length); }
+
+        function restartTimer() {
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => { if (!isPaused) next(); }, GALLERY_INTERVAL_MS);
+        }
+
+        // click handlers for nav buttons
+        buttons.forEach((btn, i) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showIndex(i, { resetTimer: true });
+            });
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    showIndex(i, { resetTimer: true });
+                }
+            });
+        });
+
+        // Pause on hover/touch so user can interact and scale images slightly on hover
+        gallery.addEventListener('mouseenter', () => {
+            isPaused = true;
+            imgA.style.transform = 'scale(1.04)';
+            imgB.style.transform = 'scale(1.04)';
+        }, { passive: true });
+        gallery.addEventListener('mouseleave', () => {
+            isPaused = false;
+            imgA.style.transform = 'scale(1)';
+            imgB.style.transform = 'scale(1)';
+        }, { passive: true });
+        gallery.addEventListener('touchstart', () => {
+            isPaused = true;
+            imgA.style.transform = 'scale(1.04)';
+            imgB.style.transform = 'scale(1.04)';
+        }, { passive: true });
+        gallery.addEventListener('touchend', () => {
+            isPaused = false;
+            imgA.style.transform = 'scale(1)';
+            imgB.style.transform = 'scale(1)';
+        }, { passive: true });
+
+        // Start rotation
+        restartTimer();
+    });
+})();
+
 
