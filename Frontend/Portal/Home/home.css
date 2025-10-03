@@ -769,7 +769,7 @@ nav {
             top: 96px;
             left: 32px;
             display: flex;
-            width: 85%;
+            width: 80%;
             height: max-content;
             background-color: transparent;
 
@@ -1256,12 +1256,15 @@ nav {
         }
 
         .fsth-main {
+            width: 80%;
             width: max-content;
             height: max-content;
             margin-top: 22px;
-            text-align: center;
+            /* text-align: center; */
+            /* background-color: red; */
 
             font-size: 2.7em;
+            /* font-size: clamp(2em, 2.7em, 3em); */
             font-weight: 800;
             letter-spacing: 1px;
 
@@ -2130,33 +2133,39 @@ nav {
         overflow: hidden;
 
         .fs-top {
-            height: 750px;
+            /* height: 750px; */
+            height: max-content;
 
             .fs-top-header {
                 /* display: none; */
                 background-color: transparent;
-                height: 650px;
+                /* height: 650px; */
+                height: max-content;
 
                 .fsth-main {
                     /* display: flex; */
-                    font-size: clamp(1.8em, 2em, 2.2em);
+                    font-size: clamp(1.9em, 80%, 2.2em);
                 }
 
                 .fsth-sub {
-                    /* display: none; */
+                    display: flex;
                     font-size: 0.88em;
                     width: calc(90% - 5px);
                 }
 
                 .fst-rates-container {
+                    position: relative;
                     /* display: none; */
                     display: grid;
+                    /* display: none; */
                     grid-template-columns: repeat(2, 1fr);
                     row-gap: 15px;
-                    column-gap: -20px;
+                    /* column-gap: -20px; */
                     background-color: transparent;
-                    height: 48%;
+                    /* height: 48%; */
+                    height: max-content;
                     width: max-content;
+                    margin-top: 55px;
 
                     .fstr {
                         height: 170px;
@@ -2180,7 +2189,9 @@ nav {
         .fs-bottom {
             display: flex;
             background-color: transparent;
-            gap: 25px;
+            gap: 35px;
+            margin-top: 60px;
+
 
             .fsb-card-container {
                 display: flex;
@@ -2325,4 +2336,10 @@ nav {
         }
     }
 
+}
+
+@media (max-height: 700px) {
+    .hashtag {
+        display: none;
+    }
 }
