@@ -533,8 +533,9 @@ window.addEventListener("scroll", function () {
             img.style.position = 'absolute';
             img.style.top = '0';
             img.style.left = '0';
-            img.style.width = '100%';
-            img.style.height = '100%';
+            img.style.width = 'stretch';
+            img.style.height = 'stretch';
+            img.style.objectPosition = 'center';
             img.style.objectFit = img.style.objectFit || 'inherit';
             // include transform transition so hover scaling is smooth
             img.style.transition = `opacity ${TRANSITION_MS}ms ease, transform 420ms ease`;
