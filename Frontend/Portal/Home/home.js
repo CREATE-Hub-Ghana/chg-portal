@@ -369,7 +369,7 @@ window.addEventListener("scroll", function () {
         if (!strip) return;
 
         // Only run on mobile screens
-        const isMobile = () => window.innerWidth < 520;
+        const isMobile = () => window.innerWidth < 640;
         if (!isMobile()) return;
 
         // Grab original items (before cloning) and clone them for seamlessness

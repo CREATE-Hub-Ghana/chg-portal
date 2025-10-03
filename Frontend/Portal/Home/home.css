@@ -1867,7 +1867,7 @@ nav {
     }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 630px) {
     .support-org-strip {
         display: flex;
         flex-direction: row;
@@ -2080,6 +2080,7 @@ nav {
 
         .ts-bottom-container {
             display: flex;
+            justify-content: center;
             width: 92%;
             height: 435px;
 
@@ -2087,7 +2088,7 @@ nav {
                 width: 85%;
                 /* background-color: red; */
 
-                margin-top: 40px;
+                margin-top: 10px;
 
                 span {
                     font-size: 1.65em;
@@ -2326,7 +2327,7 @@ nav {
                     .ffc-alr-btn {
                         width: 100%;
                         height: 55px;
-                        font-size: 1.1em;
+                        font-size: 1em;
                         font-weight: 700;
                         letter-spacing: 0.3px;
                         overflow: hidden;
