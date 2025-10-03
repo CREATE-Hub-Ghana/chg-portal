@@ -441,7 +441,8 @@ nav {
     width: 81.5%;
     height: 50px;
     background-color: transparent;
-    margin-top: 0.5%;
+    /* margin-top: 0.5%; */
+    margin-top: 5px;
 
     span {
         text-align: center;
