@@ -2177,7 +2177,21 @@ nav {
             .fsb-card-container {
                 display: flex;
                 background-color: transparent;
+                /* flex-direction: column;
+                gap: 18px; */
 
+                .fsbc-prog,
+                .fsbc-gallery {
+                    box-shadow: 0 6px 18px rgba(22, 15, 54, 0.06);
+                    transition: transform 220ms ease, box-shadow 220ms ease;
+                    background-clip: padding-box;
+                }
+
+                .fsbc-prog:hover,
+                .fsbc-gallery:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0 16px 36px rgba(22, 15, 54, 0.10);
+                }
 
                 .fsbc-prog {
                     align-items: center;
