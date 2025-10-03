@@ -2,6 +2,7 @@ require("dotenv").config({ path: "./Data.env" });
 
 const cors = require("cors");
 const express = require("express");
+const compression = require("compression");
 
 const app = express();
 const port = process.env.PORT || 5050;
@@ -13,7 +14,10 @@ const { cacheMiddleware } = require("./middleware/cache.js");
 const setupFileServing = require("./routes/static-serve.js");
 const { redisClient } = require("./config/redis-client.js");
 
-// Setup file serving
+// Use gzip/deflate/brotli compression for responses where appropriate
+app.use(compression({ threshold: 1024 }));
+
+// Setup file serving (precompressed middleware is mounted inside routes)
 setupFileServing(app, cacheMiddleware);
 
 async function startServer() {
@@ -23,14 +27,14 @@ async function startServer() {
                 `Server running on port ${port} in ${process.env.NODE_ENV} mode`,
             );
         });
-        
+
         // Handle graceful shutdown
         process.on("SIGINT", async () => {
             console.log("Shutting down server...");
             await redisClient.quit();
             server.close(() => {
-            console.log("Server shut down gracefully.");
-            process.exit(0);
+                console.log("Server shut down gracefully.");
+                process.exit(0);
             });
         });
     } catch (error) {

@@ -2,6 +2,8 @@ const path = require("path");
 
 const express = require("express");
 
+const precompressed = require("../middleware/precompressed");
+
 const setupFileServing = (app, cacheMiddleware) => {
     // Block access to sensitive files
     app.use((request, response, next) => {
@@ -34,14 +36,17 @@ const setupFileServing = (app, cacheMiddleware) => {
                     );
                     response.set("Expires", "0");
                 } else {
+                    // Default to 1 day for unknown assets
                     response.set("Cache-Control", "public, max-age=86400, immutable");
                 }
             },
         }),
     );
 
+    // Serve Global assets; use precompressed middleware for text assets
     app.use(
         "/Global",
+        precompressed(path.join(__dirname, "..", "..", "Frontend", "Global")),
         express.static(path.join(__dirname, "..", "..", "Frontend", "Global"), {
             dotfiles: "ignore",
             etag: true,
@@ -58,11 +63,39 @@ const setupFileServing = (app, cacheMiddleware) => {
         }),
     );
 
-    // Use the cache middleware for the Universal directory assets
+    // Use precompressed and cache middleware for the Universal directory assets
+    // Also set long cache lifetimes for images/fonts/icons to 30 days
+    const universalRoot = path.join(__dirname, "..", "..", "Frontend", "Universal");
     app.use(
         "/Universal",
+        precompressed(universalRoot),
         cacheMiddleware,
-        express.static(path.join(__dirname, "..", "..", "Frontend", "Universal")),
+        express.static(universalRoot, {
+            dotfiles: "ignore",
+            etag: true,
+            index: false,
+            maxAge: "30d",
+            redirect: false,
+            setHeaders: (response, filePath) => {
+                response.set("X-Content-Type-Options", "nosniff");
+
+                // HTML should not be cached
+                if (filePath.endsWith(".html")) {
+                    response.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+                    response.set("Expires", "0");
+                    return;
+                }
+
+                // Images, fonts, icons -> 30 days immutable
+                const imgFontExt = ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'];
+                const ext = path.extname(filePath).toLowerCase();
+                if (imgFontExt.includes(ext)) {
+                    response.set('Cache-Control', 'public, max-age=2592000, immutable'); // 30 days
+                } else {
+                    response.set('Cache-Control', 'public, max-age=86400, immutable');
+                }
+            },
+        }),
     );
 
     // Serve home.html for the /home route
