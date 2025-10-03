@@ -558,7 +558,7 @@ nav {
             top: 0;
             left: -75%;
             width: 35%;
-            height: 100%;
+            /* height: 100%; */
             background: linear-gradient(120deg,
                     rgba(255, 255, 255, 0.3) 0%,
                     rgba(255, 255, 255, 0.6) 50%,
@@ -1653,10 +1653,13 @@ nav {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         width: 90%;
         height: 380px;
         border-radius: 20px;
         background: linear-gradient(135deg, #dc2626 0%, #db2777 100%);
+
+        gap: 26px;
 
         .ffc-header {
             display: flex;
@@ -1665,7 +1668,7 @@ nav {
             width: max-content;
             height: max-content;
             background-color: transparent;
-            margin-top: 65px;
+            /* margin-top: 68px; */
 
             span {
                 display: flex;
@@ -1687,7 +1690,7 @@ nav {
             width: 70%;
             height: max-content;
             background-color: transparent;
-            margin-top: 15px;
+            margin-top: -4px;
 
             span {
                 display: flex;
@@ -1710,7 +1713,7 @@ nav {
             width: 50%;
             height: 65px;
             background-color: transparent;
-            margin-top: 35px;
+            margin-top: 14px;
 
             .ffc-vwu-btn {
                 display: flex;
@@ -1761,7 +1764,7 @@ nav {
                     top: 0;
                     left: -75%;
                     width: 35%;
-                    height: 100%;
+                    /* height: 100%; */
                     background: linear-gradient(120deg,
                             rgba(255, 255, 255, 0.3) 0%,
                             rgba(255, 255, 255, 0.6) 50%,
@@ -2115,7 +2118,8 @@ nav {
 
     .forth-sec {
         background-color: transparent;
-        height: 1000px;
+        height: max-content;
+        overflow: hidden;
 
         .fs-top {
             height: 750px;
@@ -2166,11 +2170,136 @@ nav {
         }
 
         .fs-bottom {
-            display: none;
+            display: flex;
+            background-color: transparent;
+            gap: 25px;
+
+            .fsb-card-container {
+                display: flex;
+                background-color: transparent;
+
+
+                .fsbc-prog {
+                    align-items: center;
+                    width: 92%;
+
+                    .fsbc-prog-logo-c {
+
+                        margin-top: 45px;
+
+                        .fsbc-icon {
+                            margin-left: 45px;
+                        }
+                    }
+
+                    .fsbc-prog-header {
+
+                        span {
+                            margin-left: 45px;
+                            font-size: 1.5em;
+                        }
+                    }
+
+                    .fsbc-prog-sub {
+
+                        span {
+                            margin-left: 45px;
+                            font-size: 0.85em;
+                        }
+
+                    }
+
+                    .fsbc-prog-capsule {
+
+                        span {
+                            margin-left: 45px;
+                        }
+
+                    }
+
+                    .fsbc-prog-list {
+                        margin-left: 8px;
+
+                        .fsbc-pl-item {
+
+                            .pli-ball {
+                                width: 12px;
+                                height: 12px;
+                            }
+
+                            span {
+                                font-size: 0.75em;
+                            }
+                        }
+
+                    }
+                }
+
+                .fsbc-gallery {
+                    display: none;
+                    background-color: green;
+                }
+            }
+
+            .fsbcc-one {
+                .fsbc-prog {
+                    height: 95%;
+                }
+            }
         }
 
         .fs-foot {
-            display: none;
+            display: flex;
+            background-color: transparent;
+            height: 705px;
+            overflow: hidden;
+
+            .fs-foot-container {
+                display: flex;
+                width: 92%;
+                height: 75%;
+                overflow: hidden;
+
+                .ffc-header {
+                    display: flex;
+                    margin-top: 5px;
+                    width: 90%;
+
+                    span {
+                        font-size: 1.45em;
+                    }
+                }
+
+                .ffc-sub {
+                    display: flex;
+                    width: 85%;
+                    margin-top: 15px;
+
+                    span {
+                        font-size: 0.9em;
+                    }
+                }
+
+                .ffc-btn-c {
+                    display: flex;
+                    flex-direction: column;
+                    width: 85%;
+                    height: max-content;
+                    gap: 20px;
+                    margin-top: 25px;
+                    overflow: hidden;
+
+                    .ffc-vwu-btn,
+                    .ffc-alr-btn {
+                        width: 100%;
+                        height: 55px;
+                        font-size: 1.1em;
+                        font-weight: 700;
+                        letter-spacing: 0.3px;
+                        overflow: hidden;
+                    }
+                }
+            }
         }
     }
 
