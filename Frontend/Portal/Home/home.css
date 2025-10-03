@@ -383,7 +383,8 @@ nav {
     align-items: center;
     width: 65vw;
     /* width: 900px; */
-    height: 65vh;
+    /* height: 65vh; */
+    height: max-content;
     background-color: transparent;
 }
 
@@ -393,7 +394,8 @@ nav {
     /* top: 27%; */
     display: flex;
     width: 100%;
-    height: 36.5%;
+    /* height: 36.5%; */
+    height: max-content;
     /* height: 155px; */
     background-color: transparent;
 
@@ -558,7 +560,7 @@ nav {
             top: 0;
             left: -75%;
             width: 35%;
-            /* height: 100%; */
+            height: 100%;
             background: linear-gradient(120deg,
                     rgba(255, 255, 255, 0.3) 0%,
                     rgba(255, 255, 255, 0.6) 50%,
@@ -1764,7 +1766,7 @@ nav {
                     top: 0;
                     left: -75%;
                     width: 35%;
-                    /* height: 100%; */
+                    /* height: stretch; */
                     background: linear-gradient(120deg,
                             rgba(255, 255, 255, 0.3) 0%,
                             rgba(255, 255, 255, 0.6) 50%,
@@ -2194,7 +2196,7 @@ nav {
                 }
 
                 .fsbc-prog {
-                    align-items: center;
+                    /* align-items: center; */
                     width: 92%;
 
                     .fsbc-prog-logo-c {
@@ -2232,7 +2234,7 @@ nav {
                     }
 
                     .fsbc-prog-list {
-                        margin-left: 8px;
+                        margin-left: 48px;
 
                         .fsbc-pl-item {
 
