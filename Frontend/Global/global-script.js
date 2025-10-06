@@ -344,6 +344,14 @@ window.addEventListener("scroll", function () {
                 const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
                 const target = Math.max(0, servicesEl.offsetTop - navHeight);
                 window.scrollTo({ top: target, behavior: 'smooth' });
+                // Remove the #services fragment from the URL after we've scrolled so subsequent reloads
+                // won't re-trigger scrolling. Use replaceState to avoid adding history entries.
+                try {
+                    const url = window.location.href.replace(/#services$/, '');
+                    history.replaceState(null, document.title, url);
+                } catch (e) {
+                    // ignore replaceState errors
+                }
             }, 80);
         }
     } catch (e) {
