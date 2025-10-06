@@ -2242,6 +2242,10 @@ body {
         }
     }
 
+    .fifth-sec {
+        display: none;
+    }
+
 }
 
 @media (max-height: 700px) {
