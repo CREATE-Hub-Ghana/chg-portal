@@ -112,6 +112,20 @@ const setupFileServing = (app, cacheMiddleware) => {
         response.sendFile(filePath);
     });
 
+    // Serve programs.html for the /programs route
+    app.get("/programs", (request, response) => {
+        const filePath = path.join(
+            __dirname,
+            "..",
+            "..",
+            "Frontend",
+            "Portal",
+            "Programs",
+            "programs.html",
+        );
+        response.sendFile(filePath);
+    });
+
     // Error handling middleware
     app.use((error, request, response, next) => {
         if (error instanceof Error && error.code === "ENOENT") {
