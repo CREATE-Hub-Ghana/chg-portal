@@ -45,6 +45,7 @@ window.addEventListener("scroll", function () {
                 btn.classList.add('selected');
                 const mobileHome = document.getElementById('home-m-btn');
                 const mobileServices = document.getElementById('services-m-btn');
+                const mobilePrograms = document.getElementById('programs-m-btn');
 
                 // Close mobile overlay if open
                 try {
@@ -55,16 +56,31 @@ window.addEventListener("scroll", function () {
                 }
 
                 if (text === 'home') {
-                    if (mobileHome) mobileHome.classList.add('selected');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // If we're already on the home page, just scroll to top. Otherwise navigate to /home.
+                    const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+                    if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
+                        if (mobileHome) mobileHome.classList.add('selected');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        window.location.pathname = '/home';
+                    }
+                } else if (text === 'programs') {
+                    if (mobilePrograms) mobilePrograms.classList.add('selected');
+                    // route to /programs
+                    window.location.pathname = '/programs';
                 } else if (text === 'services') {
                     if (mobileServices) mobileServices.classList.add('selected');
                     // compute target locally to avoid relying on outer-scope function
                     const servicesElement = document.querySelector('.second-sec');
-                    const navbarEl = document.querySelector('#navbar');
-                    const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
-                    const target = servicesElement ? Math.max(0, servicesElement.offsetTop - navHeight) : window.innerHeight;
-                    window.scrollTo({ top: target, behavior: 'smooth' });
+                    if (servicesElement) {
+                        const navbarEl = document.querySelector('#navbar');
+                        const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
+                        const target = Math.max(0, servicesElement.offsetTop - navHeight);
+                        window.scrollTo({ top: target, behavior: 'smooth' });
+                    } else {
+                        // Not on the home page: navigate to home and include hash so home can scroll to services on load
+                        window.location.href = '/home#services';
+                    }
                 }
             }
 
@@ -174,13 +190,27 @@ window.addEventListener("scroll", function () {
                     // optional: close menu when an item is chosen
                     // Close menu when an item is chosen and scroll for specific IDs
                     if (btn.id === 'services-m-btn') {
-                        // scroll so the services section sits below the navbar
-                        const target = computeServicesTarget();
-                        window.scrollTo({ top: target, behavior: 'smooth' });
+                        // If services section exists on this page, scroll to it. Otherwise navigate to home with hash so it scrolls on load.
+                        const servicesElLocal = document.querySelector('.second-sec');
+                        if (servicesElLocal) {
+                            const target = computeServicesTarget();
+                            window.scrollTo({ top: target, behavior: 'smooth' });
+                        } else {
+                            window.location.href = '/home#services';
+                        }
+                    }
+                    if (btn.id === 'programs-m-btn') {
+                        // route to programs page
+                        window.location.pathname = '/programs';
                     }
                     if (btn.id === 'home-m-btn') {
-                        // scroll to top smoothly
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        // If already on home, scroll to top; otherwise route to /home
+                        const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+                        if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                            window.location.pathname = '/home';
+                        }
                     }
                     menuOpen = false;
                     updateMenu();
@@ -191,11 +221,24 @@ window.addEventListener("scroll", function () {
                         e.preventDefault();
                         selectButton(btn);
                         if (btn.id === 'services-m-btn') {
-                            const target = computeServicesTarget();
-                            window.scrollTo({ top: target, behavior: 'smooth' });
+                            const servicesElLocal = document.querySelector('.second-sec');
+                            if (servicesElLocal) {
+                                const target = computeServicesTarget();
+                                window.scrollTo({ top: target, behavior: 'smooth' });
+                            } else {
+                                window.location.href = '/home#services';
+                            }
+                        }
+                        if (btn.id === 'programs-m-btn') {
+                            window.location.pathname = '/programs';
                         }
                         if (btn.id === 'home-m-btn') {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+                            if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            } else {
+                                window.location.pathname = '/home';
+                            }
                         }
                         menuOpen = false;
                         updateMenu();
@@ -207,10 +250,40 @@ window.addEventListener("scroll", function () {
             const servicesEl = document.querySelector('.second-sec');
             const homeBtn = document.getElementById('home-m-btn');
             const servicesBtn = document.getElementById('services-m-btn');
+            const programsBtn = document.getElementById('programs-m-btn');
 
             // also find desktop nav buttons to sync selection
             const desktopHome = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'home');
             const desktopServices = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'services');
+            const desktopPrograms = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'programs');
+
+            // If this page doesn't have a services section (e.g. /programs), don't run the scroll-based fallback
+            // Instead, initialize selection from the current pathname so the correct nav item stays selected.
+            if (!servicesEl) {
+                try {
+                    const p = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+                    if (p === '/programs' || p === '/programs.html') {
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (servicesBtn) servicesBtn.classList.remove('selected');
+                        if (programsBtn) programsBtn.classList.add('selected');
+
+                        if (desktopHome) desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms.classList.add('selected');
+                    } else if (p === '/home' || p === '/') {
+                        if (homeBtn) homeBtn.classList.add('selected');
+                        if (programsBtn) programsBtn.classList.remove('selected');
+
+                        if (desktopHome) desktopHome.classList.add('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                    }
+                } catch (e) {
+                    // ignore selection errors
+                }
+
+                // don't attach scroll observer/fallback since there's no services section
+                return;
+            }
 
             if (servicesEl && homeBtn && servicesBtn && 'IntersectionObserver' in window) {
                 // When services section is at least 40% visible, mark Services selected
@@ -233,7 +306,7 @@ window.addEventListener("scroll", function () {
                 }, { threshold: [0, 0.25, 0.4, 0.5, 0.75, 1] });
 
                 observer.observe(servicesEl);
-            } else if (homeBtn && servicesBtn) {
+            } else if (servicesEl && homeBtn && servicesBtn) {
                 // Fallback: simple threshold based on scrollY
                 function fallbackUpdate() {
                     const scrollY = window.scrollY || window.pageYOffset;
@@ -256,5 +329,25 @@ window.addEventListener("scroll", function () {
             }
         })();
     })();
+})();
+
+// If the page was opened with #services, scroll to the services section (useful after navigating from another page)
+(function scrollToHashTargetsOnLoad() {
+    if (!('location' in window)) return;
+    try {
+        if (window.location.hash === '#services') {
+            // Wait a tick for layout and any deferred styles to apply
+            setTimeout(() => {
+                const servicesEl = document.querySelector('.second-sec');
+                if (!servicesEl) return;
+                const navbarEl = document.querySelector('#navbar');
+                const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
+                const target = Math.max(0, servicesEl.offsetTop - navHeight);
+                window.scrollTo({ top: target, behavior: 'smooth' });
+            }, 80);
+        }
+    } catch (e) {
+        // ignore
+    }
 })();
 
