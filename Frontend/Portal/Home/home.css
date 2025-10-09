@@ -1053,7 +1053,7 @@ body {
                         box-shadow: 0 10px 30px rgba(22, 15, 54, 0.08), 0 6px 12px rgba(22, 15, 54, 0.06), 0 2px 4px rgba(22, 15, 54, 0.04);
                         transform: translateY(-2px);
                         transition: all 0.3s ease;
-                        cursor: pointer;
+                        /* cursor: pointer; */
                     }
                 }
 

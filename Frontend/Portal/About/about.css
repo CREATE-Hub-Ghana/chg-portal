@@ -184,7 +184,7 @@
     width: 100%;
     height: max-content;
     background-color: transparent;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 
     .mc-top {
         display: flex;
@@ -343,6 +343,153 @@
 
         .mcbcc-two {
             background-color: rgba(220, 38, 38);
+        }
+    }
+}
+
+.third-sec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+    background-color: #fff;
+    padding-bottom: 100px;
+
+    .vc-top {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: max-content;
+        background-color: transparent;
+        /* margin-top: 35px; */
+        padding-bottom: 65px;
+
+        .vct-main {
+            width: 80%;
+            width: max-content;
+            height: max-content;
+            margin-top: 35px;
+            /* text-align: center; */
+            /* background-color: red; */
+
+            font-size: 2.6em;
+            /* font-size: clamp(2em, 2.7em, 3em); */
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            b {
+                background: linear-gradient(90deg, #2563eb 0%, #9333ea 100%);
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .vct-sub {
+            margin-top: 9px;
+            text-align: center;
+            width: 50%;
+            height: auto;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1em;
+            font-weight: 500;
+            color: rgba(22, 15, 54, 0.9);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+    }
+
+    .vc-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+        height: max-content;
+        background-color: transparent;
+
+        /* gap: 35px; */
+
+        .vcb-block {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 280px;
+            height: 220px;
+            background-color: transparent;
+
+            .vcbb-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 70px;
+                height: 70px;
+                border-radius: 15px;
+                background: linear-gradient(120deg, #ef4444 0%, #db2777 100%);
+                transition: all 0.3s ease;
+
+
+                img {
+                    width: 36px;
+                    height: 36px;
+                    object-fit: contain;
+                }
+
+                &:hover {
+                    scale: 1.02;
+                    box-shadow: 0 10px 30px rgba(22, 15, 54, 0.08), 0 6px 12px rgba(22, 15, 54, 0.06), 0 2px 4px rgba(22, 15, 54, 0.04);
+                    transform: translateY(-2px);
+                    transition: all 0.3s ease;
+                }
+            }
+
+            .vcbb-main {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: max-content;
+
+                span {
+                    display: flex;
+                    width: max-content;
+                    height: auto;
+                    text-align: center;
+                    font-size: 1.2em;
+                    font-weight: 800;
+                    color: #160f36;
+                    letter-spacing: 0.2px;
+                    background-color: transparent;
+
+                    margin-top: 35px;
+                }
+            }
+
+            .vcbb-sub {
+                position: absolute;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: max-content;
+
+                span {
+                    display: flex;
+                    width: 100%;
+                    height: auto;
+                    text-align: center;
+                    font-size: 0.85em;
+                    font-weight: 550;
+                    color: rgba(22, 15, 54, 0.95);
+                    letter-spacing: 0.5px;
+                    line-height: 1.6;
+                    background-color: transparent;
+
+                }
+            }
         }
     }
 }
