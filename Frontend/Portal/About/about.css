@@ -530,6 +530,7 @@
             .ac-bottom {
                 flex-direction: column;
                 height: max-content;
+                gap: 60px;
 
                 .acb-card-container {
                     width: 92%;
@@ -569,7 +570,42 @@
     }
 
     .second-sec {
-        display: none;
+        .mc-top {
+            padding-bottom: 60px;
+
+            .mct-main {
+                font-size: 1.6em;
+            }
+
+            .mct-sub {
+                margin-top: 20px;
+                width: calc(90vw - 4px);
+                font-size: 1em;
+            }
+        }
+
+        .mc-bottom {
+            flex-direction: column;
+            height: max-content;
+            gap: 50px;
+
+            .mcb-card-container {
+                width: 92%;
+                height: max-content;
+                padding: 50px 0;
+                gap: 30px;
+
+                .mcbcc-header {
+                    span {
+                        margin-left: 40px;
+                    }
+                }
+
+                .mcbcc-list {
+                    padding-left: 40px;
+                }
+            }
+        }
     }
 
     .third-sec {
