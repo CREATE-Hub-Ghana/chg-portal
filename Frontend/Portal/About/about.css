@@ -612,16 +612,16 @@
 
     .third-sec {
         .vc-top {
-            padding-bottom: 55px;
+            padding-bottom: 54px;
 
             .vct-main {
                 font-size: 2em;
             }
 
             .vct-sub {
-                margin-top: 16px;
+                margin-top: 15px;
                 width: calc(90vw - 4px);
-                font-size: 1em;
+                font-size: 0.95em;
             }
         }
 
@@ -631,5 +631,4 @@
             gap: 60px;
         }
     }
-
 }
