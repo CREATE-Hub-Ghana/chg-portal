@@ -258,7 +258,7 @@ nav {
         transition: all 0.3s ease;
 
         &:hover {
-            transform: scale(1.01);
+            transform: scale(1.02);
             background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
             cursor: pointer;
         }
