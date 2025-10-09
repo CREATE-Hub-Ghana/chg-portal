@@ -411,3 +411,33 @@ nav {
         transition: all 0.2s ease-out;
     }
 }
+
+@media (max-width: 630px) {
+    nav {
+        height: 48px;
+        /* background-color: red; */
+
+        .logo-text-container {
+            display: flex;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .nav-btn-container {
+            display: none;
+        }
+
+        .donate {
+            display: none;
+        }
+
+        .menu-btn {
+            display: flex;
+        }
+
+        /* .menu-container {
+            display: none;
+        } */
+    }
+}

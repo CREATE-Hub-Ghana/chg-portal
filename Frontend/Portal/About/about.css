@@ -497,6 +497,82 @@
 @media (max-width: 630px) {
 
     .first-sec {
+
+        .about-container {
+            .ac-top {
+                .act-main {
+                    width: max-content;
+                    height: max-content;
+                    margin-top: 35px;
+                    /* text-align: center; */
+                    /* background-color: red; */
+
+                    font-size: 1.6em;
+                    /* font-size: clamp(2em, 2.7em, 3em); */
+                    font-weight: 800;
+                    letter-spacing: 1px;
+
+                    b {
+                        background: linear-gradient(90deg, #2563eb 0%, #9333ea 100%);
+                        background-clip: text;
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
+                }
+
+                .act-sub {
+                    margin-top: 20px;
+                    width: calc(90vw - 4px);
+                    font-size: 1em;
+                }
+            }
+
+            .ac-bottom {
+                flex-direction: column;
+                height: max-content;
+
+                .acb-card-container {
+                    width: 92%;
+                    padding-bottom: 50px;
+                    align-items: center;
+
+                    .acbcc-logo-c {
+                        justify-content: center;
+
+                        .acbcc-icon {
+                            margin: 0;
+                        }
+                    }
+
+                    .acbcc-header {
+                        justify-content: center;
+
+                        span {
+                            text-align: center;
+                            margin: 0;
+                        }
+                    }
+
+                    .acbcc-sub {
+                        justify-content: center;
+                        margin-top: 5px;
+
+                        span {
+                            text-align: center;
+                            width: 85%;
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .second-sec {
+        display: none;
+    }
+
+    .third-sec {
         display: none;
     }
 
