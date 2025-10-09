@@ -500,6 +500,8 @@
 
         .about-container {
             .ac-top {
+                padding-bottom: 63px;
+
                 .act-main {
                     width: max-content;
                     height: max-content;
@@ -521,7 +523,7 @@
                 }
 
                 .act-sub {
-                    margin-top: 20px;
+                    margin-top: 24px;
                     width: calc(90vw - 4px);
                     font-size: 1em;
                 }
@@ -530,7 +532,7 @@
             .ac-bottom {
                 flex-direction: column;
                 height: max-content;
-                gap: 60px;
+                gap: 65px;
 
                 .acb-card-container {
                     width: 92%;
@@ -578,7 +580,7 @@
             }
 
             .mct-sub {
-                margin-top: 22px;
+                margin-top: 24px;
                 width: calc(90vw - 4px);
                 font-size: 1em;
             }
@@ -610,14 +612,14 @@
 
     .third-sec {
         .vc-top {
-            padding-bottom: 62px;
+            padding-bottom: 58px;
 
             .vct-main {
                 font-size: 1.95em;
             }
 
             .vct-sub {
-                margin-top: 16px;
+                margin-top: 18px;
                 width: calc(90vw - 4px);
                 font-size: 1em;
             }
@@ -626,7 +628,7 @@
         .vc-bottom {
             flex-direction: column;
             height: max-content;
-            gap: 55px;
+            gap: 60px;
         }
     }
 
