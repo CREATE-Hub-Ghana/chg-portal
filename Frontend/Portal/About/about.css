@@ -574,11 +574,11 @@
             padding-bottom: 60px;
 
             .mct-main {
-                font-size: 1.6em;
+                font-size: 1.95em;
             }
 
             .mct-sub {
-                margin-top: 20px;
+                margin-top: 22px;
                 width: calc(90vw - 4px);
                 font-size: 1em;
             }
@@ -609,7 +609,25 @@
     }
 
     .third-sec {
-        display: none;
+        .vc-top {
+            padding-bottom: 62px;
+
+            .vct-main {
+                font-size: 1.95em;
+            }
+
+            .vct-sub {
+                margin-top: 16px;
+                width: calc(90vw - 4px);
+                font-size: 1em;
+            }
+        }
+
+        .vc-bottom {
+            flex-direction: column;
+            height: max-content;
+            gap: 55px;
+        }
     }
 
 }
