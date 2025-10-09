@@ -525,7 +525,7 @@
                 .act-sub {
                     margin-top: 24px;
                     width: calc(90vw - 4px);
-                    font-size: 1em;
+                    font-size: 0.95em;
                 }
             }
 
@@ -612,14 +612,14 @@
 
     .third-sec {
         .vc-top {
-            padding-bottom: 58px;
+            padding-bottom: 55px;
 
             .vct-main {
-                font-size: 1.95em;
+                font-size: 2em;
             }
 
             .vct-sub {
-                margin-top: 18px;
+                margin-top: 16px;
                 width: calc(90vw - 4px);
                 font-size: 1em;
             }
