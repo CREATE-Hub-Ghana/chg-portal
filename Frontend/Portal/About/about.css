@@ -1,0 +1,356 @@
+.first-sec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+    background-color: #fff;
+    padding-bottom: 50px;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+    background-color: transparent;
+
+    .ac-top {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: max-content;
+        background-color: transparent;
+        /* margin-top: 35px; */
+        padding-bottom: 70px;
+
+        .act-main {
+            width: 80%;
+            width: max-content;
+            height: max-content;
+            margin-top: 35px;
+            /* text-align: center; */
+            /* background-color: red; */
+
+            font-size: 2.7em;
+            /* font-size: clamp(2em, 2.7em, 3em); */
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            b {
+                background: linear-gradient(90deg, #2563eb 0%, #9333ea 100%);
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .act-sub {
+            margin-top: 18px;
+            text-align: center;
+            width: 50%;
+            height: auto;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.04em;
+            font-weight: 500;
+            color: rgba(22, 15, 54, 0.9);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+    }
+
+    .ac-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 400px;
+        background-color: transparent;
+
+        gap: 70px;
+
+        .acb-card-container {
+            display: flex;
+            flex-direction: column;
+            width: 42%;
+            height: 100%;
+            border-radius: 25px;
+            overflow: hidden;
+
+            .acbcc-logo-c {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 75px;
+                background-color: transparent;
+                margin-top: 45px;
+
+                .acbcc-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 68px;
+                    height: 68px;
+                    border-radius: 20px;
+                    transition: all 0.3s ease;
+
+                    margin-left: 50px;
+
+                    img {
+                        width: 52%;
+                        height: 52%;
+                        object-fit: contain;
+                    }
+                }
+            }
+
+            .acbcc-header {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 80px;
+                background-color: transparent;
+
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: max-content;
+                    height: max-content;
+                    margin-left: 50px;
+
+                    font-family: 'Manrope', sans-serif;
+                    text-align: left;
+                    font-size: 1.85em;
+                    font-weight: 800;
+                    color: #160f36;
+                    letter-spacing: 0.02rem;
+
+                    background-color: transparent;
+                }
+            }
+
+            .acbcc-sub {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: max-content;
+                background-color: transparent;
+
+                span {
+                    display: flex;
+                    width: 80%;
+                    height: max-content;
+                    margin-left: 50px;
+
+                    font-family: 'Manrope', sans-serif;
+                    text-align: left;
+                    font-size: 0.98em;
+                    font-weight: 500;
+                    color: rgba(22, 15, 54, 0.85);
+                    letter-spacing: 0.5px;
+                    line-height: 1.9;
+
+                    background-color: transparent;
+                }
+            }
+        }
+
+        .acbcc-one {
+            background: linear-gradient(120deg, #faf5ff 0%, #eff6ff 100%);
+
+            .acbcc-icon {
+                background: linear-gradient(120deg, #9333ea 0%, #2563eb 100%);
+            }
+        }
+
+        .acbcc-two {
+            background: linear-gradient(120deg, #eff6ff 0%, #f0fdf4 100%);
+
+            .acbcc-icon {
+                background: linear-gradient(120deg, #2563eb 0%, #16a34a 100%);
+            }
+        }
+    }
+}
+
+.second-sec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    background-color: transparent;
+    padding-bottom: 100px;
+
+    .mc-top {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: max-content;
+        background-color: transparent;
+        /* margin-top: 35px; */
+        padding-bottom: 62px;
+
+        .mct-main {
+            width: 80%;
+            width: max-content;
+            height: max-content;
+            margin-top: 35px;
+            /* text-align: center; */
+            /* background-color: red; */
+
+            font-size: 2.62em;
+            /* font-size: clamp(2em, 2.7em, 3em); */
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            b {
+                background: linear-gradient(90deg, #2563eb 0%, #9333ea 100%);
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .mct-sub {
+            margin-top: 15px;
+            text-align: center;
+            width: 50%;
+            height: auto;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.02em;
+            font-weight: 500;
+            color: rgba(22, 15, 54, 0.9);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+    }
+
+    .mc-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 300px;
+        background-color: transparent;
+
+        gap: 70px;
+
+        .mcb-card-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 42%;
+            height: 100%;
+            border-radius: 25px;
+            overflow: hidden;
+
+            gap: 25px;
+
+            .mcbcc-header {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: max-content;
+                background-color: transparent;
+
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: max-content;
+                    height: max-content;
+                    margin-left: 50px;
+
+                    font-family: 'Manrope', sans-serif;
+                    text-align: left;
+                    font-size: 1.65em;
+                    font-weight: 800;
+                    color: #fff;
+                    letter-spacing: 0.02rem;
+
+                    background-color: transparent;
+                }
+            }
+
+            .mcbcc-list {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 100%;
+                height: max-content;
+                background-color: transparent;
+                padding-left: 50px;
+
+                gap: 15px;
+
+                .mc-list-line {
+                    display: flex;
+                    align-items: center;
+                    width: max-content;
+                    height: 25px;
+                    background-color: transparent;
+                    gap: 15px;
+
+                    .mcll-ball-c {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 18px;
+                        height: 100%;
+                        background-color: transparent;
+
+                        .mcll-ball {
+                            border-radius: 50%;
+                            width: 9px;
+                            height: 9px;
+                            background-color: rgb(250 204 21);
+                        }
+                    }
+
+                    .mcll-text {
+                        display: flex;
+                        align-items: center;
+                        width: max-content;
+                        text-align: left;
+                        height: 100%;
+                        background-color: transparent;
+
+                        span {
+                            text-align: left;
+                            width: max-content;
+                            height: auto;
+                            font-size: 0.9em;
+                            font-weight: 500;
+                            color: #fff;
+                            letter-spacing: 0.2px;
+                            line-height: 1.2;
+                            background-color: transparent;
+                        }
+                    }
+                }
+            }
+        }
+
+        .mcbcc-one {
+            background-color: rgba(37, 100, 235);
+        }
+
+        .mcbcc-two {
+            background-color: rgba(220, 38, 38);
+        }
+    }
+}
+
+@media (max-width: 630px) {
+
+    .first-sec {
+        display: none;
+    }
+
+}

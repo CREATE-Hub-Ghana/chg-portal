@@ -46,6 +46,9 @@ window.addEventListener("scroll", function () {
                 const mobileHome = document.getElementById('home-m-btn');
                 const mobileServices = document.getElementById('services-m-btn');
                 const mobilePrograms = document.getElementById('programs-m-btn');
+                const mobileContact = document.getElementById('contact-m-btn');
+                const mobileBlog = document.getElementById('blog-m-btn') || document.getElementById('vlog-m-btn');
+                const mobileAbout = document.getElementById('about-m-btn');
 
                 // Close mobile overlay if open
                 try {
@@ -81,6 +84,15 @@ window.addEventListener("scroll", function () {
                         // Not on the home page: navigate to home and include hash so home can scroll to services on load
                         window.location.href = '/home#services';
                     }
+                } else if (text === 'about') {
+                    if (mobileAbout) mobileAbout.classList.add('selected');
+                    window.location.pathname = '/about';
+                } else if (text === 'contact') {
+                    if (mobileContact) mobileContact.classList.add('selected');
+                    window.location.pathname = '/contact';
+                } else if (text === 'blog') {
+                    if (mobileBlog) mobileBlog.classList.add('selected');
+                    window.location.pathname = '/blog';
                 }
             }
 
@@ -203,6 +215,16 @@ window.addEventListener("scroll", function () {
                         // route to programs page
                         window.location.pathname = '/programs';
                     }
+                    if (btn.id === 'contact-m-btn') {
+                        window.location.pathname = '/contact';
+                    }
+                    if (btn.id === 'blog-m-btn') {
+                        // blog
+                        window.location.pathname = '/blog';
+                    }
+                    if (btn.id === 'about-m-btn') {
+                        window.location.pathname = '/about';
+                    }
                     if (btn.id === 'home-m-btn') {
                         // If already on home, scroll to top; otherwise route to /home
                         const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
@@ -232,6 +254,15 @@ window.addEventListener("scroll", function () {
                         if (btn.id === 'programs-m-btn') {
                             window.location.pathname = '/programs';
                         }
+                        if (btn.id === 'contact-m-btn') {
+                            window.location.pathname = '/contact';
+                        }
+                        if (btn.id === 'blog-m-btn') {
+                            window.location.pathname = '/blog';
+                        }
+                        if (btn.id === 'about-m-btn') {
+                            window.location.pathname = '/about';
+                        }
                         if (btn.id === 'home-m-btn') {
                             const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
                             if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
@@ -256,6 +287,9 @@ window.addEventListener("scroll", function () {
             const desktopHome = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'home');
             const desktopServices = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'services');
             const desktopPrograms = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'programs');
+            const desktopContact = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'contact');
+            const desktopBlog = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'blog');
+            const desktopAbout = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'about');
 
             // If this page doesn't have a services section (e.g. /programs), don't run the scroll-based fallback
             // Instead, initialize selection from the current pathname so the correct nav item stays selected.
@@ -276,12 +310,80 @@ window.addEventListener("scroll", function () {
 
                         if (desktopHome) desktopHome.classList.add('selected');
                         if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                    } else if (p === '/about' || p === '/about.html') {
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (programsBtn) programsBtn && programsBtn.classList.remove('selected');
+                        if (desktopAbout) desktopAbout.classList.add('selected');
+                        if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (programsBtn) programsBtn.classList.remove('selected');
+                        if (servicesBtn) servicesBtn && servicesBtn.classList.remove('selected');
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (mobileAbout) mobileAbout && mobileAbout.classList.add('selected');
+                    } else if (p === '/contact' || p === '/contact.html') {
+                        if (desktopContact) desktopContact.classList.add('selected');
+                        if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (mobileContact) mobileContact && mobileContact.classList.add('selected');
+                    } else if (p === '/blog' || p === '/blog.html') {
+                        if (desktopBlog) desktopBlog.classList.add('selected');
+                        if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (mobileBlog) mobileBlog && mobileBlog.classList.add('selected');
                     }
                 } catch (e) {
                     // ignore selection errors
                 }
 
                 // don't attach scroll observer/fallback since there's no services section
+                return;
+            }
+
+            // Only run the scroll-based Home/Services observer when we're actually on the home route.
+            const _currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            const aboutBtn = document.getElementById('about-m-btn');
+            const contactBtn = document.getElementById('contact-m-btn');
+            const blogBtn = document.getElementById('blog-m-btn') || document.getElementById('vlog-m-btn');
+
+            if (!(_currentPath === '/' || _currentPath === '/home' || _currentPath === '/home.html')) {
+                // Not on home: avoid toggling Home/Services based on scroll.
+                // Instead, initialize selection from the pathname for other pages (About/Contact/Blog/etc.).
+                try {
+                    if (_currentPath === '/about' || _currentPath === '/about.html') {
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (servicesBtn) servicesBtn.classList.remove('selected');
+                        if (programsBtn) programsBtn.classList.remove('selected');
+                        if (aboutBtn) aboutBtn.classList.add('selected');
+                        if (desktopAbout) desktopAbout.classList.add('selected');
+                        if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                    } else if (_currentPath === '/contact' || _currentPath === '/contact.html') {
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (servicesBtn) servicesBtn.classList.remove('selected');
+                        if (programsBtn) programsBtn.classList.remove('selected');
+                        if (contactBtn) contactBtn.classList.add('selected');
+                        if (desktopContact) desktopContact.classList.add('selected');
+                        if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                    } else if (_currentPath === '/blog' || _currentPath === '/blog.html') {
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (servicesBtn) servicesBtn.classList.remove('selected');
+                        if (programsBtn) programsBtn.classList.remove('selected');
+                        if (blogBtn) blogBtn.classList.add('selected');
+                        if (desktopBlog) desktopBlog.classList.add('selected');
+                        if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                    }
+                } catch (e) {
+                    // ignore selection errors
+                }
+
+                // Do not attach scroll observers on non-home routes
                 return;
             }
 
