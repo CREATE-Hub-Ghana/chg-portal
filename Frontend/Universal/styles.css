@@ -930,6 +930,27 @@ footer {
     }
 }
 
+/* Custom scrollbar for webkit browsers (Chrome, Edge, Safari) */
+/* ::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    width: 10px;
+    background: #f0f4f8;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(145deg, #160f36 0%, #04af98 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(145deg, #160f36 0%, #04af98 100%);
+} */
+
+
 @media (max-width: 630px) {
     nav {
         height: 48px;
@@ -957,5 +978,14 @@ footer {
         /* .menu-container {
             display: none;
         } */
+    }
+
+    #back-to-top {
+        display: none;
+        left: 85dvw;
+    }
+
+    footer {
+        display: none;
     }
 }
