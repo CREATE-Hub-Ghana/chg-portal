@@ -1,7 +1,13 @@
 // Navbar sticky/compact behavior: works on all pages that include a #navbar
 window.addEventListener("scroll", function () {
     const navbar = document.querySelector("#navbar");
+    const backToTopBtn = document.getElementById('back-to-top');
+
     if (!navbar) return;
+
+    // consider a tiny tolerance for fractional pixels / bounce
+    const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 1);
+
     if (window.scrollY > 25) {
         navbar.style.backdropFilter = "blur(4px)";
         navbar.style.webkitBackdropFilter = "blur(4px)";
@@ -9,6 +15,17 @@ window.addEventListener("scroll", function () {
         navbar.style.width = "97%";
         navbar.style.borderRadius = "25px";
         navbar.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+
+        if (backToTopBtn) {
+            // hide/reset the button when we're at the bottom of the page
+            if (atBottom) {
+                backToTopBtn.style.opacity = '';
+                backToTopBtn.style.pointerEvents = '';
+            } else {
+                backToTopBtn.style.opacity = '1';
+                backToTopBtn.style.pointerEvents = 'auto';
+            }
+        }
     } else {
         navbar.style.backdropFilter = "";
         navbar.style.webkitBackdropFilter = "";
@@ -16,8 +33,88 @@ window.addEventListener("scroll", function () {
         navbar.style.width = "";
         navbar.style.borderRadius = "";
         navbar.style.backgroundColor = "";
+
+        if (backToTopBtn) {
+            backToTopBtn.style.opacity = '';
+            backToTopBtn.style.pointerEvents = '';
+        }
     }
 });
+
+(function setupBackToTop() {
+    const backToTopBtn = document.getElementById('back-to-top');
+    const jumpToTopBtn = document.querySelector('.jump-to-top');
+    if (!backToTopBtn) return;
+    if (!jumpToTopBtn) return;
+
+    // Accessibility
+    backToTopBtn.setAttribute('role', 'button');
+    if (!backToTopBtn.hasAttribute('tabindex')) backToTopBtn.setAttribute('tabindex', '0');
+    if (!backToTopBtn.hasAttribute('aria-label')) backToTopBtn.setAttribute('aria-label', 'Back to top');
+
+    jumpToTopBtn.setAttribute('role', 'button');
+    if (!jumpToTopBtn.hasAttribute('tabindex')) jumpToTopBtn.setAttribute('tabindex', '0');
+    if (!jumpToTopBtn.hasAttribute('aria-label')) jumpToTopBtn.setAttribute('aria-label', 'Jump to top');
+
+    function isAtBottom() {
+        return (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 1);
+    }
+
+    function isNearTop() {
+        return window.scrollY <= 25;
+    }
+
+    function updateVisibility() {
+        // Mirror the logic used elsewhere: hide when at top or at bottom, show otherwise
+        if (isNearTop() || isAtBottom()) {
+            backToTopBtn.style.opacity = '';
+            backToTopBtn.style.pointerEvents = '';
+        } else {
+            backToTopBtn.style.opacity = '1';
+            backToTopBtn.style.pointerEvents = 'auto';
+        }
+    }
+
+    function scrollToTop() {
+        try {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    }
+
+    backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToTop();
+    });
+
+    backToTopBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            scrollToTop();
+        }
+    });
+
+    jumpToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToTop();
+    });
+
+    jumpToTopBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            scrollToTop();
+        }
+    });
+
+    // Keep visibility in sync with page state
+    updateVisibility();
+    window.addEventListener('scroll', updateVisibility);
+    window.addEventListener('resize', updateVisibility);
+
+    // If layout changes dynamically (images/fonts), ensure visibility recalculates after load
+    window.addEventListener('load', () => setTimeout(updateVisibility, 50));
+})();
 
 // ----- Shared navigation & menu logic (moved here so all pages can import it) -----
 (function sharedNavAndMenu() {
