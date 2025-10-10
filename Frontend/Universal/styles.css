@@ -424,6 +424,7 @@ footer {
 
     .footer-top {
         display: flex;
+        flex-wrap: wrap;
         /* align-items: center; */
         justify-content: space-evenly;
         width: 100%;
@@ -526,7 +527,7 @@ footer {
         .ft-three {
             display: flex;
             flex-direction: column;
-            width: 250px;
+            min-width: 200px;
             height: 100%;
             background-color: transparent;
 
@@ -606,7 +607,6 @@ footer {
         .ft-four {
             display: flex;
             flex-direction: column;
-            align-items: center;
             width: 310px;
             height: 100%;
             background-color: transparent;
@@ -697,10 +697,11 @@ footer {
                 position: relative;
                 display: flex;
                 flex-direction: column;
-                width: 100%;
+                width: calc(90%);
                 gap: 25px;
                 margin-top: 30px;
                 margin-left: 20px;
+                background-color: transparent;
 
                 span {
                     display: flex;
@@ -716,12 +717,12 @@ footer {
 
                 input {
                     display: flex;
-                    width: 210px;
+                    width: calc(70%);
                     height: 40px;
                     border-radius: 10px;
                     background-color: rgb(31 41 55);
                     border: 1px solid rgb(55 65 81);
-                    padding: 0 60px 0 20px;
+                    padding: 0 65px 0 15px;
                     outline: none;
 
                     font-family: 'Manrope', sans-serif;
@@ -743,7 +744,7 @@ footer {
                 .mail-block {
                     position: absolute;
                     bottom: 0;
-                    left: 240px;
+                    right: 2px;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -951,6 +952,135 @@ footer {
 } */
 
 
+@media (max-width: 1135px) {
+    footer {
+        height: 900px;
+
+        .footer-top {
+
+            .ft-one,
+            .ft-two,
+            .ft-three,
+            .ft-four {
+                height: max-content;
+            }
+
+            .ft-two,
+            .ft-three {
+                width: 300px;
+            }
+
+            .ft-one {
+                width: 100%;
+
+                .fto-logo {
+                    img {
+                        left: 0;
+                        position: relative;
+                    }
+                }
+
+                .fto-about {
+                    margin-top: 20px;
+                    align-items: center;
+                    justify-content: center;
+                    height: max-content;
+
+                    span {
+                        left: 0;
+                        text-align: center;
+                        position: relative;
+                        height: max-content;
+                    }
+                }
+
+                .fto-socials {
+                    margin-top: 35px;
+                    justify-content: center;
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1015px) {
+    footer {
+        height: 930px;
+
+        .footer-bottom {
+            flex-wrap: wrap;
+            height: max-content;
+            justify-content: space-evenly;
+            /* flex-direction: column; */
+            gap: 20px;
+            bottom: 20px;
+
+            .made-in {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+
+    }
+}
+
+@media (max-width: 935px) {
+    footer {
+        .footer-top {
+
+            .ft-two,
+            .ft-three {
+                width: max-content;
+            }
+        }
+    }
+}
+
+@media (max-width: 755px) {
+    footer {
+        height: 500px;
+
+        .footer-top {
+            height: max-content;
+
+            .ft-two,
+            .ft-three,
+            .ft-four {
+                display: none;
+            }
+        }
+
+        .cut-line {
+            bottom: 40%;
+        }
+
+        .footer-bottom {
+            bottom: 30px;
+        }
+    }
+}
+
+@media (max-width: 680px) {
+    footer {
+        height: 600px;
+
+        .cut-line {
+            bottom: 42%;
+        }
+
+        .footer-bottom {
+            bottom: 30px;
+            gap: 30px;
+
+            .fb-mid {
+                flex-wrap: wrap;
+                justify-content: space-evenly;
+            }
+        }
+    }
+}
+
 @media (max-width: 630px) {
     nav {
         height: 48px;
@@ -983,9 +1113,5 @@ footer {
     #back-to-top {
         display: none;
         left: 85dvw;
-    }
-
-    footer {
-        display: none;
     }
 }
