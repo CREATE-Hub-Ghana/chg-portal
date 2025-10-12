@@ -1,0 +1,316 @@
+.first-sec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+    background-color: #fff;
+    background-color: rgba(0, 0, 0, 0.015);
+    padding-bottom: 100px;
+}
+
+.git-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    background-color: transparent;
+
+    .git-top {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: max-content;
+        background-color: transparent;
+        margin-top: 20px;
+        padding-bottom: 50px;
+
+        .git-main {
+            width: 80%;
+            width: max-content;
+            height: max-content;
+            margin-top: 35px;
+            /* text-align: center; */
+            /* background-color: red; */
+
+            font-size: 2.7em;
+            /* font-size: clamp(2em, 2.7em, 3em); */
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            b {
+                background: linear-gradient(90deg, #2563eb 0%, #9333ea 100%);
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .git-sub {
+            margin-top: 15px;
+            text-align: center;
+            width: 50%;
+            height: auto;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.04em;
+            font-weight: 500;
+            color: rgba(22, 15, 54, 0.9);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+    }
+
+    .git-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 600px;
+        background-color: transparent;
+        gap: 5%;
+
+        .contact-info-container {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            height: 100%;
+            background-color: transparent;
+
+            .cic-header {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: max-content;
+                margin-top: 10px;
+
+                span {
+                    display: flex;
+                    width: max-content;
+                    height: max-content;
+                    text-align: center;
+                    font-size: 1.35em;
+                    font-weight: bold;
+                    color: #160f36;
+                    letter-spacing: 0.5px;
+                    background-color: transparent;
+                }
+            }
+
+            .cic-mid {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: max-content;
+                background-color: transparent;
+                margin-top: 25px;
+
+                gap: 21px;
+
+                .cicm-block {
+                    display: flex;
+                    width: 100%;
+                    height: max-content;
+                    background-color: transparent;
+                    gap: 24px;
+
+                    .cicmb-icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 46px;
+                        height: 46px;
+                        border-radius: 10px;
+                        background-color: #dbeafe;
+
+                        img {
+                            width: 22px;
+                            height: 24px;
+                            object-fit: contain;
+                        }
+                    }
+
+                    .cicmb-details {
+                        display: flex;
+                        flex-direction: column;
+                        width: max-content;
+                        height: max-content;
+                        gap: 6px;
+
+                        .cbd-header {
+                            display: flex;
+                            width: max-content;
+                            height: max-content;
+                            text-align: left;
+                            font-family: 'Manrope', sans-serif;
+                            font-size: 1.15em;
+                            font-weight: 600;
+                            color: #160f36;
+                            letter-spacing: 0.3px;
+                            background-color: transparent;
+                        }
+
+                        .cbd-contact {
+                            display: flex;
+                            flex-direction: column;
+                            width: max-content;
+                            height: max-content;
+                            margin-top: 2px;
+
+                            gap: 3px;
+
+                            span {
+                                display: flex;
+                                width: max-content;
+                                height: max-content;
+                                text-align: left;
+                                font-family: 'Manrope', sans-serif;
+                                font-size: 0.92em;
+                                font-weight: 400;
+                                color: #160f36;
+                                letter-spacing: 0.5px;
+                                background-color: transparent;
+                            }
+                        }
+
+                        a {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: max-content;
+                            height: max-content;
+                            text-decoration: none;
+
+                            margin-top: 5px;
+
+                            transition: all 0.3s ease;
+
+                            font-family: 'Poppins';
+                            color: #2563eb;
+                            font-size: 0.9em;
+                            font-weight: 550;
+                            cursor: pointer;
+
+                            img {
+                                position: absolute;
+                                top: 50%;
+                                right: -28px;
+                                transform: translateY(-50%);
+                                width: 24px;
+                                height: 24px;
+                                object-fit: contain;
+                                /* margin-bottom: 2px;
+                                margin-left: 5px; */
+
+                                transition: all 0.25s ease;
+                            }
+
+                            /* &:hover {
+                                img {
+                                    right: -32px;
+                                }
+                            } */
+                        }
+                    }
+                }
+            }
+        }
+
+        .sam-container {
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+            height: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
+            background-color: #fff;
+            overflow: hidden;
+
+            .sam-header {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: max-content;
+                margin-top: 45px;
+                padding-left: 50px;
+
+                span {
+                    display: flex;
+                    width: max-content;
+                    height: max-content;
+                    /* font-family: 'Manrope', sans-serif; */
+                    text-align: center;
+                    font-size: 1.7em;
+                    font-weight: bold;
+                    color: #160f36;
+                    letter-spacing: 1px;
+                    background-color: transparent;
+                }
+            }
+
+            .sam-input-sec {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                width: calc(100% - 100px);
+                height: max-content;
+                background-color: transparent;
+                padding: 0 50px;
+                margin-top: 30px;
+
+                row-gap: 30px;
+
+                .is-block {
+                    display: flex;
+                    flex-direction: column;
+                    width: calc(48% - 2px);
+                    height: max-content;
+                    background-color: transparent;
+
+                    gap: 12px;
+
+                    span {
+                        display: flex;
+                        width: max-content;
+                        height: max-content;
+                        text-align: left;
+                        font-family: 'Manrope', sans-serif;
+                        font-size: 0.85em;
+                        font-weight: bold;
+                        color: rgba(22, 15, 54, 0.85);
+                        letter-spacing: 0.2px;
+                        background-color: transparent;
+                    }
+
+                    input {
+                        display: flex;
+                        width: calc(100% - 32px);
+                        height: 50px;
+                        outline: none;
+                        border: 1px solid #d1d5db;
+                        border-radius: 8px;
+                        background-color: transparent;
+                        transition: all 0.25s ease;
+
+                        padding: 0 15px;
+
+                        font-family: 'Manrope', sans-serif;
+                        text-align: left;
+                        color: black;
+                        font-size: 0.9em;
+                        font-weight: 500;
+                        letter-spacing: 0.5px;
+
+                        &:focus {
+                            outline: 2px solid #2563eb;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

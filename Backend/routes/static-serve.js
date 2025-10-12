@@ -126,6 +126,20 @@ const setupFileServing = (app, cacheMiddleware) => {
         response.sendFile(filePath);
     });
 
+    // Serve programs.html for the /programs route
+    app.get("/contact", (request, response) => {
+        const filePath = path.join(
+            __dirname,
+            "..",
+            "..",
+            "Frontend",
+            "Portal",
+            "Contact",
+            "contact.html",
+        );
+        response.sendFile(filePath);
+    });
+
     // Serve about.html for the /about route
     app.get("/about", (request, response) => {
         const filePath = path.join(
