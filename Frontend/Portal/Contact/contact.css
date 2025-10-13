@@ -271,7 +271,7 @@ body {
                             width: 20px;
                             height: 20px;
                             object-fit: contain;
-                            /* opacity: 0.9; */
+                            opacity: 0.9;
                         }
 
                         &:hover {
@@ -663,5 +663,96 @@ body {
     100% {
         left: 125%;
         opacity: 0;
+    }
+}
+
+@media (max-width: 630px) {
+    .git-container {
+        .git-top {
+            background-color: transparent;
+            padding-bottom: 50px;
+
+            .git-main {
+                font-size: 1.6em;
+            }
+
+            .git-sub {
+                margin-top: 24px;
+                width: calc(90vw - 4px);
+                font-size: 0.95em;
+            }
+        }
+
+        .git-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 55px;
+
+            .contact-info-container {
+                width: 90%;
+
+                .cic-header {
+                    justify-content: center;
+                }
+
+                .cic-mid { 
+                    margin-top: 30px;
+                }
+
+                .cic-foot {
+                    align-items: center;
+                    margin-top: 35px;
+                    gap: 20px;
+
+                    span {
+                        text-align: center;
+                    }
+
+                    .cicf-socials {
+                        justify-content: center;
+                    }
+                }
+            }
+
+            .sam-container {
+                width: 92%;
+
+                .sam-header {
+                    justify-content: center;
+
+                    span {
+                        margin: 0;
+                    }
+                }
+
+                .sam-input-sec {
+                    width: calc(100% - 70px);
+                    padding: 0 35px;
+
+                    .is-block {
+                        width: 100%;
+                    }
+                }
+
+                .inquiry-message-container {
+                    width: calc(100% - 70px);
+                    padding: 0 35px;
+                }
+
+                .nl-subscribe {
+                    width: calc(100% - 70px);
+
+                    span {
+                        text-align: left;
+                    }
+                }
+
+                #send-inquiry-message {
+                    width: calc(100% - 70px);
+                    margin-top: 15px;
+                }
+            }
+        }
     }
 }
