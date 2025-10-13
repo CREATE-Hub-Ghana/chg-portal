@@ -73,7 +73,7 @@ body {
         width: 100%;
         height: max-content;
         background-color: transparent;
-        gap: 5%;
+        gap: 6%;
 
         .contact-info-container {
             display: flex;
@@ -293,7 +293,7 @@ body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 60%;
+            width: 55%;
             height: max-content;
             border-radius: 20px;
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);

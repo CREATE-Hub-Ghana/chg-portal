@@ -1640,6 +1640,10 @@ body {
         margin-left: 20px;
     }
 
+    .first-sec {
+        height: 100vh;
+    }
+
     .first-sect-inner {
         display: flex;
         align-items: start;
