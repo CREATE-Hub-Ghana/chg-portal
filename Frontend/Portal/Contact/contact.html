@@ -137,7 +137,7 @@
       </div>
     </nav>
 
-    <!-- <button id="back-to-top" title="Back to Top"></button> -->
+    <button id="back-to-top" title="Back to Top"></button>
 
     <div class="first-sec">
       <div class="git-container">
@@ -253,6 +253,36 @@
                 </div>
               </div>
             </div>
+
+            <div class="cic-foot">
+              <span>Follow Us</span>
+
+              <div class="cicf-socials">
+                <a href="#" class="cicf-container">
+                  <img
+                    src="../../Universal/Icons/facebook_gray.svg"
+                    alt="Facebook Icon" />
+                </a>
+
+                <a href="#" class="cicf-container">
+                  <img
+                    src="../../Universal/Icons/twitter_gray.svg"
+                    alt="Twitter Icon" />
+                </a>
+
+                <a href="#" class="cicf-container">
+                  <img
+                    src="../../Universal/Icons/linkedIn_gray.svg"
+                    alt="LinkedIn Icon" />
+                </a>
+
+                <a href="#" class="cicf-container">
+                  <img
+                    src="../../Universal/Icons/instagram_gray.svg"
+                    alt="Instagram Icon" />
+                </a>
+              </div>
+            </div>
           </div>
 
           <div class="sam-container">
@@ -263,30 +293,83 @@
             <div class="sam-input-sec">
               <div class="is-block">
                 <span>Full Name *</span>
-                <input type="text" />
+                <input type="text" id="full-name" />
               </div>
 
               <div class="is-block">
                 <span>Email Address *</span>
-                <input type="text" />
+                <input type="text" id="email-address" />
               </div>
 
               <div class="is-block">
                 <span>Subject *</span>
-                <input type="text" />
+                <input type="text" id="email-subject" />
               </div>
 
               <div class="is-block">
                 <span>Inquiry Type</span>
-                <input type="text" />
+                <!-- <input type="text" /> -->
+                <!-- <select name="Inquiry" id="inquiry-type"></select> -->
+                <button id="inquiry-type-select">
+                  General Inquiry
+                  <div class="select-icon">
+                    <img
+                      src="../../Universal/Icons/select_arrow_down_black.svg"
+                      alt="Select Arrow" />
+                  </div>
+                </button>
+
+                <div class="its-container">
+                  <div class="inquiry-type selected">
+                    <span>General Inquiry</span>
+                  </div>
+                  <div class="inquiry-type">
+                    <span>Partnership</span>
+                  </div>
+                  <div class="inquiry-type">
+                    <span>Volunteer</span>
+                  </div>
+                  <div class="inquiry-type">
+                    <span>Programs</span>
+                  </div>
+                  <div class="inquiry-type">
+                    <span>Services</span>
+                  </div>
+                  <div class="inquiry-type">
+                    <span>Media</span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <div class="inquiry-message-container">
+              <span>Message *</span>
+              <textarea
+                name="Inquiry"
+                id="inquiry-message"
+                placeholder="Tell us more about your inquiry..."></textarea>
+            </div>
+
+            <div class="nl-subscribe">
+              <input type="checkbox" />
+              <span
+                >Subscribe to our newsletter for updates on programs and impact
+                stories</span
+              >
+            </div>
+
+            <button id="send-inquiry-message">
+              <img
+                src="../../Universal/Icons/send_white_1.svg"
+                alt="Send Icon" />
+              Send Message
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- <footer>
+    <footer>
       <div class="footer-top">
         <div class="ft-one">
           <div class="fto-logo">
@@ -441,7 +524,7 @@
 
         <button class="jump-to-top" title="Back to Top"></button>
       </div>
-    </footer> -->
+    </footer>
   </body>
   <script src="../../Portal/Contact/contact.js" defer></script>
   <script src="../../Global/global-script.js" defer></script>
