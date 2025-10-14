@@ -689,7 +689,7 @@
                     }
 
                     &:hover {
-                        background-color: rgb(37 99 235);
+                        background-color: rgba(37, 100, 235, 0.85);
                         transition: all 0.25s ease;
                         cursor: pointer;
                     }
