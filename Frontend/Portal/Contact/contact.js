@@ -49,6 +49,7 @@
     function openDropdown() {
         itsContainer.classList.add('shown');
         inquiryBtn.setAttribute('aria-expanded', 'true');
+        inquiryBtn.style.outlineColor = "#2563eb";
         // move focus into the listbox: focused item is selected or first
         const selected = inquiryTypes.find((it) => it.classList.contains('selected')) || inquiryTypes[0];
         if (selected) selected.focus();
@@ -57,6 +58,7 @@
     function closeDropdown() {
         itsContainer.classList.remove('shown');
         inquiryBtn.setAttribute('aria-expanded', 'false');
+        inquiryBtn.style.outlineColor = "";
     }
 
     // Toggle on button click

@@ -186,10 +186,12 @@ body {
                             width: max-content;
                             height: max-content;
                             text-decoration: none;
+                            background-color: transparent;
 
                             margin-top: 5px;
+                            gap: 4px;
 
-                            transition: all 0.3s ease;
+                            transition: all 0.2s ease;
 
                             font-family: 'Poppins';
                             color: #2563eb;
@@ -198,24 +200,22 @@ body {
                             cursor: pointer;
 
                             img {
-                                position: absolute;
+                                /* position: absolute;
                                 top: 50%;
-                                right: -28px;
-                                transform: translateY(-50%);
+                                transform: translateY(-50%); */
                                 width: 24px;
                                 height: 24px;
                                 object-fit: contain;
+                                margin-bottom: 0.5px;
                                 /* margin-bottom: 2px;
                                 margin-left: 5px; */
 
                                 transition: all 0.25s ease;
                             }
 
-                            /* &:hover {
-                                img {
-                                    right: -32px;
-                                }
-                            } */
+                            &:hover {
+                                gap: 7px;
+                            }
                         }
                     }
                 }
