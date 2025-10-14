@@ -784,12 +784,12 @@ footer {
         bottom: 0;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         width: 90%;
         height: 17%;
         background-color: transparent;
 
-        .made-in {
+        /* .made-in {
             display: flex;
             width: max-content;
             height: max-content;
@@ -814,6 +814,31 @@ footer {
                     height: 22px;
                     object-fit: contain;
                 }
+            }
+        } */
+
+        .fb-first {
+            position: absolute;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: max-content;
+            height: max-content;
+
+            span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: max-content;
+                height: max-content;
+                font-family: 'Manrope', sans-serif;
+                text-align: left;
+                font-size: 0.8em;
+                font-weight: 400;
+                color: rgba(255, 255, 255, 0.85);
+                letter-spacing: 0.5px;
+                background-color: transparent;
             }
         }
 
@@ -862,6 +887,8 @@ footer {
         }
 
         .jump-to-top {
+            position: absolute;
+            right: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1001,6 +1028,15 @@ footer {
                 }
             }
         }
+
+        .footer-bottom {
+            justify-content: space-between;
+
+            .fb-first,
+            .jump-to-top {
+                position: relative;
+            }
+        }
     }
 }
 
@@ -1012,7 +1048,7 @@ footer {
             flex-wrap: wrap;
             height: max-content;
             justify-content: space-evenly;
-            /* flex-direction: column; */
+            flex-direction: column;
             gap: 20px;
             bottom: 20px;
 
@@ -1063,7 +1099,7 @@ footer {
 
 @media (max-width: 680px) {
     footer {
-        height: 600px;
+        height: 565px;
 
         .cut-line {
             bottom: 42%;
