@@ -858,3 +858,110 @@ body {
         }
     }
 }
+
+/* Modal: email selection */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+}
+
+.modal[aria-hidden="false"],
+.modal.shown {
+    display: flex;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.modal-panel {
+    position: relative;
+    width: 420px;
+    max-width: calc(100% - 40px);
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 20px 16px 20px;
+    box-shadow: 0 10px 25px rgba(2, 6, 23, 0.2);
+    z-index: 2;
+
+    h3 {
+        margin: 0 0 6px 0;
+        font-size: 1.1rem;
+        color: #160f36;
+    }
+
+    p {
+        margin: 0 0 12px 0;
+        color: rgba(22, 15, 54, 0.8);
+        font-size: 0.95rem;
+    }
+
+    .modal-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 12px;
+
+        .modal-option {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            font-family: 'Manrope', sans-serif;
+            cursor: pointer;
+            font-weight: 600;
+            color: #111827;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-option:hover {
+            background-color: rgba(219, 234, 254, 0.9);
+        }
+
+        .modal-option:active {
+            background-color: rgba(219, 234, 254, 0.95);
+        }
+    }
+
+    .modal-close {
+        display: inline-block;
+        display: none;
+        margin-left: auto;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: none;
+        background: transparent;
+        color: #374151;
+        cursor: pointer;
+    }
+
+/* Toast confirmation */
+.action-toast {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    background: rgba(22, 15, 54, 0.95);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(4, 6, 28, 0.35);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 220ms ease, transform 220ms ease;
+    z-index: 1400;
+    font-weight: 600;
+}
+.action-toast.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+}

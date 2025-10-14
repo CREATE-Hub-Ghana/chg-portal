@@ -172,7 +172,11 @@
                     <span>support@createhubghana.com</span>
                   </div>
 
-                  <a id="send-mail"
+                  <a
+                    id="send-mail"
+                    href="#"
+                    role="button"
+                    data-modal-type="email"
                     >Send Email
                     <img
                       src="../../Universal/Icons/arrow_right_blue.svg"
@@ -196,7 +200,7 @@
                     <span>+233 59 484 9077</span>
                   </div>
 
-                  <a href="#" id="call-now"
+                  <a id="call-now" href="#" role="button" data-modal-type="call"
                     >Call Now
                     <img
                       src="../../Universal/Icons/arrow_right_blue.svg"
@@ -386,6 +390,33 @@
             <button>View on Google Maps</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Email selection modal -->
+    <div id="email-select-modal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop" data-action="close"></div>
+      <div
+        class="modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title">
+        <h3 id="modal-title">Choose recipient</h3>
+        <p>
+          Select which email address you want to use to contact Create Hub
+          Ghana.
+        </p>
+        <div class="modal-actions">
+          <button class="modal-option" data-email="info@createhubghana.com">
+            info@createhubghana.com
+          </button>
+          <button class="modal-option" data-email="support@createhubghana.com">
+            support@createhubghana.com
+          </button>
+        </div>
+        <button class="modal-close" data-action="close" aria-label="Close">
+          Close
+        </button>
       </div>
     </div>
 

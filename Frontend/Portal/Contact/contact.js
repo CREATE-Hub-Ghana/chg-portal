@@ -142,16 +142,70 @@
 
     // Basic validation for send button (enable/disable)
     function validateForm() {
+        const errors = {};
+
+        // Name: at least 2 characters
         const hasName = fullName && fullName.value.trim().length > 1;
-        const hasEmail = emailAddress && /\S+@\S+\.\S+/.test(emailAddress.value);
+        errors.fullName = !hasName;
+
+        // Email: simple regex
+        const hasEmail = emailAddress && /\S+@\S+\.\S+/.test(emailAddress.value.trim());
+        errors.emailAddress = !hasEmail;
+
+        // Subject: require at least 2 chars
+        const hasSubject = emailSubject && emailSubject.value.trim().length > 1;
+        errors.emailSubject = !hasSubject;
+
+        // Inquiry type: ensure a selection has been made (data-selected attribute)
+        const hasType = inquiryBtn && inquiryBtn.getAttribute('data-selected') && inquiryBtn.getAttribute('data-selected').trim().length > 0;
+        errors.inquiryType = !hasType;
+
+        // Message: require at least 5 chars
         const hasMessage = inquiryMessage && inquiryMessage.value.trim().length > 4;
-        if (sendBtn) sendBtn.disabled = !(hasName && hasEmail && hasMessage);
+        errors.inquiryMessage = !hasMessage;
+
+        // Toggle error outline classes for each field
+        function toggleOutline(el, isError) {
+            if (!el) return;
+            if (isError) {
+                el.classList.add('input-error');
+                // for buttons (inquiryBtn) also set outline style
+                if (el instanceof HTMLButtonElement) {
+                    el.style.outline = '2px solid #dc2626';
+                    el.style.outlineOffset = '2px';
+                }
+            } else {
+                el.classList.remove('input-error');
+                if (el instanceof HTMLButtonElement) {
+                    el.style.outline = '';
+                    el.style.outlineOffset = '';
+                }
+            }
+        }
+
+        toggleOutline(fullName, errors.fullName);
+        toggleOutline(emailAddress, errors.emailAddress);
+        toggleOutline(emailSubject, errors.emailSubject);
+        toggleOutline(inquiryMessage, errors.inquiryMessage);
+        toggleOutline(inquiryBtn, errors.inquiryType);
+
+        // disable send button if any errors
+        const hasAnyError = Object.values(errors).some(Boolean);
+        if (sendBtn) sendBtn.disabled = hasAnyError;
+
+        return { errors, hasAnyError };
     }
 
     [fullName, emailAddress, inquiryMessage].forEach((el) => {
         if (!el) return;
         el.addEventListener('input', validateForm);
     });
+
+    // Also validate subject and inquiry type interactions
+    if (emailSubject) emailSubject.addEventListener('input', validateForm);
+    // When a selection is made from the custom dropdown we already call setSelection()
+    // so call validateForm after selection to update state.
+    inquiryTypes.forEach((el) => el.addEventListener('click', validateForm));
 
     // Prevent default submit; simulate send (placeholder)
     if (sendBtn) {
@@ -161,7 +215,24 @@
         sendBtn.addEventListener('click', function (e) {
             e.preventDefault();
             // Basic feedback: if disabled, do nothing
-            if (sendBtn.disabled) return;
+            if (sendBtn.disabled) {
+                // focus first invalid element
+                const result = validateForm();
+                if (result && result.errors) {
+                    if (result.errors.fullName && fullName) {
+                        fullName.focus();
+                    } else if (result.errors.emailAddress && emailAddress) {
+                        emailAddress.focus();
+                    } else if (result.errors.emailSubject && emailSubject) {
+                        emailSubject.focus();
+                    } else if (result.errors.inquiryType && inquiryBtn) {
+                        inquiryBtn.focus();
+                    } else if (result.errors.inquiryMessage && inquiryMessage) {
+                        inquiryMessage.focus();
+                    }
+                }
+                return;
+            }
 
             const payload = {
                 name: fullName.value.trim(),
@@ -192,4 +263,160 @@
         });
     }
 
+})();
+
+// Email selection modal logic
+(function () {
+    const body = document.querySelector('body');
+    const sendMailBtn = document.getElementById('send-mail');
+    const callNowBtn = document.getElementById('call-now');
+    const modal = document.getElementById('email-select-modal');
+    if (!modal) return;
+
+    const backdrop = modal.querySelector('.modal-backdrop');
+    const closeButtons = modal.querySelectorAll('[data-action="close"]');
+    const actionsContainer = modal.querySelector('.modal-actions');
+    const modalTitle = modal.querySelector('#modal-title');
+    const modalPara = modal.querySelector('p');
+
+    // toast element (dynamically added)
+    let toast = document.getElementById('action-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'action-toast';
+        toast.className = 'action-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        document.body.appendChild(toast);
+    }
+
+    function showModalFor(type) {
+        // clear existing actions
+        actionsContainer.innerHTML = '';
+        if (type === 'email') {
+            modalTitle.textContent = 'Choose recipient';
+            if (modalPara) modalPara.textContent = 'Select which email address you want to use to contact Create Hub Ghana.';
+            const emails = ['info@createhubghana.com', 'support@createhubghana.com'];
+            emails.forEach((em) => {
+                const btn = document.createElement('button');
+                btn.className = 'modal-option';
+                btn.type = 'button';
+                btn.dataset.email = em;
+                btn.textContent = em;
+                actionsContainer.appendChild(btn);
+            });
+        } else if (type === 'call') {
+            modalTitle.textContent = 'Choose number';
+            if (modalPara) modalPara.textContent = 'Select which phone number you want to call.';
+            const phones = ['+233249097323', '+233594849077'];
+            phones.forEach((ph) => {
+                const btn = document.createElement('button');
+                btn.className = 'modal-option';
+                btn.type = 'button';
+                btn.dataset.phone = ph;
+                // display readable phone
+                const pretty = ph.replace(/(\+233)(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+                btn.textContent = pretty;
+                actionsContainer.appendChild(btn);
+            });
+        }
+
+        // attach handlers to options
+        const opts = Array.from(actionsContainer.querySelectorAll('.modal-option'));
+        opts.forEach((opt) => {
+            opt.addEventListener('click', function (e) {
+                if (opt.dataset.email) {
+                    hideModal();
+                    openMailTo(opt.dataset.email);
+                    showToast('Mail client opened');
+                } else if (opt.dataset.phone) {
+                    hideModal();
+                    openPhone(opt.dataset.phone);
+                    showToast('Dialer opened');
+                }
+            });
+
+            opt.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    opt.click();
+                } else if (e.key === 'Escape' || e.key === 'Esc') {
+                    e.preventDefault();
+                    hideModal();
+                }
+            });
+        });
+
+        modal.setAttribute('aria-hidden', 'false');
+        modal.classList.add('shown');
+        body.style.overflow = 'hidden'; // prevent background scroll
+        const first = actionsContainer.querySelector('.modal-option');
+        if (first) first.focus();
+    }
+
+    function hideModal() {
+        modal.setAttribute('aria-hidden', 'true');
+        modal.classList.remove('shown');
+        body.style.overflow = '';
+        // return focus to the last trigger if present
+        const lastTrigger = document.querySelector('[data-modal-active]');
+        if (lastTrigger) {
+            lastTrigger.removeAttribute('data-modal-active');
+            lastTrigger.focus();
+        }
+    }
+
+    // Build mailto and open user's mail client
+    function openMailTo(recipient) {
+        const subject = encodeURIComponent(document.getElementById('email-subject')?.value || '');
+        const bodyParts = [];
+        const name = document.getElementById('full-name')?.value;
+        const message = document.getElementById('inquiry-message')?.value;
+        if (name) bodyParts.push('Name: ' + name);
+        if (message) bodyParts.push('\n\n' + message);
+        const bodyStr = encodeURIComponent(bodyParts.join('\n'));
+
+        const mailto = `mailto:${recipient}?subject=${subject}&body=${bodyStr}`;
+        window.location.href = mailto;
+    }
+
+    function openPhone(phone) {
+        // use tel: link
+        window.location.href = `tel:${phone}`;
+    }
+
+    // Toast helpers
+    let toastTimer = null;
+    function showToast(text, ms = 2500) {
+        if (!toast) return;
+        toast.textContent = text;
+        toast.classList.add('visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            toast.classList.remove('visible');
+        }, ms);
+    }
+
+    // attach triggers
+    [sendMailBtn, callNowBtn].forEach((btn) => {
+        if (!btn) return;
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const type = btn.dataset.modalType || btn.getAttribute('data-modal-type') || btn.getAttribute('data-modaltype') || btn.getAttribute('data-type') || 'email';
+            // mark active for focus return
+            btn.setAttribute('data-modal-active', 'true');
+            showModalFor(type);
+        });
+    });
+
+    // close on backdrop or explicit close
+    backdrop.addEventListener('click', hideModal);
+    closeButtons.forEach((b) => b.addEventListener('click', hideModal));
+
+    // Escape to close modal
+    document.addEventListener('keydown', function (e) {
+        if ((e.key === 'Escape' || e.key === 'Esc') && modal.classList.contains('shown')) {
+            hideModal();
+        }
+    });
 })();
