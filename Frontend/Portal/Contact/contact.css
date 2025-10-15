@@ -287,6 +287,97 @@ body {
                     }
                 }
             }
+
+            .quick-actions-container {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: max-content;
+                background: linear-gradient(120deg, #eff6ff 0%, #faf5ff 100%);
+                border-radius: 20px;
+                margin-top: 45px;
+
+                padding: 25px 0;
+
+                .qa-header {
+                    display: flex;
+                    width: 100%;
+                    height: max-content;
+
+                    span {
+                        display: flex;
+                        width: max-content;
+                        height: max-content;
+                        text-align: center;
+                        font-size: 1.10em;
+                        font-weight: bold;
+                        color: #160f36;
+                        letter-spacing: 0.5px;
+                        background-color: transparent;
+                        margin-left: 25px;
+                    }
+                }
+
+                .quick-actions {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 100%;
+                    height: max-content;
+                    margin-top: 15px;
+
+                    gap: 10px;
+
+                    .qa-block {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        width: calc(100% - 40px);
+                        height: max-content;
+                        background-color: #fff;
+                        border-radius: 10px;
+                        padding: 10px 0;
+                        cursor: pointer;
+
+                        gap: 2px;
+
+                        .qab-main {
+                            display: flex;
+                            width: max-content;
+                            height: max-content;
+                            text-align: left;
+                            font-family: 'Manrope', sans-serif;
+                            font-size: 0.88em;
+                            font-weight: 600;
+                            color: #160f36;
+                            letter-spacing: 0.3px;
+                            background-color: transparent;
+                            margin-left: 15px;
+
+                            cursor: pointer;
+                        }
+
+                        .qab-sub {
+                            display: flex;
+                            width: max-content;
+                            height: max-content;
+                            text-align: left;
+                            font-size: 0.72em;
+                            font-weight: 500;
+                            color: rgba(22, 15, 54, 0.8);
+                            letter-spacing: 0.2px;
+                            background-color: transparent;
+                            margin-left: 15px;
+
+                            cursor: pointer;
+                        }
+
+                        &:hover {
+                            background-color: rgb(249 250 251);
+                        }
+                    }
+                }
+            }
         }
 
         .sam-container {
