@@ -950,6 +950,10 @@ body {
                 height: 18px;
                 object-fit: contain;
             }
+
+            span {
+                cursor: pointer;
+            }
         }
 
         .modal-option:hover {

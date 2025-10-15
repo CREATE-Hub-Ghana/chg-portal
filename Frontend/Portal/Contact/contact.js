@@ -471,8 +471,11 @@
                     showToast('Mail client opened');
                 } else if (opt.dataset.phone) {
                     hideModal();
-                    openPhone(opt.dataset.phone);
-                    showToast('Dialer opened');
+                    // openPhone will return a string describing what it opened
+                    const action = openPhone(opt.dataset.phone);
+                    // show context-aware toast
+                    if (action === 'whatsapp') showToast('WhatsApp opened');
+                    else showToast('Dialer opened');
                 }
             });
 
@@ -521,8 +524,28 @@
     }
 
     function openPhone(phone) {
-        // use tel: link
-        window.location.href = `tel:${phone}`;
+        // If this is the WhatsApp-specific number, open the wa.me link in a
+        // new tab so it launches WhatsApp (web or app). Otherwise fall back to
+        // tel: for normal phone numbers. Returns a string describing the
+        // action taken: 'whatsapp' or 'tel'.
+        try {
+            const normalized = (phone || '').replace(/\s+/g, '');
+            if (normalized === '+233249097323' || normalized === '233249097323') {
+                // wa.me expects no plus sign
+                const waNumber = normalized.replace(/^\+/, '');
+                const waUrl = `https://wa.me/${waNumber}`;
+                // open in a new tab/window
+                window.open(waUrl, '_blank', 'noopener,noreferrer');
+                return 'whatsapp';
+            } else {
+                window.location.href = `tel:${phone}`;
+                return 'tel';
+            }
+        } catch (e) {
+            // fallback to tel: in case of any error
+            try { window.location.href = `tel:${phone}`; } catch (e2) { /* ignore */ }
+            return 'tel';
+        }
     }
 
     // Toast helpers
