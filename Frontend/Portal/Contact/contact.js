@@ -205,8 +205,15 @@
         const hasEmail = emailAddress && /\S+@\S+\.\S+/.test(emailAddress.value.trim());
         errors.emailAddress = !hasEmail;
 
-        // Subject: require at least 2 chars
-        const hasSubject = emailSubject && emailSubject.value.trim().length > 1;
+        // Subject: require at least 2 chars and not be composed only of symbols.
+        // Must contain at least one alphanumeric (letter or digit) and be >= 2 chars.
+        const subjectVal = (emailSubject && emailSubject.value || '').trim();
+        const hasAlphaNum = /[\p{L}\p{N}]/u.test(subjectVal);
+        // blacklist of symbols we don't allow in the subject. If any of these
+        // are present, the subject should be considered invalid even if it
+        // contains letters.
+        const hasForbiddenSymbols = /[!@#$%^&*()_+\[\]{}\\|;:'",.<>\/\?`~\-]/.test(subjectVal);
+        const hasSubject = subjectVal.length > 1 && hasAlphaNum && !hasForbiddenSymbols;
         errors.emailSubject = !hasSubject;
 
         // Inquiry type: ensure a selection has been made (data-selected attribute)
@@ -220,7 +227,9 @@
         // Toggle outlines for all fields (full form validation) with specific messages
         toggleOutline(fullName, errors.fullName, errors.fullName ? 'Enter full name e.g. John Doe' : undefined);
         toggleOutline(emailAddress, errors.emailAddress, errors.emailAddress ? 'Enter a valid email address' : undefined);
-        toggleOutline(emailSubject, errors.emailSubject, errors.emailSubject ? 'Enter a subject (min 2 characters)' : undefined);
+        // If forbidden symbols present, show the symbol-specific message; otherwise show the generic subject hint.
+        const subjectMsg = hasForbiddenSymbols ? 'Do not include symbols (!@#$%^&*()_+ etc)' : (errors.emailSubject ? 'Enter a subject (min 2 characters)' : undefined);
+        toggleOutline(emailSubject, errors.emailSubject, subjectMsg);
         toggleOutline(inquiryMessage, errors.inquiryMessage, errors.inquiryMessage ? 'Enter message (min 4 characters)' : undefined);
         toggleOutline(inquiryBtn, errors.inquiryType, errors.inquiryType ? 'Select an inquiry type' : undefined);
 
@@ -248,8 +257,15 @@
                 toggleOutline(emailAddress, isError, isError ? 'Enter a valid email address' : undefined);
                 break;
             case 'emailSubject':
-                isError = !(emailSubject && emailSubject.value.trim().length > 1);
-                toggleOutline(emailSubject, isError, isError ? 'Enter a subject (min 2 characters)' : undefined);
+                {
+                    const val = (emailSubject && emailSubject.value || '').trim();
+                    const hasAlphaNumLocal = /[\p{L}\p{N}]/u.test(val);
+                    const ok = val.length > 1 && hasAlphaNumLocal;
+                    isError = !ok;
+                    // If there are characters but none are alphanumeric, show symbol-specific message
+                    const msg = val.length > 0 && !hasAlphaNumLocal ? 'Do not include symbols (!@#$%^&*()_+ etc)' : 'Enter a subject (min 2 characters and include letters or numbers)';
+                    toggleOutline(emailSubject, isError, isError ? msg : undefined);
+                }
                 break;
             case 'inquiryMessage':
                 isError = !(inquiryMessage && inquiryMessage.value.trim().length >= 4);
@@ -345,13 +361,13 @@
             sendBtn.textContent = 'Sending...';
             sendBtn.disabled = true;
             setTimeout(() => {
-                sendBtn.textContent = 'Send Message';
+                sendBtn.textContent = '';
                 validateForm();
                 // Optionally clear fields on success
-                // fullName.value = '';
-                // emailAddress.value = '';
-                // emailSubject.value = '';
-                // inquiryMessage.value = '';
+                fullName.value = '';
+                emailAddress.value = '';
+                emailSubject.value = '';
+                inquiryMessage.value = '';
                 alert('Your message has been queued for sending.');
             }, 700);
         });
