@@ -424,9 +424,39 @@
                 btn.className = 'modal-option';
                 btn.type = 'button';
                 btn.dataset.phone = ph;
+
+                // Only add icon for +233249097323
+                if (ph === '+233249097323') {
+                    const icon = document.createElement('img');
+                    icon.src = '../../Universal/Icons/whatsapp_green.svg';
+                    icon.alt = '';
+                    icon.className = 'modal-option-icon';
+                    icon.setAttribute('aria-hidden', 'true');
+                    // remove icon on load error to avoid broken image
+                    icon.addEventListener('error', () => {
+                        if (icon.parentNode) icon.parentNode.removeChild(icon);
+                    });
+                    btn.appendChild(icon);
+                } else if (ph === '+233594849077') {
+                    const icon = document.createElement('img');
+                    icon.src = '../../Universal/Icons/phone_blue.svg';
+                    icon.alt = '';
+                    icon.className = 'modal-option-icon';
+                    icon.setAttribute('aria-hidden', 'true');
+                    icon.addEventListener('error', () => {
+                        if (icon.parentNode) icon.parentNode.removeChild(icon);
+                    });
+                    btn.appendChild(icon);
+                }
+
                 // display readable phone
                 const pretty = ph.replace(/(\+233)(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
-                btn.textContent = pretty;
+                const label = document.createElement('span');
+                label.className = 'modal-option-label';
+                label.textContent = pretty;
+
+                btn.appendChild(label);
+
                 actionsContainer.appendChild(btn);
             });
         }

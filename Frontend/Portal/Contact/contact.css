@@ -929,6 +929,7 @@ body {
         margin-bottom: 12px;
 
         .modal-option {
+            position: relative;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -941,6 +942,14 @@ body {
             font-weight: 600;
             color: #111827;
             letter-spacing: 0.3px;
+
+            .modal-option-icon {
+                position: absolute;
+                left: 15px;
+                width: 18px;
+                height: 18px;
+                object-fit: contain;
+            }
         }
 
         .modal-option:hover {
