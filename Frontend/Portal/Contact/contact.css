@@ -421,6 +421,12 @@ body {
                         }
                     }
 
+                    input.input-error,
+                    select.input-error,
+                    button.input-error {
+                        outline: 2px solid #dc2626;
+                    }
+
                     .its-container {
                         position: absolute;
                         top: 90px;
@@ -498,6 +504,21 @@ body {
                         opacity: 1;
                         pointer-events: auto;
                     }
+
+                    .error-message {
+                        display: none;
+                        width: max-content;
+                        height: max-content;
+                        text-align: left;
+                        font-family: 'Manrope', sans-serif;
+                        font-size: 0.75em;
+                        font-weight: 550;
+                        color: #dc2626;
+                        letter-spacing: 0.2px;
+                        background-color: transparent;
+
+                        margin-top: -9px;
+                    }
                 }
             }
 
@@ -559,6 +580,25 @@ body {
                         color: rgba(0, 0, 0, 0.55);
                         letter-spacing: 0.5px;
                     }
+                }
+
+                textarea.input-error {
+                    outline: 2px solid #dc2626;
+                }
+
+                #error-message {
+                    display: none;
+                    width: max-content;
+                    height: max-content;
+                    text-align: left;
+                    font-family: 'Manrope', sans-serif;
+                    font-size: 0.75em;
+                    font-weight: 550;
+                    color: #dc2626;
+                    letter-spacing: 0.2px;
+                    background-color: transparent;
+
+                    margin-top: -10px;
                 }
             }
 
@@ -944,24 +984,25 @@ body {
         cursor: pointer;
     }
 
-/* Toast confirmation */
-.action-toast {
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    background: rgba(22, 15, 54, 0.95);
-    color: #fff;
-    padding: 10px 14px;
-    border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(4, 6, 28, 0.35);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 220ms ease, transform 220ms ease;
-    z-index: 1400;
-    font-weight: 600;
-}
-.action-toast.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+    /* Toast confirmation */
+    .action-toast {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        background: rgba(22, 15, 54, 0.95);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(4, 6, 28, 0.35);
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 220ms ease, transform 220ms ease;
+        z-index: 1400;
+        font-weight: 600;
+    }
+
+    .action-toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

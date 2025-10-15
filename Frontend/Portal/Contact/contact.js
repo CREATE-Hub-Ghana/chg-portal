@@ -16,6 +16,13 @@
 
     if (!inquiryBtn || !itsContainer) return; // nothing to do
 
+    // Hide any inline error message spans on startup
+    try {
+        Array.from(document.querySelectorAll('.error-message')).forEach((s) => (s.style.display = 'none'));
+    } catch (e) {
+        /* ignore */
+    }
+
     // Accessibility: make button act like a combobox/listbox trigger
     inquiryBtn.setAttribute('aria-haspopup', 'listbox');
     inquiryBtn.setAttribute('aria-expanded', 'false');
@@ -140,12 +147,58 @@
         }
     });
 
+    // Toggle error outline classes for a single element (module-level helper)
+    function toggleOutline(el, isError, message) {
+        if (!el) return;
+        if (isError) {
+            el.classList.add('input-error');
+            // for buttons (inquiryBtn) also set outline style
+            if (el instanceof HTMLButtonElement) {
+                el.style.outline = '2px solid #dc2626';
+                el.style.outlineOffset = '2px';
+            }
+            // show an inline error message if present in the same wrapper
+            // The message textarea uses a different container (.inquiry-message-container)
+            // so include that selector as well when searching for the error span.
+            try {
+                const blk = el.closest && el.closest('.is-block, .inquiry-message-container');
+                const span = blk && blk.querySelector && blk.querySelector('.error-message');
+                if (span) {
+                    span.style.display = 'block';
+                    // show custom message when provided, otherwise default text
+                    span.textContent = message || 'This field is required';
+                }
+            } catch (e) {
+                /* ignore */
+            }
+        } else {
+            el.classList.remove('input-error');
+            if (el instanceof HTMLButtonElement) {
+                el.style.outline = '';
+                el.style.outlineOffset = '';
+            }
+            try {
+                const blk = el.closest && el.closest('.is-block, .inquiry-message-container');
+                const span = blk && blk.querySelector && blk.querySelector('.error-message');
+                if (span) span.style.display = 'none';
+            } catch (e) {
+                /* ignore */
+            }
+        }
+    }
+
     // Basic validation for send button (enable/disable)
     function validateForm() {
         const errors = {};
 
-        // Name: at least 2 characters
-        const hasName = fullName && fullName.value.trim().length > 1;
+        // Name: require at least two words (e.g. "John Doe"). Each word may
+        // include letters (including accented/Unicode letters), hyphens,
+        // apostrophes, or periods. Consecutive punctuation is disallowed because
+        // punctuation must be followed by a letter. Examples: "O'Connor",
+        // "Anne-Marie", "J. Doe".
+        // We use \p{L} with the Unicode flag to allow accented letters.
+        const namePart = "\\p{L}+(?:[.'-]\\p{L}+)*\\.?"; // one name token
+        const hasName = fullName && new RegExp("^\\s*" + namePart + "(?:\\s+" + namePart + ")+\\s*$", 'u').test(fullName.value || '');
         errors.fullName = !hasName;
 
         // Email: simple regex
@@ -160,34 +213,16 @@
         const hasType = inquiryBtn && inquiryBtn.getAttribute('data-selected') && inquiryBtn.getAttribute('data-selected').trim().length > 0;
         errors.inquiryType = !hasType;
 
-        // Message: require at least 5 chars
-        const hasMessage = inquiryMessage && inquiryMessage.value.trim().length > 4;
+        // Message: require at least 4 chars
+        const hasMessage = inquiryMessage && inquiryMessage.value.trim().length >= 4;
         errors.inquiryMessage = !hasMessage;
 
-        // Toggle error outline classes for each field
-        function toggleOutline(el, isError) {
-            if (!el) return;
-            if (isError) {
-                el.classList.add('input-error');
-                // for buttons (inquiryBtn) also set outline style
-                if (el instanceof HTMLButtonElement) {
-                    el.style.outline = '2px solid #dc2626';
-                    el.style.outlineOffset = '2px';
-                }
-            } else {
-                el.classList.remove('input-error');
-                if (el instanceof HTMLButtonElement) {
-                    el.style.outline = '';
-                    el.style.outlineOffset = '';
-                }
-            }
-        }
-
-        toggleOutline(fullName, errors.fullName);
-        toggleOutline(emailAddress, errors.emailAddress);
-        toggleOutline(emailSubject, errors.emailSubject);
-        toggleOutline(inquiryMessage, errors.inquiryMessage);
-        toggleOutline(inquiryBtn, errors.inquiryType);
+        // Toggle outlines for all fields (full form validation) with specific messages
+        toggleOutline(fullName, errors.fullName, errors.fullName ? 'Enter full name e.g. John Doe' : undefined);
+        toggleOutline(emailAddress, errors.emailAddress, errors.emailAddress ? 'Enter a valid email address' : undefined);
+        toggleOutline(emailSubject, errors.emailSubject, errors.emailSubject ? 'Enter a subject (min 2 characters)' : undefined);
+        toggleOutline(inquiryMessage, errors.inquiryMessage, errors.inquiryMessage ? 'Enter message (min 4 characters)' : undefined);
+        toggleOutline(inquiryBtn, errors.inquiryType, errors.inquiryType ? 'Select an inquiry type' : undefined);
 
         // disable send button if any errors
         const hasAnyError = Object.values(errors).some(Boolean);
@@ -196,44 +231,103 @@
         return { errors, hasAnyError };
     }
 
-    [fullName, emailAddress, inquiryMessage].forEach((el) => {
-        if (!el) return;
-        el.addEventListener('input', validateForm);
-    });
+    // Validate a single field by key and toggle outline only for that field
+    function validateSingle(fieldKey) {
+        let isError = false;
+        switch (fieldKey) {
+            case 'fullName':
+                {
+                    const namePart = "\\p{L}+(?:[.'-]\\p{L}+)*\\.?";
+                    const re = new RegExp("^\\s*" + namePart + "(?:\\s+" + namePart + ")+\\s*$", 'u');
+                    isError = !(fullName && re.test(fullName.value || ''));
+                    toggleOutline(fullName, isError, isError ? 'Enter full name e.g. John Doe' : undefined);
+                }
+                break;
+            case 'emailAddress':
+                isError = !(emailAddress && /\S+@\S+\.\S+/.test(emailAddress.value.trim()));
+                toggleOutline(emailAddress, isError, isError ? 'Enter a valid email address' : undefined);
+                break;
+            case 'emailSubject':
+                isError = !(emailSubject && emailSubject.value.trim().length > 1);
+                toggleOutline(emailSubject, isError, isError ? 'Enter a subject (min 2 characters)' : undefined);
+                break;
+            case 'inquiryMessage':
+                isError = !(inquiryMessage && inquiryMessage.value.trim().length >= 4);
+                toggleOutline(inquiryMessage, isError, isError ? 'Enter message (min 4 characters)' : undefined);
+                break;
+            case 'inquiryType':
+                isError = !(inquiryBtn && inquiryBtn.getAttribute('data-selected') && inquiryBtn.getAttribute('data-selected').trim().length > 0);
+                toggleOutline(inquiryBtn, isError, isError ? 'Select an inquiry type' : undefined);
+                break;
+            default:
+                break;
+        }
+        return isError;
+    }
 
-    // Also validate subject and inquiry type interactions
-    if (emailSubject) emailSubject.addEventListener('input', validateForm);
-    // When a selection is made from the custom dropdown we already call setSelection()
-    // so call validateForm after selection to update state.
-    inquiryTypes.forEach((el) => el.addEventListener('click', validateForm));
+    // We only validate when the user clicks Send. This avoids showing errors
+    // while the user is typing or on initial page load. Additionally, we add
+    // blur handlers so that a field is validated when the user leaves it,
+    // but only if they've typed more than 1 character (so empty fields don't
+    // show errors immediately).
+    function validateFieldOnBlur(fieldEl, fieldKey, minCharsForCheck = 2) {
+        if (!fieldEl) return;
+        fieldEl.addEventListener('focusout', function () {
+            const val = (fieldEl.value || '').trim();
+            if (val.length >= minCharsForCheck) {
+                // validate only this specific field to avoid toggling others
+                validateSingle(fieldKey);
+            } else {
+                // if too short, remove any outline so blank fields remain neutral
+                fieldEl.classList.remove('input-error');
+                if (fieldEl instanceof HTMLButtonElement) {
+                    fieldEl.style.outline = '';
+                    fieldEl.style.outlineOffset = '';
+                }
+            }
+        });
+    }
 
-    // Prevent default submit; simulate send (placeholder)
+    // Apply blur validation to inputs and textarea
+    // Validate full name on blur even when user has typed a single character
+    // so that an invalid single-word name like "K" will show an error.
+    validateFieldOnBlur(fullName, 'fullName', 1);
+    validateFieldOnBlur(emailAddress, 'emailAddress', 2);
+    validateFieldOnBlur(emailSubject, 'emailSubject', 2);
+    // For message, we only run validation on blur if user typed >1 char; full
+    // validity still requires >4 chars.
+    validateFieldOnBlur(inquiryMessage, 'inquiryMessage', 2);
+
+    // Also validate when a selection is explicitly made from the dropdown
+    inquiryTypes.forEach((el) => el.addEventListener('click', function () {
+        // selection happened, update visuals for inquiry type only
+        validateSingle('inquiryType');
+    }));
+
     if (sendBtn) {
-        // initialize disabled state
-        validateForm();
-
         sendBtn.addEventListener('click', function (e) {
             e.preventDefault();
-            // Basic feedback: if disabled, do nothing
-            if (sendBtn.disabled) {
-                // focus first invalid element
-                const result = validateForm();
-                if (result && result.errors) {
-                    if (result.errors.fullName && fullName) {
-                        fullName.focus();
-                    } else if (result.errors.emailAddress && emailAddress) {
-                        emailAddress.focus();
-                    } else if (result.errors.emailSubject && emailSubject) {
-                        emailSubject.focus();
-                    } else if (result.errors.inquiryType && inquiryBtn) {
-                        inquiryBtn.focus();
-                    } else if (result.errors.inquiryMessage && inquiryMessage) {
-                        inquiryMessage.focus();
-                    }
+
+            const result = validateForm();
+
+            // If there are validation errors, focus the first invalid field and stop
+            if (result && result.hasAnyError) {
+                const errs = result.errors;
+                if (errs.fullName && fullName) {
+                    fullName.focus();
+                } else if (errs.emailAddress && emailAddress) {
+                    emailAddress.focus();
+                } else if (errs.emailSubject && emailSubject) {
+                    emailSubject.focus();
+                } else if (errs.inquiryType && inquiryBtn) {
+                    inquiryBtn.focus();
+                } else if (errs.inquiryMessage && inquiryMessage) {
+                    inquiryMessage.focus();
                 }
                 return;
             }
 
+            // Build payload and simulate send
             const payload = {
                 name: fullName.value.trim(),
                 email: emailAddress.value.trim(),
