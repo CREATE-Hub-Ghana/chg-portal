@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Build the white-variant src from the current src
         const makeWhiteSrc = (src) => {
+            // Special-case: linkedIn uses a different white filename in the footer
+            if (src.endsWith('linkedIn_black.svg') || src.endsWith('linkedIn_black_1.svg')) {
+                return src.replace(/linkedIn_black(?:_1)?\.svg$/i, 'linkedIn_white_2.svg');
+            }
+
             // Prefer replacing the explicit pattern "_black.svg" -> "_white.svg"
             if (src.includes('_black.svg')) return src.replace('_black.svg', '_white.svg');
 
