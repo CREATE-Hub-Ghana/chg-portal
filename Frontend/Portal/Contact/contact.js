@@ -198,8 +198,12 @@
         // "Anne-Marie", "J. Doe".
         // We use \p{L} with the Unicode flag to allow accented letters.
         const namePart = "\\p{L}+(?:[.'-]\\p{L}+)*\\.?"; // one name token
-        const hasName = fullName && new RegExp("^\\s*" + namePart + "(?:\\s+" + namePart + ")+\\s*$", 'u').test(fullName.value || '');
-        errors.fullName = !hasName;
+        const nameVal = (fullName && fullName.value || '').trim();
+        const hasName = fullName && new RegExp("^\\s*" + namePart + "(?:\\s+" + namePart + ")+\\s*$", 'u').test(nameVal);
+        // Detect characters we disallow in names: anything not a letter,
+        // space, hyphen, apostrophe, or period. Use Unicode property for letters.
+        const nameHasForbidden = /[^\p{L}\s.'-]/u.test(nameVal);
+        errors.fullName = !hasName || nameHasForbidden;
 
         // Email: simple regex
         const hasEmail = emailAddress && /\S+@\S+\.\S+/.test(emailAddress.value.trim());
@@ -225,7 +229,9 @@
         errors.inquiryMessage = !hasMessage;
 
         // Toggle outlines for all fields (full form validation) with specific messages
-        toggleOutline(fullName, errors.fullName, errors.fullName ? 'Enter full name e.g. John Doe' : undefined);
+        // If the name contains forbidden symbols show a symbol-specific message.
+        const nameMsg = nameHasForbidden ? 'Do not include symbols or numbers in the name' : (errors.fullName ? 'Enter full name e.g. John Doe' : undefined);
+        toggleOutline(fullName, errors.fullName, nameMsg);
         toggleOutline(emailAddress, errors.emailAddress, errors.emailAddress ? 'Enter a valid email address' : undefined);
         // If forbidden symbols present, show the symbol-specific message; otherwise show the generic subject hint.
         const subjectMsg = hasForbiddenSymbols ? 'Do not include symbols (!@#$%^&*()_+ etc)' : (errors.emailSubject ? 'Enter a subject (min 2 characters)' : undefined);
@@ -248,8 +254,11 @@
                 {
                     const namePart = "\\p{L}+(?:[.'-]\\p{L}+)*\\.?";
                     const re = new RegExp("^\\s*" + namePart + "(?:\\s+" + namePart + ")+\\s*$", 'u');
-                    isError = !(fullName && re.test(fullName.value || ''));
-                    toggleOutline(fullName, isError, isError ? 'Enter full name e.g. John Doe' : undefined);
+                    const val = (fullName && fullName.value || '').trim();
+                    const hasForbidden = /[^\p{L}\s.'-]/u.test(val);
+                    isError = !(fullName && re.test(val)) || hasForbidden;
+                    const msg = hasForbidden ? 'Do not include symbols or numbers in the name' : 'Enter full name e.g. John Doe';
+                    toggleOutline(fullName, isError, isError ? msg : undefined);
                 }
                 break;
             case 'emailAddress':
@@ -313,6 +322,54 @@
     // For message, we only run validation on blur if user typed >1 char; full
     // validity still requires >4 chars.
     validateFieldOnBlur(inquiryMessage, 'inquiryMessage', 2);
+
+    // Show symbol-specific error while the user is typing in the name field.
+    if (fullName) {
+        fullName.addEventListener('input', function () {
+            const val = (fullName.value || '').trim();
+            // only show the symbol error; structural (two-name) validation
+            // remains on blur/send
+            const hasForbidden = /[^\p{L}\s.'-]/u.test(val);
+            if (hasForbidden) {
+                toggleOutline(fullName, true, 'Do not include symbols or numbers in the name');
+            } else {
+                // remove symbol error when characters are clean; keep other
+                // outline state (structural errors will be applied on blur/send)
+                // so we only clear if the current class is input-error and the
+                // message matches our symbol text.
+                try {
+                    const blk = fullName.closest && fullName.closest('.is-block, .inquiry-message-container');
+                    const span = blk && blk.querySelector && blk.querySelector('.error-message');
+                    if (span && span.textContent && span.textContent.indexOf('Do not include symbols') === 0) {
+                        span.style.display = 'none';
+                    }
+                    fullName.classList.remove('input-error');
+                } catch (e) { /* ignore */ }
+            }
+        });
+    }
+
+    // Mirror: show symbol-specific error while typing in Subject input.
+    if (emailSubject) {
+        emailSubject.addEventListener('input', function () {
+            const val = (emailSubject.value || '').trim();
+            // Subject should contain at least one alphanumeric; show symbol
+            // error when it contains disallowed symbols as a helpful immediate hint.
+            const hasForbidden = /[!@#$%^&*()_+\[\]{}\\|;:'",.<>\/\?`~\-]/.test(val);
+            if (hasForbidden) {
+                toggleOutline(emailSubject, true, 'Do not include symbols (!@#$%^&*()_+ etc)');
+            } else {
+                try {
+                    const blk = emailSubject.closest && emailSubject.closest('.is-block');
+                    const span = blk && blk.querySelector && blk.querySelector('.error-message');
+                    if (span && span.textContent && span.textContent.indexOf('Do not include symbols') === 0) {
+                        span.style.display = 'none';
+                    }
+                    emailSubject.classList.remove('input-error');
+                } catch (e) { /* ignore */ }
+            }
+        });
+    }
 
     // Also validate when a selection is explicitly made from the dropdown
     inquiryTypes.forEach((el) => el.addEventListener('click', function () {
