@@ -586,7 +586,7 @@ body {
                     outline: 2px solid #dc2626;
                 }
 
-                #error-message {
+                .error-message {
                     display: none;
                     width: max-content;
                     height: max-content;
@@ -922,7 +922,7 @@ body {
 
 .modal-panel {
     position: relative;
-    width: 420px;
+    width: max-content;
     max-width: calc(100% - 40px);
     background: #fff;
     border-radius: 12px;
