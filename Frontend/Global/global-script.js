@@ -1,3 +1,34 @@
+// Donate / Support button routing: navigate to /support when activated
+function setupDonateButtons() {
+    const donateBtns = Array.from(document.querySelectorAll('.donate'));
+    if (!donateBtns || donateBtns.length === 0) return;
+
+    function activateDonate(e) {
+        if (e && typeof e.preventDefault === 'function') e.preventDefault();
+        try {
+            window.location.pathname = '/support';
+        } catch (err) {
+            // Fallback to full URL
+            window.location.href = '/support';
+        }
+    }
+
+    donateBtns.forEach((btn) => {
+        // Accessibility: ensure button role and keyboard focusability
+        if (!btn.hasAttribute('role')) btn.setAttribute('role', 'button');
+        if (!btn.hasAttribute('tabindex')) btn.setAttribute('tabindex', '0');
+        if (!btn.hasAttribute('aria-label')) btn.setAttribute('aria-label', 'Support us');
+
+        btn.addEventListener('click', activateDonate);
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                activateDonate(e);
+            }
+        });
+    });
+}
+
 // Navbar sticky/compact behavior: works on all pages that include a #navbar
 window.addEventListener("scroll", function () {
     const navbar = document.querySelector("#navbar");
@@ -115,6 +146,9 @@ window.addEventListener("scroll", function () {
     // If layout changes dynamically (images/fonts), ensure visibility recalculates after load
     window.addEventListener('load', () => setTimeout(updateVisibility, 50));
 })();
+
+// initialize donation buttons early so pages with donate can respond
+try { setupDonateButtons(); } catch (e) { /* ignore */ }
 
 // ----- Shared navigation & menu logic (moved here so all pages can import it) -----
 (function sharedNavAndMenu() {
