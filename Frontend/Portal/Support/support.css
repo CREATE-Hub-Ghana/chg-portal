@@ -383,7 +383,7 @@ body {
         box-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
         background-color: #fff;
         overflow: hidden;
-        padding-bottom: 40px;
+        padding-bottom: 50px;
 
         .git-header {
             display: flex;
@@ -713,8 +713,8 @@ body {
             textarea {
                 display: flex;
                 width: calc(100% - 32px);
-                height: 90px;
-                min-height: 60px;
+                height: 125px;
+                min-height: 70px;
                 max-height: 200px;
                 outline: none;
                 border: 2px solid #d1d5db;
@@ -741,6 +741,7 @@ body {
                 }
 
                 &::placeholder {
+                    font-size: 0.95em;
                     color: rgba(0, 0, 0, 0.55);
                     letter-spacing: 0.5px;
                 }
@@ -780,7 +781,7 @@ body {
             background: linear-gradient(145deg, #2563eb 0%, #9333ea 100%);
             transition: all 0.3s ease;
 
-            margin-top: 30px;
+            margin-top: 35px;
             gap: 8px;
 
             text-align: center;
@@ -836,7 +837,7 @@ body {
         height: max-content;
         background-color: transparent;
 
-        gap: 40px;
+        gap: 35px;
 
         .sponsorship-proposal-container {
             display: flex;
@@ -846,7 +847,7 @@ body {
             height: max-content;
             background: linear-gradient(90deg, #fef2f2 0%, #fdf2f8 100%);
             border-radius: 20px;
-            padding: 35px 0;
+            padding: 35px 0 40px 0;
 
             .spc-icon-container {
                 display: flex;
@@ -954,13 +955,99 @@ body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             width: 100%;
-            height: 394px;
+            height: max-content;
             border-radius: 20px;
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
             background-color: #fff;
             overflow: hidden;
+
+            padding: 40px 0;
+
+            .tsb-header {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: max-content;
+
+                span {
+                    display: flex;
+                    width: max-content;
+                    height: max-content;
+                    text-align: center;
+                    font-size: 1.4em;
+                    font-weight: bold;
+                    color: #160f36;
+                    letter-spacing: 1px;
+                    background-color: transparent;
+                    margin-left: 50px;
+                }
+            }
+
+            .tbs-list {
+                display: flex;
+                flex-direction: column;
+                width: calc(100% - 100px);
+                height: max-content;
+                margin-top: 24px;
+                background-color: transparent;
+                gap: 15px;
+
+                .tbsl-block {
+                    display: flex;
+                    width: 100%;
+                    height: max-content;
+                    background-color: transparent;
+                    gap: 12px;
+
+                    .tlb-icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 30px;
+                        height: 30px;
+                        background-color: transparent;
+
+                        img {
+                            width: 25px;
+                            height: 25px;
+                            object-fit: contain;
+                        }
+                    }
+
+                    .tbl-right {
+                        display: flex;
+                        flex-direction: column;
+                        width: calc(100% - 80px);
+                        height: max-content;
+                        gap: 5px;
+
+                        .tblr-main {
+                            display: flex;
+                            width: 100%;
+                            height: max-content;
+                            text-align: left;
+                            font-family: 'Manrope', sans-serif;
+                            font-size: 0.9em;
+                            font-weight: 700;
+                            color: #160f36;
+                            margin-top: 1px;
+                        }
+
+                        .tblr-sub {
+                            display: flex;
+                            width: 100%;
+                            height: max-content;
+                            text-align: left;
+                            font-family: 'Manrope', sans-serif;
+                            font-size: 0.83em;
+                            font-weight: 500;
+                            color: rgba(22, 15, 54, 0.75);
+                            line-height: 1.5;
+                        }
+                    }
+                }
+            }
         }
     }
 }
