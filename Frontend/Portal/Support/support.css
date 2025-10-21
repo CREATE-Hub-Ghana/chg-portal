@@ -1137,7 +1137,7 @@ body {
 
         .git-container {
             width: 92%;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
 
             .git-header {
                 justify-content: center;
@@ -1181,6 +1181,19 @@ body {
 
         .ts-right {
             width: 92%;
+
+            .tsr-bottom {
+                .tbs-list {
+                    width: calc(100% - 50px);
+                    margin-left: 50px;
+
+                    .tbsl-block {
+                        .tbl-right {
+                            width: calc(100% - 85px);
+                        }
+                    }
+                }
+            }
         }
     }
 }
