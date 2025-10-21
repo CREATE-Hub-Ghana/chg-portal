@@ -140,6 +140,8 @@ body {
                 overflow: hidden;
                 box-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
                 transition: all 0.25s ease;
+                cursor: pointer;
+                text-decoration: none;
 
 
                 .pb-profile {
@@ -170,6 +172,7 @@ body {
                     font-weight: 600;
                     color: #160f36;
                     letter-spacing: 0.5px;
+                    cursor: pointer;
                 }
 
                 .pbp-description {
@@ -182,6 +185,7 @@ body {
                     color: rgba(22, 15, 54, 0.9);
                     letter-spacing: 0.5px;
                     line-height: 1.4;
+                    cursor: pointer;
                 }
 
                 &:hover {
