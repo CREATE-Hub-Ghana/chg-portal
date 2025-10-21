@@ -1055,3 +1055,76 @@ body {
         }
     }
 }
+
+@media (max-width: 630px) {
+
+    .first-sec {
+        .pwu-container {
+            background-color: transparent;
+            padding-bottom: 50px;
+
+            .pwu-main {
+                font-size: 1.8em;
+            }
+
+            .pwu-sub {
+                margin-top: 22px;
+                width: calc(90vw - 8px);
+                font-size: 0.95em;
+            }
+        }
+
+    }
+
+    .second-sec {
+        display: flex;
+        padding: 0 0 60px 0;
+
+        .investment-rates-container {
+            width: 92%;
+
+            .irc-main {
+                width: 85%;
+                margin-top: 10px;
+
+                span {
+                    font-size: 1.6em;
+                    font-weight: bolder;
+                }
+            }
+
+            .irc-sub {
+                width: 85%;
+                margin-top: 25px;
+
+                span {
+                    font-size: 0.9em;
+                }
+            }
+
+            .irc-rates {
+                flex-wrap: wrap;
+                width: 100%;
+                justify-content: center;
+                row-gap: 30px;
+                column-gap: 15px;
+
+                .irc-rb {
+                    .irb-value {
+                        font-size: 2em;
+                    }
+
+                    .irb-des {
+                        /* margin: 0; */
+                        font-size: 0.8em;
+                        width: 95%;
+                    }
+                }
+            }
+        }
+    }
+
+    .third-sec {
+        display: none;
+    }
+}
