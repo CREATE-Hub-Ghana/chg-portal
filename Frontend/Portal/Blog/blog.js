@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = Array.from(document.querySelectorAll('.lu-filter'));
     const storyBlocks = Array.from(document.querySelectorAll('.story-block'));
     const featured = document.querySelector('.featured-story-container');
+    const searchButton = document.getElementById('filter-search-btn');
+    const searchInput = document.getElementById('filter-search');
 
     // Helper: extract category text from a story-block
     function getCategory(el) {
@@ -200,5 +202,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make sure "All" is visually active on load and featured section is unaffected
     setActiveFilterButton('filter-all');
     applyFilter('all');
+
+    //SEARCH INPUT EXPAND/CONTRACT
+
+    if (searchButton && searchInput) {
+        // ensure smooth width transition
+        if (!searchInput.style.transition) searchInput.style.transition = 'all 250ms ease-out';
+
+        searchButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isExpanded = searchInput.dataset.expanded === 'true';
+            const img = searchButton.querySelector('img');
+            if (!isExpanded) {
+                searchButton.style.padding = '6.5px 10px';
+                searchButton.style.marginRight = '6px';
+                searchButton.style.backgroundColor = '#2563eb';
+                if (img) img.src = '../../Universal/Icons/search_white.svg';
+                if (img) img.style.opacity = '1';
+                if (img) img.style.width = '18px';
+                if (img) img.style.height = '18px';
+
+                searchInput.style.width = '892px';
+                searchInput.style.height = 'calc(100% + 4px)';
+                searchInput.style.padding = '0 55px 0 25px';
+                searchInput.dataset.expanded = 'true';
+                searchButton.setAttribute('aria-expanded', 'true');
+                searchInput.focus();
+            } else {
+                searchButton.style.padding = '';
+                searchButton.style.marginRight = '0';
+                searchButton.style.backgroundColor = '';
+                if (img) img.src = '../../Universal/Icons/search_black.svg';
+                if (img) img.style.opacity = '';
+                if (img) img.style.width = '';
+                if (img) img.style.height = '';
+
+                searchInput.style.width = '';
+                searchInput.style.height = '';
+                searchInput.style.padding = '';
+                searchInput.dataset.expanded = 'false';
+                searchButton.setAttribute('aria-expanded', 'false');
+                searchInput.blur();
+            }
+        });
+    }
 });
 

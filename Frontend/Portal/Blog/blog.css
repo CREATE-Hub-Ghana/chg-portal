@@ -5,6 +5,7 @@
     width: 100%;
     height: max-content;
     padding-bottom: 50px;
+    margin-top: 60px;
 }
 
 .lu-container {
@@ -76,7 +77,7 @@
             width: max-content;
             height: max-content;
             background-color: transparent;
-            gap: 16px;
+            gap: 17px;
 
             button {
                 display: flex;
@@ -121,6 +122,64 @@
                 &:hover {
                     background-color: #2563eb;
                     transform: scale(1);
+                }
+            }
+
+            .filter-search-container {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                width: max-content;
+                height: 39px;
+                background-color: transparent;
+
+                .lu-search {
+                    padding: 9.5px 15px;
+                    /* padding: 6.5px 10px;
+                    margin-right: 6px; */
+                    z-index: 100;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                        object-fit: contain;
+                        opacity: 0.5;
+                        margin-top: 1px;
+                    }
+                }
+
+                input {
+                    position: absolute;
+                    display: flex;
+                    align-items: center;
+                    width: 46px;
+                    /* width: 972px; */
+                    height: calc(100% - 2px);
+                    /* margin-left: 10px; */
+                    /* border: 1.5px solid #d1d5db; */
+                    border: none;
+                    outline: none;
+                    border-radius: 9999px;
+                    font-family: 'Manrope', sans-serif;
+                    font-size: 0.9em;
+                    font-weight: 500;
+                    color: rgba(22, 15, 54, 0.9);
+                    letter-spacing: 0.3px;
+                    transition: all 0.3s ease;
+
+                    z-index: 1;
+
+                    background-color: #f3f4f6;
+
+                    /* &:focus {
+                        border-color: #2563eb;
+                        box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+                    } */
+
+                    /* &:hover {
+                        width: 972px;
+                    } */
                 }
             }
         }
