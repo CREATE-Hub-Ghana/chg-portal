@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Collect filter buttons and story nodes
     const filterButtons = Array.from(document.querySelectorAll('.lu-filter'));
     const storyBlocks = Array.from(document.querySelectorAll('.story-block'));
+    const secondSec = document.querySelector('.second-sec');
     const featured = document.querySelector('.featured-story-container');
     const searchButton = document.getElementById('filter-search-btn');
     const searchInput = document.getElementById('filter-search');
@@ -83,12 +84,42 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn && btn.classList) btn.classList.add('active-filter');
     }
 
-    // Apply a filter: type can be 'all' | 'category' | 'latest' | 'popular'
+    // Apply a filter: type can be 'all' | 'category' | 'latest' | 'popular' | 'search'
     function applyFilter(type, value) {
         // NOTE: active button is managed separately via setActiveFilterButton
 
         if (type === 'all') {
             allStoryNodes.forEach(showNode);
+            return;
+        }
+
+        if (type === 'search') {
+            const query = (value || '').toLowerCase().trim();
+            if (!query) {
+                // empty search -> show all and display featured story
+                allStoryNodes.forEach(showNode);
+                if (featured) featured.style.display = '';
+                if (secondSec) secondSec.style.paddingBottom = '';
+                return;
+            }
+            // hide featured story when search is active
+            if (featured) featured.style.display = 'none';
+            if (secondSec) secondSec.style.paddingBottom = '30px';
+
+            allStoryNodes.forEach(node => {
+                // get story title and category text
+                const titleEl = node.querySelector('.story-title span');
+                const categoryEl = node.querySelector('.sb-category');
+                const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+                const category = categoryEl ? categoryEl.textContent.toLowerCase() : '';
+
+                // match against title or category
+                if (title.includes(query) || category.includes(query)) {
+                    showNode(node);
+                } else {
+                    hideNode(node);
+                }
+            });
             return;
         }
 
@@ -209,6 +240,52 @@ document.addEventListener('DOMContentLoaded', () => {
         // ensure smooth width transition
         if (!searchInput.style.transition) searchInput.style.transition = 'all 250ms ease-out';
 
+        // Track current search state
+        let isSearchActive = false;
+
+        // Helper: update search active state based on input value
+        function updateSearchActiveState() {
+            const hasValue = searchInput.value.trim().length > 0;
+            if (hasValue !== isSearchActive) {
+                isSearchActive = hasValue;
+                if (isSearchActive) {
+                    searchButton.classList.add('active-filter');
+                    searchInput.dataset.hasContent = 'true';
+                } else {
+                    searchButton.classList.remove('active-filter');
+                    searchInput.dataset.hasContent = 'false';
+                }
+            }
+        }
+
+        // Handle search input on every keystroke
+        searchInput.addEventListener('input', (e) => {
+            const query = searchInput.value.trim();
+
+            // Apply search filter in real-time
+            applyFilter('search', query);
+
+            // Update active state
+            updateSearchActiveState();
+        });
+
+        // Handle search input on Enter key (submit)
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const query = searchInput.value.trim();
+                applyFilter('search', query);
+                updateSearchActiveState();
+            }
+            // Allow ESC to clear search
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                searchInput.value = '';
+                applyFilter('search', '');
+                updateSearchActiveState();
+            }
+        });
+
         searchButton.addEventListener('click', (e) => {
             e.preventDefault();
             const isExpanded = searchInput.dataset.expanded === 'true';
@@ -242,6 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchInput.style.padding = '';
                 searchInput.dataset.expanded = 'false';
                 searchButton.setAttribute('aria-expanded', 'false');
+
+                // Clear search when collapsing
+                searchInput.value = '';
+                applyFilter('search', '');
+                updateSearchActiveState();
+
                 searchInput.blur();
             }
         });
