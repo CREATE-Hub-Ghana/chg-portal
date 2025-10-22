@@ -94,7 +94,7 @@
                 text-align: center;
                 font-family: 'Poppins', sans-serif;
                 font-family: 'Manrope', sans-serif;
-                font-size: 0.87em;
+                font-size: 0.865em;
                 color: rgba(22, 15, 54, 0.7);
                 font-weight: bold;
                 letter-spacing: 1px;
@@ -335,10 +335,11 @@
 }
 
 .third-sec {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    row-gap: 40px;
+    justify-items: center;
+    width: 90%;
     height: max-content;
     background-color: transparent;
     padding-bottom: 100px;
@@ -347,12 +348,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 350px;
+        width: 355px;
         height: max-content;
         background-color: #f9fafb;
         border-radius: 20px;
         overflow: hidden;
         padding-bottom: 30px;
+
+        transition: all 0.25s ease;
 
         .sb-image {
             display: flex;
@@ -362,6 +365,14 @@
             height: 180px;
             background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
             border-radius: 20px 20px 0 0;
+
+            img {
+                width: 45px;
+                height: 45px;
+                object-fit: contain;
+                margin-top: 15px;
+                opacity: 0.2;
+            }
         }
 
         .mid-top {
@@ -402,6 +413,123 @@
                 letter-spacing: 0.3px;
                 background-color: transparent;
             }
+        }
+
+        .story-title {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            width: calc(100% - 40px);
+            height: max-content;
+
+            span {
+                display: flex;
+                width: max-content;
+                height: max-content;
+                text-align: left;
+                font-family: 'Manrope', sans-serif;
+                font-size: 1.13em;
+                font-weight: bold;
+                color: rgba(22, 15, 54, 0.9);
+                letter-spacing: 0.2px;
+            }
+        }
+
+        .sb-bottom {
+            display: flex;
+            align-items: center;
+            width: calc(100% - 40px);
+            height: max-content;
+            background-color: transparent;
+            margin-top: 20px;
+
+            .story-details {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: max-content;
+                height: max-content;
+                gap: 8px;
+                background-color: transparent;
+
+                .sd-block {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: max-content;
+                    height: max-content;
+                    gap: 8px;
+                    background-color: transparent;
+
+                    img {
+                        width: 16px;
+                        height: 16px;
+                        object-fit: contain;
+                        opacity: 0.6;
+                    }
+
+                    span {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: max-content;
+                        height: max-content;
+                        font-family: 'Manrope', sans-serif;
+                        font-size: 0.8em;
+                        font-weight: 500;
+                        color: rgba(22, 15, 54, 0.65);
+                        letter-spacing: 0.3px;
+                        background-color: transparent;
+                        /* line-height: 1.5; */
+                    }
+                }
+            }
+
+            button {
+                margin-left: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: max-content;
+                height: max-content;
+                padding: 8px 20px;
+                border: none;
+                outline: none;
+                border-radius: 999999px;
+                background-color: #2563eb;
+                transition: all 0.3s ease;
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: max-content;
+                    height: max-content;
+                    font-family: 'Poppins', Arial, sans-serif;
+                    font-size: 0.85em;
+                    font-weight: bold;
+                    color: #fff;
+                    letter-spacing: 1px;
+                    background-color: #2563eb;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                }
+
+                &:hover {
+                    transform: scale(1.02);
+                    background-color: #2563eb;
+                    cursor: pointer;
+                }
+
+                &:active {
+                    transform: scale(0.98);
+                }
+            }
+        }
+
+        &:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
+            transform: translateY(-2px);
         }
     }
 }
