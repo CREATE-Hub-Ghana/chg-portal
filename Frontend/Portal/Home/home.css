@@ -1327,6 +1327,7 @@ body {
                 padding: 0 6px;
 
                 button {
+                    position: relative;
                     display: flex;
                     width: 10px;
                     height: 10px;
