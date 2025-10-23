@@ -98,13 +98,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!query) {
                 // empty search -> show all and display featured story
                 allStoryNodes.forEach(showNode);
-                if (featured) featured.style.display = '';
-                if (secondSec) secondSec.style.paddingBottom = '';
+                const isMobile = window.innerWidth < 630 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                if (!isMobile) {
+                    if (featured) featured.style.display = '';
+                    if (secondSec) secondSec.style.paddingBottom = '';
+                }
                 return;
             }
             // hide featured story when search is active
             if (featured) featured.style.display = 'none';
-            if (secondSec) secondSec.style.paddingBottom = '30px';
+            if (secondSec) secondSec.style.paddingBottom = '5px';
 
             allStoryNodes.forEach(node => {
                 // get story title and category text
@@ -290,6 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const isExpanded = searchInput.dataset.expanded === 'true';
             const img = searchButton.querySelector('img');
+            const searchContainer = document.querySelector('.filter-search-container');
+            const isMobile = window.innerWidth < 630 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
             if (!isExpanded) {
                 searchButton.style.padding = '6.5px 10px';
                 searchButton.style.marginRight = '6px';
@@ -299,12 +305,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (img) img.style.width = '18px';
                 if (img) img.style.height = '18px';
 
-                searchInput.style.width = '892px';
-                searchInput.style.height = 'calc(100% + 4px)';
+                filterButtons.forEach(b => b.style.opacity = '0');
+
+                searchContainer.style.marginRight = '-10px';
+
+                // searchInput.style.width = '892px';
+                searchInput.style.width = 'calc(100% - 80px)';
+
+                searchInput.style.height = '42px';
                 searchInput.style.padding = '0 55px 0 25px';
                 searchInput.dataset.expanded = 'true';
                 searchButton.setAttribute('aria-expanded', 'true');
                 searchInput.focus();
+
+                if (isMobile) {
+                    // Mobile: make the search input take most of the width and hide filter buttons for clarity
+                    searchContainer.style.position = 'relative';
+                    searchContainer.style.zIndex = '999';
+                    searchContainer.style.width = '100%';
+                    searchContainer.style.marginRight = '0';
+
+                    filterButtons.forEach(b => {
+                        b.style.opacity = '0';
+                        b.style.display = 'none';
+                        b.style.pointerEvents = 'none';
+                    });
+
+                    // Expand input to full width (account for the search button)
+                    searchInput.style.width = '100%';
+                    searchInput.style.boxSizing = 'border-box';
+                    searchInput.style.padding = '0 55px 0 16px';
+                    searchInput.style.height = '48px';
+
+                    // Hide featured on mobile
+                    if (featured) featured.style.display = 'none';
+                    if (secondSec) secondSec.style.paddingBottom = '5px';
+                }
+
+
             } else {
                 searchButton.style.padding = '';
                 searchButton.style.marginRight = '0';
@@ -313,6 +351,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (img) img.style.opacity = '';
                 if (img) img.style.width = '';
                 if (img) img.style.height = '';
+
+                filterButtons.forEach(b => b.style.opacity = '');
+                searchContainer.style.marginRight = '';
 
                 searchInput.style.width = '';
                 searchInput.style.height = '';
@@ -326,6 +367,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateSearchActiveState();
 
                 searchInput.blur();
+
+                if (isMobile) {
+                    searchContainer.style.position = '';
+                    searchContainer.style.zIndex = '';
+                    searchContainer.style.width = '';
+                    searchContainer.style.marginRight = '';
+
+                    filterButtons.forEach(b => {
+                        b.style.opacity = '';
+                        b.style.display = '';
+                        b.style.pointerEvents = '';
+                    });
+
+                    searchInput.style.width = '';
+                    searchInput.style.boxSizing = '';
+                    searchInput.style.padding = '';
+                    searchInput.style.height = '';
+
+                    // Keep featured hidden on mobile even when search is cleared
+                    // Only show on desktop
+                    if (featured) featured.style.display = '';
+                    if (secondSec) secondSec.style.paddingBottom = '';
+                }
             }
         });
     }
