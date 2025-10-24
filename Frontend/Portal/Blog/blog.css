@@ -906,7 +906,7 @@
                     width: calc(90% - 4px);
                     height: 55px;
                     margin: 0;
-                    font-size: 1em;
+                    font-size: 0.98em;
                     font-weight: bold;
                 }
             }
