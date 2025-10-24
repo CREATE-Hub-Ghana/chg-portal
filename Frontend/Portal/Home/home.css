@@ -2064,10 +2064,6 @@ body {
                         letter-spacing: 0.3px;
                         overflow: hidden;
                     }
-
-                    .ffc-vwu-btn::before {
-                        height: 0px;
-                    }
                 }
             }
         }

@@ -906,6 +906,8 @@
                     width: calc(90% - 4px);
                     height: 55px;
                     margin: 0;
+                    font-size: 1em;
+                    font-weight: bold;
                 }
             }
 
