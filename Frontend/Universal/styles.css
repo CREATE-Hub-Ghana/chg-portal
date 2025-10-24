@@ -194,7 +194,7 @@ body {
     /* height: 1000vh; */
     height: max-content;
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', system-ui, sans-serif;
     overflow-x: hidden;
 }
 
