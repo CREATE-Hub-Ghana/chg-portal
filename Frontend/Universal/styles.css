@@ -6,6 +6,38 @@
     font-display: swap;
 }
 
+/* @font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./Fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    src: url('./Fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./Fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 800;
+    src: url('./Fonts/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+    font-display: swap;
+} */
+
 @font-face {
     font-family: 'Montserrat';
     font-style: normal;
