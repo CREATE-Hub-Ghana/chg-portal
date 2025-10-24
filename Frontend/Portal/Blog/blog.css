@@ -381,19 +381,24 @@
     }
 
     .fsc-right {
+        position: relative;
         display: flex;
         flex-direction: column;
         width: 50%;
-        height: stretch;
+        height: 100%;
         background-color: rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(2px);
         border-radius: 0 20px 20px 0;
         overflow: hidden;
+        min-width: 0;
+        min-height: 0;
 
         img {
             width: 100%;
-            height: stretch;
+            height: 100%;
             object-fit: fill;
+            min-width: 0;
+            min-height: 0;
         }
     }
 }
@@ -695,7 +700,7 @@
                 border-radius: 0 0 20px 20px;
 
                 img {
-                    width: stretch;
+                    width: 100%;
                 }
             }
         }
