@@ -177,6 +177,7 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
                 const mobileHome = document.getElementById('home-m-btn');
                 const mobileServices = document.getElementById('services-m-btn');
                 const mobilePrograms = document.getElementById('programs-m-btn');
+                const mobileLearn = document.getElementById('learn-m-btn');
                 const mobileContact = document.getElementById('contact-m-btn');
                 const mobileBlog = document.getElementById('blog-m-btn') || document.getElementById('vlog-m-btn');
                 const mobileAbout = document.getElementById('about-m-btn');
@@ -202,17 +203,25 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
                     if (mobilePrograms) mobilePrograms.classList.add('selected');
                     // route to /programs
                     window.location.pathname = '/programs';
+                } else if (text === 'learn') {
+                    if (mobileLearn) mobileLearn.classList.add('selected');
+                    // route to /learn
+                    window.location.pathname = '/learn';
                 } else if (text === 'services') {
                     if (mobileServices) mobileServices.classList.add('selected');
-                    // compute target locally to avoid relying on outer-scope function
-                    const servicesElement = document.querySelector('.second-sec');
-                    if (servicesElement) {
-                        const navbarEl = document.querySelector('#navbar');
-                        const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
-                        const target = Math.max(0, servicesElement.offsetTop - navHeight);
-                        window.scrollTo({ top: target, behavior: 'smooth' });
+                    // Only scroll to services section if we're already on the home page
+                    const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+                    if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
+                        // We're on home page - scroll to services section
+                        const servicesElement = document.querySelector('.second-sec');
+                        if (servicesElement) {
+                            const navbarEl = document.querySelector('#navbar');
+                            const navHeight = navbarEl ? navbarEl.getBoundingClientRect().height : 0;
+                            const target = Math.max(0, servicesElement.offsetTop - navHeight);
+                            window.scrollTo({ top: target, behavior: 'smooth' });
+                        }
                     } else {
-                        // Not on the home page: navigate to home and include hash so home can scroll to services on load
+                        // Not on home page: navigate to home and include hash so home can scroll to services on load
                         window.location.href = '/home#services';
                     }
                 } else if (text === 'about') {
@@ -333,18 +342,27 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
                     // optional: close menu when an item is chosen
                     // Close menu when an item is chosen and scroll for specific IDs
                     if (btn.id === 'services-m-btn') {
-                        // If services section exists on this page, scroll to it. Otherwise navigate to home with hash so it scrolls on load.
-                        const servicesElLocal = document.querySelector('.second-sec');
-                        if (servicesElLocal) {
-                            const target = computeServicesTarget();
-                            window.scrollTo({ top: target, behavior: 'smooth' });
+                        // Only scroll to services section if we're on the home page
+                        const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+                        if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
+                            // We're on home page - scroll to services section if it exists
+                            const servicesElLocal = document.querySelector('.second-sec');
+                            if (servicesElLocal) {
+                                const target = computeServicesTarget();
+                                window.scrollTo({ top: target, behavior: 'smooth' });
+                            }
                         } else {
+                            // Not on home page: navigate to home with hash
                             window.location.href = '/home#services';
                         }
                     }
                     if (btn.id === 'programs-m-btn') {
                         // route to programs page
                         window.location.pathname = '/programs';
+                    }
+                    if (btn.id === 'learn-m-btn') {
+                        // route to learn page
+                        window.location.pathname = '/learn';
                     }
                     if (btn.id === 'contact-m-btn') {
                         window.location.pathname = '/contact';
@@ -374,16 +392,25 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
                         e.preventDefault();
                         selectButton(btn);
                         if (btn.id === 'services-m-btn') {
-                            const servicesElLocal = document.querySelector('.second-sec');
-                            if (servicesElLocal) {
-                                const target = computeServicesTarget();
-                                window.scrollTo({ top: target, behavior: 'smooth' });
+                            // Only scroll to services section if we're on the home page
+                            const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+                            if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
+                                // We're on home page - scroll to services section if it exists
+                                const servicesElLocal = document.querySelector('.second-sec');
+                                if (servicesElLocal) {
+                                    const target = computeServicesTarget();
+                                    window.scrollTo({ top: target, behavior: 'smooth' });
+                                }
                             } else {
+                                // Not on home page: navigate to home with hash
                                 window.location.href = '/home#services';
                             }
                         }
                         if (btn.id === 'programs-m-btn') {
                             window.location.pathname = '/programs';
+                        }
+                        if (btn.id === 'learn-m-btn') {
+                            window.location.pathname = '/learn';
                         }
                         if (btn.id === 'contact-m-btn') {
                             window.location.pathname = '/contact';
@@ -413,11 +440,13 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
             const homeBtn = document.getElementById('home-m-btn');
             const servicesBtn = document.getElementById('services-m-btn');
             const programsBtn = document.getElementById('programs-m-btn');
+            const learnBtn = document.getElementById('learn-m-btn');
 
             // also find desktop nav buttons to sync selection
             const desktopHome = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'home');
             const desktopServices = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'services');
             const desktopPrograms = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'programs');
+            const desktopLearn = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'learn');
             const desktopContact = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'contact');
             const desktopBlog = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'blog');
             const desktopAbout = Array.from(document.querySelectorAll('.nav-btn')).find(b => (b.textContent || '').trim().toLowerCase() === 'about');
@@ -435,6 +464,16 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
                         if (desktopHome) desktopHome.classList.remove('selected');
                         if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
                         if (desktopPrograms) desktopPrograms.classList.add('selected');
+                    } else if (p === '/learn' || p === '/learn.html') {
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (servicesBtn) servicesBtn.classList.remove('selected');
+                        if (programsBtn) programsBtn.classList.remove('selected');
+                        if (learnBtn) learnBtn.classList.add('selected');
+
+                        if (desktopHome) desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (desktopLearn) desktopLearn.classList.add('selected');
                     } else if (p === '/home' || p === '/') {
                         if (homeBtn) homeBtn.classList.add('selected');
                         if (programsBtn) programsBtn.classList.remove('selected');
@@ -486,29 +525,46 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
                         if (homeBtn) homeBtn.classList.remove('selected');
                         if (servicesBtn) servicesBtn.classList.remove('selected');
                         if (programsBtn) programsBtn.classList.remove('selected');
+                        if (learnBtn) learnBtn.classList.remove('selected');
                         if (aboutBtn) aboutBtn.classList.add('selected');
                         if (desktopAbout) desktopAbout.classList.add('selected');
                         if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
                         if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
                         if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (desktopLearn) desktopLearn && desktopLearn.classList.remove('selected');
+                    } else if (_currentPath === '/learn' || _currentPath === '/learn.html') {
+                        if (homeBtn) homeBtn.classList.remove('selected');
+                        if (servicesBtn) servicesBtn.classList.remove('selected');
+                        if (programsBtn) programsBtn.classList.remove('selected');
+                        if (aboutBtn) aboutBtn.classList.remove('selected');
+                        if (learnBtn) learnBtn.classList.add('selected');
+                        if (desktopLearn) desktopLearn.classList.add('selected');
+                        if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
+                        if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
+                        if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (desktopAbout) desktopAbout && desktopAbout.classList.remove('selected');
                     } else if (_currentPath === '/contact' || _currentPath === '/contact.html') {
                         if (homeBtn) homeBtn.classList.remove('selected');
                         if (servicesBtn) servicesBtn.classList.remove('selected');
                         if (programsBtn) programsBtn.classList.remove('selected');
+                        if (learnBtn) learnBtn.classList.remove('selected');
                         if (contactBtn) contactBtn.classList.add('selected');
                         if (desktopContact) desktopContact.classList.add('selected');
                         if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
                         if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
                         if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (desktopLearn) desktopLearn && desktopLearn.classList.remove('selected');
                     } else if (_currentPath === '/blog' || _currentPath === '/blog.html') {
                         if (homeBtn) homeBtn.classList.remove('selected');
                         if (servicesBtn) servicesBtn.classList.remove('selected');
                         if (programsBtn) programsBtn.classList.remove('selected');
+                        if (learnBtn) learnBtn.classList.remove('selected');
                         if (blogBtn) blogBtn.classList.add('selected');
                         if (desktopBlog) desktopBlog.classList.add('selected');
                         if (desktopHome) desktopHome && desktopHome.classList.remove('selected');
                         if (desktopServices) desktopServices && desktopServices.classList.remove('selected');
                         if (desktopPrograms) desktopPrograms && desktopPrograms.classList.remove('selected');
+                        if (desktopLearn) desktopLearn && desktopLearn.classList.remove('selected');
                     }
                 } catch (e) {
                     // ignore selection errors
