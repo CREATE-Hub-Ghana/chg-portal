@@ -472,6 +472,32 @@
                 btn.textContent = em;
                 actionsContainer.appendChild(btn);
             });
+
+            // Show browser options on all browsers
+            // Add section divider
+            const divider = document.createElement('div');
+            divider.className = 'modal-divider';
+            divider.setAttribute('aria-hidden', 'true');
+            divider.textContent = 'Or open in browser:';
+            actionsContainer.appendChild(divider);
+
+            // Add Gmail option
+            const gmailBtn = document.createElement('button');
+            gmailBtn.className = 'modal-option modal-browser-option';
+            gmailBtn.type = 'button';
+            gmailBtn.dataset.openMethod = 'gmail';
+            gmailBtn.dataset.email = emails[0]; // default to first email
+            gmailBtn.innerHTML = '<span style="font-weight: 600;">Gmail</span>';
+            actionsContainer.appendChild(gmailBtn);
+
+            // Add Outlook Web option
+            const outlookBtn = document.createElement('button');
+            outlookBtn.className = 'modal-option modal-browser-option';
+            outlookBtn.type = 'button';
+            outlookBtn.dataset.openMethod = 'outlook';
+            outlookBtn.dataset.email = emails[0]; // default to first email
+            outlookBtn.innerHTML = '<span style="font-weight: 600;">Outlook Web</span>';
+            actionsContainer.appendChild(outlookBtn);
         } else if (type === 'call') {
             modalTitle.textContent = 'Choose number';
             if (modalPara) modalPara.textContent = 'Select which phone number you want to call.';
@@ -523,9 +549,21 @@
         opts.forEach((opt) => {
             opt.addEventListener('click', function (e) {
                 if (opt.dataset.email) {
+                    // Email option clicked
                     hideModal();
-                    openMailTo(opt.dataset.email);
-                    showToast('Mail client opened');
+                    if (opt.dataset.openMethod) {
+                        // Browser option (Gmail, Outlook Web)
+                        openMailTo(opt.dataset.email, opt.dataset.openMethod);
+                        if (opt.dataset.openMethod === 'gmail') {
+                            showToast('Opening Gmail...');
+                        } else if (opt.dataset.openMethod === 'outlook') {
+                            showToast('Opening Outlook Web...');
+                        }
+                    } else {
+                        // Traditional mailto: method
+                        openMailTo(opt.dataset.email);
+                        showToast('Mail client opened');
+                    }
                 } else if (opt.dataset.phone) {
                     hideModal();
                     // openPhone will return a string describing what it opened
@@ -566,8 +604,23 @@
         }
     }
 
+    // Detect browser type
+    function getBrowserType() {
+        const userAgent = navigator.userAgent || '';
+        if (userAgent.includes('Edg/') || userAgent.includes('Edge/')) {
+            return 'edge';
+        } else if (userAgent.includes('Chrome/') && !userAgent.includes('Chromium')) {
+            return 'chrome';
+        } else if (userAgent.includes('Firefox/')) {
+            return 'firefox';
+        } else if (userAgent.includes('Safari/') && !userAgent.includes('Chrome')) {
+            return 'safari';
+        }
+        return 'unknown';
+    }
+
     // Build mailto and open user's mail client
-    function openMailTo(recipient) {
+    function openMailTo(recipient, openMethod = 'mailto') {
         const subject = encodeURIComponent(document.getElementById('email-subject')?.value || '');
         const bodyParts = [];
         const name = document.getElementById('full-name')?.value;
@@ -576,8 +629,19 @@
         if (message) bodyParts.push('\n\n' + message);
         const bodyStr = encodeURIComponent(bodyParts.join('\n'));
 
-        const mailto = `mailto:${recipient}?subject=${subject}&body=${bodyStr}`;
-        window.location.href = mailto;
+        if (openMethod === 'gmail') {
+            // Gmail compose URL
+            const gmailUrl = `https://mail.google.com/mail/u/0/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${bodyStr}`;
+            window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+        } else if (openMethod === 'outlook') {
+            // Outlook web compose URL
+            const outlookUrl = `https://outlook.live.com/mail/0/compose?to=${recipient}&subject=${subject}`;
+            window.open(outlookUrl, '_blank', 'noopener,noreferrer');
+        } else {
+            // Default mailto: method
+            const mailto = `mailto:${recipient}?subject=${subject}&body=${bodyStr}`;
+            window.location.href = mailto;
+        }
     }
 
     function openPhone(phone) {
