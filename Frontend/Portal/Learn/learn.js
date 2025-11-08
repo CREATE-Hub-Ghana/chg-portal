@@ -233,3 +233,36 @@ activeGl.addEventListener('mouseleave', () => {
     // Set img display back to its default (flex)
     activeGlImg.style.opacity = '0';
 });
+
+
+// Quick Filter Toggle Functionality
+const quickFilters = document.querySelectorAll('.quick-filter');
+
+quickFilters.forEach(filter => {
+    filter.addEventListener('click', () => {
+        // Remove selected class from all quick filters and update icons
+        quickFilters.forEach(qf => {
+            qf.classList.remove('selected');
+            const img = qf.querySelector('.qf-icon img');
+            if (img) {
+                // Special case for al-qf (All Resources) - use book_purple_1.svg
+                if (qf.classList.contains('al-qf')) {
+                    img.src = img.src.replace('book_white_1.svg', 'book_purple_1.svg');
+                } else {
+                    img.src = img.src.replace('_white.svg', '_purple.svg');
+                }
+            }
+        });
+
+        // Add selected class to clicked filter and update icon
+        filter.classList.add('selected');
+        const img = filter.querySelector('.qf-icon img');
+        if (img) {
+            if (filter.classList.contains('al-qf')) {
+                img.src = img.src.replace('book_purple_1.svg', 'book_white_1.svg');
+            } else {
+                img.src = img.src.replace('_purple.svg', '_white.svg');
+            }
+        }
+    });
+});
