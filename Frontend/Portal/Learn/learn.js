@@ -249,6 +249,8 @@ const listBtn = document.querySelector('.list-btn');
 const activeGl = document.querySelector('.active-gl');
 const activeGlSpan = activeGl.querySelector('span');
 const activeGlImg = activeGl.querySelector('img');
+// Container for resource blocks (used to switch layout between grid/list)
+const resourceContainer = document.querySelector('.resource-container');
 
 // When list button is clicked
 listBtn.addEventListener('click', () => {
@@ -261,6 +263,8 @@ listBtn.addEventListener('click', () => {
 
     // Set img src
     activeGlImg.src = '../../Universal/Icons/list_purple_1.svg';
+    // Switch to list view: make resource blocks full width
+    setListView(true);
 });
 
 // When grid button is clicked
@@ -274,7 +278,67 @@ gridBtn.addEventListener('click', () => {
 
     // Set img src
     activeGlImg.src = '../../Universal/Icons/grid_purple.svg';
+    // Switch back to grid view: revert resource block sizing
+    setListView(false);
 });
+
+// Helper: toggle list/grid layout for resource blocks
+function setListView(isList) {
+    // fallback if container not found
+    const rbs = document.querySelectorAll('.resource-block');
+    const rbht = document.querySelectorAll('.rbh-top');
+    const rbmd = document.querySelectorAll('.rbm-details');
+
+
+    if (!resourceContainer || !rbs) {
+        // Still apply direct styles to blocks if container is missing
+        rbs.forEach(rb => {
+            rb.style.width = isList ? '100%' : '';
+            rb.style.maxWidth = isList ? '100%' : '';
+        });
+        return;
+    }
+
+    if (isList) {
+        // stack items vertically and stretch them
+        resourceContainer.style.flexDirection = 'column';
+        resourceContainer.style.alignItems = 'stretch';
+
+        rbht.forEach(el => {
+            el.style.gap = '8px';
+            el.style.justifyContent = 'unset';
+        });
+
+        rbmd.forEach(el => {
+            el.style.gap = '20px';
+            el.style.justifyContent = 'unset';
+        });
+
+        rbs.forEach(rb => {
+            rb.style.width = '100%';
+            rb.style.maxWidth = '100%';
+        });
+    } else {
+        // revert to CSS-driven grid behavior
+        resourceContainer.style.flexDirection = '';
+        resourceContainer.style.alignItems = '';
+
+        rbht.forEach(el => {
+            el.style.gap = '';
+            el.style.justifyContent = '';
+        });
+
+        rbmd.forEach(el => {
+            el.style.gap = '';
+            el.style.justifyContent = '';
+        });
+
+        rbs.forEach(rb => {
+            rb.style.width = '';
+            rb.style.maxWidth = '';
+        });
+    }
+}
 
 // When hovering over active-gl
 activeGl.addEventListener('mouseenter', () => {
