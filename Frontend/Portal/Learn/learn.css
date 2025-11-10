@@ -828,11 +828,12 @@ body {
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: center;
-        width: max-content;
+        width: 100%;
         max-width: 1230px;
         height: max-content;
         background-color: transparent;
         gap: 30px;
+        margin: auto;
         margin-top: 15px;
 
         .resource-block {

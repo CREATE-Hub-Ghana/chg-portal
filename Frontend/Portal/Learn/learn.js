@@ -6,6 +6,58 @@ const filterSpan = resourceSearchFilter.querySelector('span');
 
 let isFilterOpen = false;
 
+// Utility: normalize text to a stable key (e.g. "All Resources" -> "all-resources")
+function normalizeKey(text) {
+    if (!text) return '';
+    return text
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+// Assign `data-category` to each resource block based on visible tags inside it.
+function assignDataCategories() {
+    const resourceBlocks = document.querySelectorAll('.resource-block');
+    resourceBlocks.forEach(rb => {
+        // Look for tag containers inside resource block. Support a few markup variants.
+        const tagEls = rb.querySelectorAll('.rbm-tags span, .rbm-tags .tag, .rbm-tags > *');
+        let cats = [];
+        if (tagEls && tagEls.length) {
+            cats = Array.from(tagEls).map(t => t.textContent || '').filter(Boolean);
+        }
+
+        // Fallback: try to find a category label/badge in the head area
+        if (!cats.length) {
+            const headTag = rb.querySelector('.rbh-title span, .rbh-top .tag, .rbh-top span');
+            if (headTag && headTag.textContent) cats.push(headTag.textContent);
+        }
+
+        // Normalize categories to keys and set as data attribute (space separated)
+        const keys = cats.map(normalizeKey).filter(Boolean);
+        rb.dataset.category = keys.length ? keys.join(' ') : 'uncategorized';
+    });
+}
+
+// Relational mapping of filter keys to related tag keys.
+// Keys should be normalized (use normalizeKey when adding new entries).
+const RELATED_TAGS = {
+    'programming': ['programming', 'coding', 'python', 'scratch', 'beginner', 'Web Development', 'Frontend', 'Backend'],
+    'tech-in-africa': ['tech-in-africa', 'technology', 'digital-transformation', 'tech', 'digital'],
+    'financial-literacy': ['financial-literacy', 'finance', 'investment', 'wealth-building', 'money'],
+    'pan-africanism': ['pan-africanism', 'unity', 'african-renaissance', 'leadership', 'ubuntu'],
+    'entrepreneurship': ['entrepreneurship', 'startup', 'business', 'innovation', 'tech-innovation'],
+    'youth-development': ['youth-development', 'mentorship', 'empowerment', 'youth'],
+    'all-resources': ['all-resources']
+};
+
+// Normalize RELATED_TAGS values so they are consistent with normalizeKey
+Object.keys(RELATED_TAGS).forEach(k => {
+    RELATED_TAGS[k] = Array.from(new Set(RELATED_TAGS[k].map(normalizeKey).filter(Boolean)));
+});
+
 // Toggle filter dropdown
 function toggleFilter(open) {
     const shouldOpen = open !== undefined ? open : !isFilterOpen;
@@ -60,6 +112,14 @@ function selectFilter(filter) {
 
         // Close dropdown
         toggleFilter(false);
+
+        // Apply resource filtering based on selected dropdown item
+        const key = normalizeKey(filterText);
+        if (key) {
+            filterResources(key);
+            // Also sync quick-filters UI to match if possible
+            syncQuickFiltersToKey(key);
+        }
     });
 }
 
@@ -264,5 +324,109 @@ quickFilters.forEach(filter => {
                 img.src = img.src.replace('_purple.svg', '_white.svg');
             }
         }
+
+        // Apply the filter to resources and sync dropdown
+        const text = filter.querySelector('span')?.textContent || filter.textContent || '';
+        const key = normalizeKey(text);
+        if (key) {
+            filterResources(key);
+            // Update dropdown button text to match quick filter
+            filterSpan.textContent = text.trim();
+            // Try to set dropdown selection visually
+            const matchingFilter = Array.from(filterTypes).find(ft => normalizeKey(ft.querySelector('span')?.textContent) === key);
+            if (matchingFilter) {
+                filterTypes.forEach(f => f.classList.toggle('selected', f === matchingFilter));
+            }
+        }
     });
 });
+
+
+// --- Filtering helpers -------------------------------------------------
+// Show/hide resource blocks by normalized category key
+function filterResources(key) {
+    const rbs = document.querySelectorAll('.resource-block');
+    if (!key || key === 'all-resources' || key === 'all' || key === 'all-resources') {
+        rbs.forEach(rb => {
+            rb.style.display = '';
+        });
+        return;
+    }
+
+    // Build accepted keys: include related/synonym tags for the selected key
+    const accepted = new Set([
+        key,
+        ...(RELATED_TAGS[key] || []),
+    ].map(normalizeKey));
+
+    rbs.forEach(rb => {
+        // Gather candidate keys from explicit data-category and visible tag elements
+        const cats = (rb.dataset.category || '')
+            .split(/\s+/)
+            .map(normalizeKey)
+            .filter(Boolean);
+
+        // Also include any textual tags found in .rbm-tags spans (in case HTML tags differ)
+        const tagEls = rb.querySelectorAll('.rbm-tags span, .rbm-tags .resource-tag span');
+        const tagKeys = Array.from(tagEls)
+            .map(t => normalizeKey(t.textContent || ''))
+            .filter(Boolean);
+
+        const allKeys = new Set([...cats, ...tagKeys]);
+
+        // Special case: 'other' should display resources that don't match any main category
+        if (key === 'other') {
+            // Build a set of all keys that belong to main categories (exclude 'all-resources' and 'other')
+            const mainCategoryKeys = Object.keys(RELATED_TAGS).filter(k => k !== 'all-resources' && k !== 'other');
+            const mainAccepted = new Set();
+            mainCategoryKeys.forEach(mc => RELATED_TAGS[mc].forEach(m => mainAccepted.add(normalizeKey(m))));
+
+            // If resource has NO intersection with mainAccepted, show it
+            const intersectsMain = Array.from(allKeys).some(k => mainAccepted.has(k));
+            if (!intersectsMain) rb.style.display = '';
+            else rb.style.display = 'none';
+            return;
+        }
+
+        // Check intersection between accepted and the resource's keys
+        const matches = Array.from(accepted).some(a => allKeys.has(a));
+        if (matches) {
+            rb.style.display = '';
+        } else {
+            rb.style.display = 'none';
+        }
+    });
+}
+
+// Sync quick-filters UI to a normalized key
+function syncQuickFiltersToKey(key) {
+    quickFilters.forEach(qf => {
+        const text = qf.querySelector('span')?.textContent || qf.textContent || '';
+        qf.classList.toggle('selected', normalizeKey(text) === key);
+        // update icons when toggling
+        const img = qf.querySelector('.qf-icon img');
+        if (!img) return;
+        if (qf.classList.contains('selected')) {
+            if (qf.classList.contains('al-qf')) img.src = img.src.replace('book_purple_1.svg', 'book_white_1.svg');
+            else img.src = img.src.replace('_purple.svg', '_white.svg');
+        } else {
+            if (qf.classList.contains('al-qf')) img.src = img.src.replace('book_white_1.svg', 'book_purple_1.svg');
+            else img.src = img.src.replace('_white.svg', '_purple.svg');
+        }
+    });
+}
+
+// Try to sync dropdown filter types by adding a dataset value
+filterTypes.forEach(ft => {
+    const t = ft.querySelector('span')?.textContent || ft.textContent || '';
+    ft.dataset.value = normalizeKey(t);
+});
+
+// Initial setup: assign categories then apply currently selected quick-filter (if any)
+assignDataCategories();
+const initialQ = document.querySelector('.quick-filter.selected');
+if (initialQ) {
+    const t = initialQ.querySelector('span')?.textContent || initialQ.textContent || '';
+    const k = normalizeKey(t);
+    if (k) filterResources(k);
+}
