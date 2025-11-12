@@ -62,6 +62,9 @@ Object.keys(RELATED_TAGS).forEach(k => {
 let currentCategoryKey = 'all-resources';
 let currentSearchQuery = '';
 
+// Fuse.js instance for fuzzy search
+let fuseInstance = null;
+
 // Simple debounce helper
 function debounce(fn, wait = 200) {
     let t;
@@ -69,6 +72,45 @@ function debounce(fn, wait = 200) {
         clearTimeout(t);
         t = setTimeout(() => fn.apply(this, args), wait);
     };
+}
+
+// Initialize Fuse.js for fuzzy search across resource blocks
+function initializeFuseSearch() {
+    const rbs = document.querySelectorAll('.resource-block');
+    const searchData = Array.from(rbs).map((rb, idx) => {
+        const title = rb.querySelector('.rbh-title')?.textContent || '';
+        const author = rb.querySelector('.rbh-author')?.textContent || '';
+        const description = rb.querySelector('.rbm-resource-description')?.textContent || '';
+        const details = rb.querySelector('.rbm-details')?.textContent || '';
+        const tagEls = rb.querySelectorAll('.rbm-tags span');
+        const tags = Array.from(tagEls).map(t => t.textContent || '').join(' ');
+
+        return {
+            idx,
+            element: rb,
+            title,
+            author,
+            description,
+            details,
+            tags,
+            category: rb.dataset.category || ''
+        };
+    });
+
+    // Configure Fuse.js with relevant search keys and thresholds
+    fuseInstance = new Fuse(searchData, {
+        keys: [
+            { name: 'title', weight: 3 },
+            { name: 'author', weight: 2 },
+            { name: 'tags', weight: 2 },
+            { name: 'description', weight: 1.5 },
+            { name: 'details', weight: 1 }
+        ],
+        threshold: 0.4, // 0 = perfect match, 1 = match anything
+        ignoreLocation: true,
+        useExtendedSearch: false,
+        minMatchCharLength: 2
+    });
 }
 
 // Apply both category and text search filters together
@@ -115,13 +157,21 @@ function applyFilters() {
         // Text search match logic
         let searchMatch = true;
         if (q) {
-            // Try to gather likely searchable fields
-            const title = (rb.querySelector('.rbh-title')?.textContent || '').toLowerCase();
-            const mid = (rb.querySelector('.rbm-details')?.textContent || rb.textContent || '').toLowerCase();
-            const author = (rb.querySelector('.rbh-author')?.textContent || '').toLowerCase();
-            const tagsText = Array.from(allKeys).join(' ');
-            const hay = `${title} ${mid} ${author} ${tagsText}`;
-            searchMatch = hay.indexOf(q) !== -1;
+            // Use Fuse.js for fuzzy search if available, fallback to simple indexOf
+            if (fuseInstance) {
+                const fuseResults = fuseInstance.search(q);
+                const matchedIndices = new Set(fuseResults.map(r => r.item.idx));
+                const rbIndex = Array.from(document.querySelectorAll('.resource-block')).indexOf(rb);
+                searchMatch = matchedIndices.has(rbIndex);
+            } else {
+                // Fallback to simple string matching
+                const title = (rb.querySelector('.rbh-title')?.textContent || '').toLowerCase();
+                const mid = (rb.querySelector('.rbm-details')?.textContent || rb.textContent || '').toLowerCase();
+                const author = (rb.querySelector('.rbh-author')?.textContent || '').toLowerCase();
+                const tagsText = Array.from(allKeys).join(' ');
+                const hay = `${title} ${mid} ${author} ${tagsText}`;
+                searchMatch = hay.indexOf(q) !== -1;
+            }
         }
 
         if (categoryMatch && searchMatch) rb.style.display = '';
@@ -551,6 +601,12 @@ filterTypes.forEach(ft => {
 
 // Initial setup: assign categories then apply currently selected quick-filter (if any)
 assignDataCategories();
+
+// Initialize Fuse.js search when available
+if (typeof Fuse !== 'undefined') {
+    initializeFuseSearch();
+}
+
 const initialQ = document.querySelector('.quick-filter.selected');
 if (initialQ) {
     const t = initialQ.querySelector('span')?.textContent || initialQ.textContent || '';
