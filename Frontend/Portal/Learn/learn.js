@@ -61,9 +61,8 @@ Object.keys(RELATED_TAGS).forEach(k => {
 // Current filter/search state
 let currentCategoryKey = 'all-resources';
 let currentSearchQuery = '';
-
-// Fuse.js instance for fuzzy search
-let fuseInstance = null;
+// Keep original DOM order to restore when search cleared
+let originalOrder = null;
 
 // Simple debounce helper
 function debounce(fn, wait = 200) {
@@ -72,45 +71,6 @@ function debounce(fn, wait = 200) {
         clearTimeout(t);
         t = setTimeout(() => fn.apply(this, args), wait);
     };
-}
-
-// Initialize Fuse.js for fuzzy search across resource blocks
-function initializeFuseSearch() {
-    const rbs = document.querySelectorAll('.resource-block');
-    const searchData = Array.from(rbs).map((rb, idx) => {
-        const title = rb.querySelector('.rbh-title')?.textContent || '';
-        const author = rb.querySelector('.rbh-author')?.textContent || '';
-        const description = rb.querySelector('.rbm-resource-description')?.textContent || '';
-        const details = rb.querySelector('.rbm-details')?.textContent || '';
-        const tagEls = rb.querySelectorAll('.rbm-tags span');
-        const tags = Array.from(tagEls).map(t => t.textContent || '').join(' ');
-
-        return {
-            idx,
-            element: rb,
-            title,
-            author,
-            description,
-            details,
-            tags,
-            category: rb.dataset.category || ''
-        };
-    });
-
-    // Configure Fuse.js with relevant search keys and thresholds
-    fuseInstance = new Fuse(searchData, {
-        keys: [
-            { name: 'title', weight: 3 },
-            { name: 'author', weight: 2 },
-            { name: 'tags', weight: 2 },
-            { name: 'description', weight: 1.5 },
-            { name: 'details', weight: 1 }
-        ],
-        threshold: 0.4, // 0 = perfect match, 1 = match anything
-        ignoreLocation: true,
-        useExtendedSearch: false,
-        minMatchCharLength: 2
-    });
 }
 
 // Apply both category and text search filters together
@@ -154,29 +114,135 @@ function applyFilters() {
             }
         }
 
-        // Text search match logic
+        // Text search match logic - Use fuzzy matching for better results
         let searchMatch = true;
         if (q) {
-            // Use Fuse.js for fuzzy search if available, fallback to simple indexOf
-            if (fuseInstance) {
-                const fuseResults = fuseInstance.search(q);
-                const matchedIndices = new Set(fuseResults.map(r => r.item.idx));
-                const rbIndex = Array.from(document.querySelectorAll('.resource-block')).indexOf(rb);
-                searchMatch = matchedIndices.has(rbIndex);
+            // Gather all searchable text
+            const title = rb.querySelector('.rbh-title')?.textContent || '';
+            const author = rb.querySelector('.rbh-author')?.textContent || '';
+            const description = rb.querySelector('.rbm-resource-description')?.textContent || '';
+            const tagEls = rb.querySelectorAll('.rbm-tags .resource-tag span');
+            const tags = Array.from(tagEls).map(t => t.textContent || '').join(' ');
+            const details = rb.querySelector('.rbm-details')?.textContent || '';
+
+            const searchText = `${title} ${author} ${description} ${tags} ${details}`.toLowerCase();
+            const qLower = q.toLowerCase();
+
+            // Simple flexible matching: check if any word in the search starts with the query
+            // or if query is a substring (handles "code" matching "coding")
+            if (searchText.indexOf(qLower) !== -1) {
+                searchMatch = true;
             } else {
-                // Fallback to simple string matching
-                const title = (rb.querySelector('.rbh-title')?.textContent || '').toLowerCase();
-                const mid = (rb.querySelector('.rbm-details')?.textContent || rb.textContent || '').toLowerCase();
-                const author = (rb.querySelector('.rbh-author')?.textContent || '').toLowerCase();
-                const tagsText = Array.from(allKeys).join(' ');
-                const hay = `${title} ${mid} ${author} ${tagsText}`;
-                searchMatch = hay.indexOf(q) !== -1;
+                // Also check word-level fuzzy matching
+                const searchWords = searchText.split(/\s+/);
+                const queryWords = qLower.split(/\s+/);
+
+                searchMatch = queryWords.some(qWord =>
+                    searchWords.some(sWord =>
+                        sWord.startsWith(qWord) ||
+                        qWord.startsWith(sWord) ||
+                        (sWord.length >= 3 && qWord.length >= 3 &&
+                            (sWord.includes(qWord) || qWord.includes(sWord)))
+                    )
+                );
             }
         }
 
         if (categoryMatch && searchMatch) rb.style.display = '';
         else rb.style.display = 'none';
     });
+
+    // Re-order visible results by relevance when there's an active search query
+    try {
+        const container = document.querySelector('.resource-container');
+        if (container) {
+            // Capture original order once
+            if (!originalOrder) {
+                originalOrder = Array.from(container.querySelectorAll('.resource-block'));
+            }
+
+            const visible = Array.from(container.querySelectorAll('.resource-block')).filter(el => {
+                const style = window.getComputedStyle(el);
+                return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+            });
+
+            if (currentSearchQuery && currentSearchQuery.length) {
+                const q = currentSearchQuery.trim();
+
+                // Build searchable items for Fuse.js
+                const searchItems = visible.map(el => {
+                    const title = el.querySelector('.rbh-title')?.textContent || '';
+                    const author = el.querySelector('.rbh-author')?.textContent || '';
+                    const description = el.querySelector('.rbm-resource-description')?.textContent || '';
+                    const tagEls = el.querySelectorAll('.rbm-tags span, .rbm-tags .resource-tag span');
+                    const tags = Array.from(tagEls).map(t => t.textContent || '').join(' ');
+                    const details = el.querySelector('.rbm-details')?.textContent || '';
+
+                    return {
+                        el,
+                        title,
+                        author,
+                        description,
+                        tags,
+                        details
+                    };
+                });
+
+                // Configure Fuse.js for fuzzy search with weighted keys
+                const fuseOptions = {
+                    includeScore: true,
+                    threshold: 0.4, // 0.0 = exact, 1.0 = match anything
+                    distance: 100,
+                    minMatchCharLength: 2,
+                    keys: [
+                        { name: 'title', weight: 0.5 },
+                        { name: 'tags', weight: 0.25 },
+                        { name: 'author', weight: 0.15 },
+                        { name: 'description', weight: 0.07 },
+                        { name: 'details', weight: 0.03 }
+                    ]
+                };
+
+                // Use Fuse.js if available, fallback to original order
+                if (typeof Fuse !== 'undefined') {
+                    const fuse = new Fuse(searchItems, fuseOptions);
+                    const results = fuse.search(q);
+
+                    // Sort by Fuse score (lower score = better match)
+                    results.forEach((result, idx) => {
+                        container.appendChild(result.item.el);
+                    });
+
+                    // Append non-matching visible items at the end (shouldn't happen with current filter)
+                    const matched = new Set(results.map(r => r.item.el));
+                    visible.forEach(el => {
+                        if (!matched.has(el)) container.appendChild(el);
+                    });
+                } else {
+                    // Fallback: basic indexOf sorting if Fuse.js not loaded
+                    const scored = visible.map(el => {
+                        const text = (el.textContent || '').toLowerCase();
+                        const qLower = q.toLowerCase();
+                        const idx = text.indexOf(qLower);
+                        return { el, score: idx === -1 ? 999999 : idx };
+                    });
+                    scored.sort((a, b) => a.score - b.score);
+                    scored.forEach(s => container.appendChild(s.el));
+                }
+            } else {
+                // restore original order for visible items
+                if (originalOrder && originalOrder.length) {
+                    originalOrder.forEach(node => {
+                        // append only nodes that are currently in container (they should be)
+                        if (container.contains(node)) container.appendChild(node);
+                    });
+                }
+            }
+        }
+    } catch (err) {
+        // don't block filtering on ordering errors
+        // console.debug('reorder failed', err);
+    }
 
     // Show a friendly 'no results' block when nothing is visible
     try {
@@ -601,12 +667,6 @@ filterTypes.forEach(ft => {
 
 // Initial setup: assign categories then apply currently selected quick-filter (if any)
 assignDataCategories();
-
-// Initialize Fuse.js search when available
-if (typeof Fuse !== 'undefined') {
-    initializeFuseSearch();
-}
-
 const initialQ = document.querySelector('.quick-filter.selected');
 if (initialQ) {
     const t = initialQ.querySelector('span')?.textContent || initialQ.textContent || '';
