@@ -58,6 +58,94 @@ Object.keys(RELATED_TAGS).forEach(k => {
     RELATED_TAGS[k] = Array.from(new Set(RELATED_TAGS[k].map(normalizeKey).filter(Boolean)));
 });
 
+// Current filter/search state
+let currentCategoryKey = 'all-resources';
+let currentSearchQuery = '';
+
+// Simple debounce helper
+function debounce(fn, wait = 200) {
+    let t;
+    return function (...args) {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+    };
+}
+
+// Apply both category and text search filters together
+function applyFilters() {
+    const rbs = document.querySelectorAll('.resource-block');
+    // Build accepted keys for the current category
+    const key = currentCategoryKey;
+
+    // If showing all, accepted will be empty (treated as match-any)
+    const accepted = new Set();
+    if (key && key !== 'all-resources' && key !== 'all') {
+        ([key, ...(RELATED_TAGS[key] || [])]).forEach(k => accepted.add(normalizeKey(k)));
+    }
+
+    // Precompute mainAccepted for 'other' handling
+    const mainCategoryKeys = Object.keys(RELATED_TAGS).filter(k => k !== 'all-resources' && k !== 'other');
+    const mainAccepted = new Set();
+    mainCategoryKeys.forEach(mc => RELATED_TAGS[mc].forEach(m => mainAccepted.add(normalizeKey(m))));
+
+    const q = (currentSearchQuery || '').toString().trim().toLowerCase();
+
+    rbs.forEach(rb => {
+        const cats = (rb.dataset.category || '')
+            .split(/\s+/)
+            .map(normalizeKey)
+            .filter(Boolean);
+
+        const tagEls = rb.querySelectorAll('.rbm-tags span, .rbm-tags .resource-tag span');
+        const tagKeys = Array.from(tagEls).map(t => normalizeKey(t.textContent || '')).filter(Boolean);
+
+        const allKeys = new Set([...cats, ...tagKeys]);
+
+        // Category match logic
+        let categoryMatch = true;
+        if (key && key !== 'all-resources' && key !== 'all') {
+            if (key === 'other') {
+                const intersectsMain = Array.from(allKeys).some(k => mainAccepted.has(k));
+                categoryMatch = !intersectsMain;
+            } else {
+                categoryMatch = Array.from(accepted).some(a => allKeys.has(a));
+            }
+        }
+
+        // Text search match logic
+        let searchMatch = true;
+        if (q) {
+            // Try to gather likely searchable fields
+            const title = (rb.querySelector('.rbh-title')?.textContent || '').toLowerCase();
+            const mid = (rb.querySelector('.rbm-details')?.textContent || rb.textContent || '').toLowerCase();
+            const author = (rb.querySelector('.rbh-author')?.textContent || '').toLowerCase();
+            const tagsText = Array.from(allKeys).join(' ');
+            const hay = `${title} ${mid} ${author} ${tagsText}`;
+            searchMatch = hay.indexOf(q) !== -1;
+        }
+
+        if (categoryMatch && searchMatch) rb.style.display = '';
+        else rb.style.display = 'none';
+    });
+
+    // Show a friendly 'no results' block when nothing is visible
+    try {
+        const container = document.querySelector('.resource-container');
+        const noRes = container && container.querySelector('.no-resources-found');
+        if (noRes) {
+            const anyVisible = Array.from(rbs).some(rb => {
+                // element may be hidden via inline style or CSS
+                const style = window.getComputedStyle(rb);
+                return style.display !== 'none' && style.visibility !== 'hidden' && rb.offsetParent !== null;
+            });
+            noRes.style.display = anyVisible ? 'none' : 'flex';
+        }
+    } catch (err) {
+        // defensive: do not break filtering if DOM structure differs
+        // console.debug('no-resources check failed', err);
+    }
+}
+
 // Toggle filter dropdown
 function toggleFilter(open) {
     const shouldOpen = open !== undefined ? open : !isFilterOpen;
@@ -116,7 +204,8 @@ function selectFilter(filter) {
         // Apply resource filtering based on selected dropdown item
         const key = normalizeKey(filterText);
         if (key) {
-            filterResources(key);
+            currentCategoryKey = key;
+            applyFilters();
             // Also sync quick-filters UI to match if possible
             syncQuickFiltersToKey(key);
         }
@@ -358,6 +447,26 @@ activeGl.addEventListener('mouseleave', () => {
     activeGlImg.style.opacity = '0';
 });
 
+// Search input handling (debounced)
+const resourceSearchInput = document.querySelector('#resource-search');
+if (resourceSearchInput) {
+    const onSearch = debounce((e) => {
+        currentSearchQuery = (e.target.value || '').trim();
+        applyFilters();
+    }, 220);
+
+    resourceSearchInput.addEventListener('input', onSearch);
+
+    // Allow pressing Enter to immediately apply
+    resourceSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            currentSearchQuery = (resourceSearchInput.value || '').trim();
+            applyFilters();
+        }
+    });
+}
+
 
 // Quick Filter Toggle Functionality
 const quickFilters = document.querySelectorAll('.quick-filter');
@@ -393,7 +502,9 @@ quickFilters.forEach(filter => {
         const text = filter.querySelector('span')?.textContent || filter.textContent || '';
         const key = normalizeKey(text);
         if (key) {
-            filterResources(key);
+            // set state and apply combined filters
+            currentCategoryKey = key;
+            applyFilters();
             // Update dropdown button text to match quick filter
             filterSpan.textContent = text.trim();
             // Try to set dropdown selection visually
@@ -409,57 +520,9 @@ quickFilters.forEach(filter => {
 // --- Filtering helpers -------------------------------------------------
 // Show/hide resource blocks by normalized category key
 function filterResources(key) {
-    const rbs = document.querySelectorAll('.resource-block');
-    if (!key || key === 'all-resources' || key === 'all' || key === 'all-resources') {
-        rbs.forEach(rb => {
-            rb.style.display = '';
-        });
-        return;
-    }
-
-    // Build accepted keys: include related/synonym tags for the selected key
-    const accepted = new Set([
-        key,
-        ...(RELATED_TAGS[key] || []),
-    ].map(normalizeKey));
-
-    rbs.forEach(rb => {
-        // Gather candidate keys from explicit data-category and visible tag elements
-        const cats = (rb.dataset.category || '')
-            .split(/\s+/)
-            .map(normalizeKey)
-            .filter(Boolean);
-
-        // Also include any textual tags found in .rbm-tags spans (in case HTML tags differ)
-        const tagEls = rb.querySelectorAll('.rbm-tags span, .rbm-tags .resource-tag span');
-        const tagKeys = Array.from(tagEls)
-            .map(t => normalizeKey(t.textContent || ''))
-            .filter(Boolean);
-
-        const allKeys = new Set([...cats, ...tagKeys]);
-
-        // Special case: 'other' should display resources that don't match any main category
-        if (key === 'other') {
-            // Build a set of all keys that belong to main categories (exclude 'all-resources' and 'other')
-            const mainCategoryKeys = Object.keys(RELATED_TAGS).filter(k => k !== 'all-resources' && k !== 'other');
-            const mainAccepted = new Set();
-            mainCategoryKeys.forEach(mc => RELATED_TAGS[mc].forEach(m => mainAccepted.add(normalizeKey(m))));
-
-            // If resource has NO intersection with mainAccepted, show it
-            const intersectsMain = Array.from(allKeys).some(k => mainAccepted.has(k));
-            if (!intersectsMain) rb.style.display = '';
-            else rb.style.display = 'none';
-            return;
-        }
-
-        // Check intersection between accepted and the resource's keys
-        const matches = Array.from(accepted).some(a => allKeys.has(a));
-        if (matches) {
-            rb.style.display = '';
-        } else {
-            rb.style.display = 'none';
-        }
-    });
+    // set global state and re-use applyFilters
+    currentCategoryKey = key || 'all-resources';
+    applyFilters();
 }
 
 // Sync quick-filters UI to a normalized key
