@@ -1494,7 +1494,7 @@ body {
                 }
 
                 .lib-value {
-                    margin-top: 5px;
+                    margin-top: 0px;
                 }
             }
         }
@@ -1569,6 +1569,7 @@ body {
                 color: #160f36;
                 letter-spacing: 0.2px;
                 line-height: 1.5;
+                opacity: 0.95;
             }
         }
 
