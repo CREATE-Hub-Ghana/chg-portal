@@ -1772,7 +1772,12 @@ body {
         }
 
         .resource-container {
-            display: none;
+            display: flex;
+            justify-content: center;
+
+            .resource-block {
+                width: 95%;
+            }
         }
     }
 
