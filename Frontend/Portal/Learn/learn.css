@@ -1755,7 +1755,7 @@ body {
                     min-width: 210px;
                 }
 
-                .grid-list-container{
+                .grid-list-container {
                     display: flex;
                     width: 95px;
                 }
@@ -1763,7 +1763,12 @@ body {
         }
 
         .quick-filters-container {
-            display: none;
+            display: flex;
+
+            .quick-filters {
+                row-gap: 20px;
+                column-gap: 10px;
+            }
         }
 
         .resource-container {
