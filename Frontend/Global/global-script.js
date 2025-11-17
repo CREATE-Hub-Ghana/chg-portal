@@ -33,19 +33,39 @@ function setupDonateButtons() {
 window.addEventListener("scroll", function () {
     const navbar = document.querySelector("#navbar");
     const backToTopBtn = document.getElementById('back-to-top');
+    const footer = document.querySelector('footer');
 
     if (!navbar) return;
 
     // consider a tiny tolerance for fractional pixels / bounce
     const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 1);
 
+    // default top for the compact navbar (2.5% of viewport height)
+    const defaultTopPx = Math.round(window.innerHeight * 0.025);
+
     if (window.scrollY > 25) {
         navbar.style.backdropFilter = "blur(4px)";
         navbar.style.webkitBackdropFilter = "blur(4px)";
-        navbar.style.top = "2.5%";
         navbar.style.width = "97%";
         navbar.style.borderRadius = "25px";
         navbar.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+
+        // Keep the navbar above the footer when the footer scrolls into view.
+        // Compute a top value in px (so it can be clamped precisely).
+        let topToSet = defaultTopPx;
+        if (footer) {
+            const navHeight = navbar.getBoundingClientRect().height;
+            const footerTop = footer.getBoundingClientRect().top; // distance from viewport top
+            const margin = 8; // small gap between navbar bottom and footer top
+
+            // If the footer's top is coming up under the navbar, move the navbar up
+            // so its bottom sits just above the footer's top.
+            if (footerTop < navHeight + margin) {
+                topToSet = Math.max(margin, Math.round(footerTop - navHeight - margin));
+            }
+        }
+
+        navbar.style.top = topToSet + 'px';
 
         if (backToTopBtn) {
             // hide/reset the button when we're at the bottom of the page
