@@ -460,8 +460,8 @@ const resourceContainer = document.querySelector('.resource-container');
 // When list button is clicked
 listBtn.addEventListener('click', () => {
 
-    // activeGl.style.right = '5px';
-    activeGl.style.left = '55px';
+    // Position activeGl differently on mobile vs desktop
+    setActiveGlPosition(true);
 
     // Change inner span content from Grid to List
     activeGlSpan.textContent = 'List';
@@ -475,7 +475,8 @@ listBtn.addEventListener('click', () => {
 // When grid button is clicked
 gridBtn.addEventListener('click', () => {
 
-    activeGl.style.left = '5px';
+    // Position activeGl for grid view
+    setActiveGlPosition(false);
     // activeGl.style.right = 'auto';
 
     // Change inner span content back to Grid
@@ -544,6 +545,27 @@ function setListView(isList) {
         });
     }
 }
+
+// Compute and set activeGl left position depending on screen size and view
+function computeActiveGlLeft(isList) {
+    // treat max-width 480px as mobile; adjust if your breakpoint differs
+    const isMobile = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 480px)').matches;
+    if (isList) return isMobile ? '50px' : '55px';
+    // grid default stays at 5px on both mobile and desktop
+    return '5px';
+}
+
+function setActiveGlPosition(isList) {
+    if (!activeGl) return;
+    activeGl.style.left = computeActiveGlLeft(isList);
+}
+
+// Keep position responsive on window resize
+window.addEventListener('resize', () => {
+    if (!activeGlSpan) return;
+    const isList = activeGlSpan.textContent === 'List';
+    setActiveGlPosition(isList);
+});
 
 // When hovering over active-gl
 activeGl.addEventListener('mouseenter', () => {

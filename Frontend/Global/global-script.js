@@ -56,7 +56,7 @@ window.addEventListener("scroll", function () {
         if (footer) {
             const navHeight = navbar.getBoundingClientRect().height;
             const footerTop = footer.getBoundingClientRect().top; // distance from viewport top
-            const margin = 8; // small gap between navbar bottom and footer top
+            const margin = 1.5; // small gap between navbar bottom and footer top
 
             // If the footer's top is coming up under the navbar, move the navbar up
             // so its bottom sits just above the footer's top.
