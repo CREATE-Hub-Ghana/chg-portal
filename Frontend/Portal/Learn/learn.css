@@ -1726,6 +1726,7 @@ body {
             .featured-resource-container {
                 .featured-resource-block {
                     width: 92%;
+                    height: max-content;
                 }
             }
         }
@@ -1752,7 +1753,9 @@ body {
                 .resource-search-filter {
                     display: flex;
                     /* width: calc(100% - 150px); */
-                    min-width: 210px;
+                    /* min-width: 210px; */
+                    min-width: 64%;
+                    max-width: 185px;
                 }
 
                 .grid-list-container {
@@ -1766,6 +1769,7 @@ body {
             display: flex;
 
             .quick-filters {
+                width: 100%;
                 row-gap: 20px;
                 column-gap: 10px;
             }
@@ -1777,6 +1781,7 @@ body {
 
             .resource-block {
                 width: 95%;
+                height: max-content;
             }
         }
     }
