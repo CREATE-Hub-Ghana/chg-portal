@@ -20,8 +20,8 @@ body {
     gap: 25px;
 
     /* CSS variables live on the element so JS can update them (pseudo-elements should not re-declare them) */
-    --bg-a: url('../../Universal/Images/group-pic-1.jpg');
-    --bg-b: url('../../Universal/Images/bs128.jpg');
+    --bg-a: url('../../Universal/Images/group-pic-1.avif');
+    --bg-b: url('../../Universal/Images/bs128.avif');
     --bg-a-opacity: 0.42;
     --bg-b-opacity: 0;
 

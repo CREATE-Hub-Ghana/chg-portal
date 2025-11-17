@@ -87,7 +87,7 @@ const setupFileServing = (app, cacheMiddleware) => {
                 }
 
                 // Images, fonts, icons -> 30 days immutable
-                const imgFontExt = ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'];
+                const imgFontExt = ['.png', '.avif', '.jpeg', '.webp', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'];
                 const ext = path.extname(filePath).toLowerCase();
                 if (imgFontExt.includes(ext)) {
                     response.set('Cache-Control', 'public, max-age=2592000, immutable'); // 30 days

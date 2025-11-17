@@ -8,16 +8,16 @@
     // List of background images (relative paths from this JS file).
     // Populated from files under Frontend/Universal/Images
     const images = [
-        "url('../../Universal/Images/group-pic-1.jpg')",
-        "url('../../Universal/Images/bs128.jpg')",
-        "url('../../Universal/Images/bs133.jpg')",
-        "url('../../Universal/Images/bs147.jpg')",
-        "url('../../Universal/Images/bs158.jpg')",
-        "url('../../Universal/Images/bs168.jpg')",
-        "url('../../Universal/Images/bs183.jpg')",
-        "url('../../Universal/Images/bs188.jpg')",
-        "url('../../Universal/Images/bs65.jpg')",
-        "url('../../Universal/Images/bs67.jpg')"
+        "url('../../Universal/Images/group-pic-1.avif')",
+        "url('../../Universal/Images/bs128.avif')",
+        "url('../../Universal/Images/bs133.avif')",
+        "url('../../Universal/Images/bs147.avif')",
+        "url('../../Universal/Images/bs158.avif')",
+        "url('../../Universal/Images/bs168.avif')",
+        "url('../../Universal/Images/bs183.avif')",
+        "url('../../Universal/Images/bs188.avif')",
+        "url('../../Universal/Images/bs65.avif')",
+        "url('../../Universal/Images/bs67.avif')"
     ];
 
     // Preload images to avoid flicker
