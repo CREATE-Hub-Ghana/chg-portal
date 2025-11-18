@@ -1819,6 +1819,7 @@ body {
 
         .learning-impact-container {
             width: 92%;
+            background: linear-gradient(125deg, #9333ea 0%, #2563eb 100%);
 
 
             .lic-main {
