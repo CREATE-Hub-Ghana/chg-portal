@@ -167,10 +167,66 @@
 }
 
 @font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url('./Fonts/DM_Sans/static/DMSans-Light.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./Fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./Fonts/DM_Sans/static/DMSans-Medium.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('./Fonts/DM_Sans/static/DMSans-SemiBold.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./Fonts/DM_Sans/static/DMSans-Bold.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
     font-family: 'SUSE';
     font-style: normal;
     font-weight: 700;
     src: url('./Fonts/SUSE/static/SUSE-Bold.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Bower';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./Fonts/bower/Bower-Bold/Bower-Bold.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sansi';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./Fonts/McKinsey_Sans/SANSI/SANSI.ttf') format('truetype');
     font-display: swap;
 }
 

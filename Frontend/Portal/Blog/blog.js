@@ -237,6 +237,121 @@ document.addEventListener('DOMContentLoaded', () => {
     setActiveFilterButton('filter-all');
     applyFilter('all');
 
+    // Handle "Read Story" button clicks to display blog-container
+    const readStoryButtons = document.querySelectorAll('#read-story');
+    const blogContainer = document.querySelector('.blog-container');
+    const blogInner = document.querySelector('.bc-inner');
+    readStoryButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (blogContainer) {
+                // Get the parent story block
+                const storyBlock = btn.closest('.story-block');
+                if (storyBlock) {
+                    // Extract title and category
+                    const titleEl = storyBlock.querySelector('.story-title span');
+                    const title = titleEl ? titleEl.textContent : '';
+                    const categoryEl = storyBlock.querySelector('.sb-category');
+                    const category = categoryEl ? categoryEl.textContent : '';
+
+                    // Extract author, date, and read time
+                    const authorEl = storyBlock.querySelector('.sd-block:nth-child(1) span');
+                    const dateEl = storyBlock.querySelector('.sd-block:nth-child(2) span');
+                    const readTimeEl = storyBlock.querySelector('.sb-min-read');
+
+                    const author = authorEl ? authorEl.textContent : '';
+                    const date = dateEl ? dateEl.textContent : '';
+                    const readTime = readTimeEl ? readTimeEl.textContent : '';
+
+                    // Populate blog container
+                    const navBlogTitle = blogContainer.querySelector('.bcn-blog-title');
+                    const blogTitle = blogContainer.querySelector('.blog-title');
+                    const blogDetails = blogContainer.querySelector('.blog-details');
+
+                    if (blogTitle) blogTitle.textContent = title;
+                    if (blogDetails) blogDetails.textContent = `${date} | ${category}`;
+                    if (navBlogTitle) navBlogTitle.textContent = title;
+                }
+
+                blogContainer.classList.add('shown');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    // Handle scroll to make blog-container full width when it hits the top
+    if (blogInner && blogContainer) {
+        const bcNavbar = document.querySelector('.bc-navbar');
+        const bciHead = document.querySelector('.bci-head');
+        const bcCloseButton = document.querySelector('.bc-close-button');
+
+        blogContainer.addEventListener('scroll', () => {
+            const rect = blogInner.getBoundingClientRect();
+            if (rect.top <= 0) {
+                // blog-container has reached the top, make it full width
+                blogInner.style.width = '100%';
+                blogInner.style.marginLeft = '0';
+                blogInner.style.marginRight = '0';
+                blogInner.style.borderRadius = '0';
+            } else {
+                // blog-container is not at the top, reset to original width
+                blogInner.style.width = '';
+                blogInner.style.marginLeft = '';
+                blogInner.style.marginRight = '';
+                blogInner.style.borderRadius = '';
+            }
+
+            // Check if bci-head is no longer in view
+            if (bciHead && bcNavbar && bcCloseButton) {
+                const headRect = bciHead.getBoundingClientRect();
+                if (headRect.bottom <= 0) {
+                    // bci-head is no longer visible, move navbar to top
+                    bcNavbar.style.top = '0';
+                    bcNavbar.style.position = 'sticky';
+                    bcCloseButton.style.top = '15px';
+                    bcCloseButton.style.width = '36px';
+                    bcCloseButton.style.height = '36px';
+                } else {
+                    // bci-head is still visible, reset navbar
+                    bcNavbar.style.top = '-71px';
+                    bcNavbar.style.position = 'absolute';
+                    bcCloseButton.style.top = '20px';
+                    bcCloseButton.style.width = '40px';
+                    bcCloseButton.style.height = '40px';
+                }
+            }
+        });
+
+        // Handle bc-arrow-down click to scroll down until rect.top <= 0
+        const bcArrowDown = document.querySelector('.bc-arrow-down');
+        if (bcArrowDown) {
+            bcArrowDown.addEventListener('click', () => {
+                // Scroll until rect.top <= 0
+                const scrollStep = () => {
+                    const rect = blogInner.getBoundingClientRect();
+                    if (rect.top > 0) {
+                        blogContainer.scrollBy({ top: rect.top, behavior: 'smooth' });
+                    }
+                };
+                scrollStep();
+            });
+        }
+
+        // Handle bc-close-button click to close the blog container
+        if (bcCloseButton) {
+            bcCloseButton.addEventListener('click', () => {
+                blogContainer.classList.remove('shown');
+                document.body.style.overflow = '';
+                // Reset scroll position
+                blogContainer.scrollTop = 0;
+                // Reset blog-inner styles
+                blogInner.style.width = '';
+                blogInner.style.marginLeft = '';
+                blogInner.style.marginRight = '';
+                blogInner.style.borderRadius = '';
+            });
+        }
+    }
+
     //SEARCH INPUT EXPAND/CONTRACT
 
     if (searchButton && searchInput) {
