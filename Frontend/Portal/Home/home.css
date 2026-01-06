@@ -4,7 +4,7 @@ body {
 }
 
 .first-sec {
-    margin-top: -50px;
+    margin-top: -100px;
     display: flex;
     flex-direction: column;
     /* align-items: center; */
@@ -268,12 +268,14 @@ body {
         font-weight: 600;
         color: #fff;
         letter-spacing: 0.5px;
-        background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
+        /* background: linear-gradient(90deg, #160f36 0%, #04af98 100%); */
+        background-color: #04af98;
         transition: all 0.3s ease;
 
         &:hover {
             transform: scale(1.015);
-            background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
+            /* background: linear-gradient(90deg, #160f36 0%, #04af98 100%); */
+            background-color: #04af98;
             cursor: pointer;
             transition: all 0.4s ease;
         }
@@ -361,13 +363,15 @@ body {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 615px;
-    background-color: transparent;
+    height: max-content;
+    /* background-color: red; */
+    padding-bottom: 60px;
 }
 
 .sc-header {
-    position: absolute;
-    top: 65px;
+    /* position: absolute;
+    top: 65px; */
+    margin-top: 65px;
     display: flex;
     width: max-content;
     height: max-content;
@@ -380,21 +384,23 @@ body {
         font-family: 'Manrope', sans-serif;
         font-size: 2.8em;
         font-weight: bolder;
-        background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
-        /* background-color: #04af98; */
+        /* background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
+        background-color: #04af98;
         background-clip: text;
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        -webkit-text-fill-color: transparent; */
         letter-spacing: 0.5px;
         line-height: 1.2;
         background-color: transparent;
+        color: #160f36;
         text-shadow: 5px 5px 1px 2px rgba(0, 0, 0, 0.25);
     }
 }
 
 .sc-sub {
-    position: absolute;
-    top: 140px;
+    /* position: absolute;
+    top: 140px; */
+    margin-top: 20px;
     display: flex;
     width: 710px;
     height: 50px;
@@ -413,28 +419,33 @@ body {
 }
 
 .services-display-container {
-    position: absolute;
-    top: 245px;
+    /* position: absolute;
+    top: 245px; */
+    margin-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* flex-wrap: wrap; */
-    width: 92%;
-    height: 299px;
+    flex-wrap: wrap;
+    max-width: 840px;
+    /* height: 299px; */
+    height: max-content;
     background-color: transparent;
     gap: 36px;
 
     .service-card {
-        position: relative;
+
         display: flex;
+        flex-direction: column;
+        flex-grow: 1;
         width: 400px;
-        height: 100%;
+        height: max-content;
         background-color: transparent;
         border-radius: 15px;
         box-shadow: 0px 5px 25px 2px rgba(0, 0, 0, 0.09);
         font-family: 'Manrope', sans-serif;
         overflow: hidden;
         transition: all 0.3s ease;
+        padding-bottom: 40px;
 
         .scd-icon {
             position: absolute;
@@ -467,10 +478,13 @@ body {
             background: linear-gradient(135deg, #a855f7 0%, #db2777 100%);
         }
 
+        .scdi-4 {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        }
+
         .scd-header {
-            position: absolute;
-            top: 42px;
-            left: 110px;
+            margin-top: 42px;
+            margin-left: 32px;
             display: flex;
             width: max-content;
             height: 22px;
@@ -490,9 +504,8 @@ body {
         }
 
         .scd-sub {
-            position: absolute;
-            top: 96px;
-            left: 32px;
+            margin-top: 15px;
+            margin-left: 32px;
             display: flex;
             width: 80%;
             height: max-content;
@@ -534,14 +547,17 @@ body {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    width: 18px;
-                    height: 18px;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
 
-                    img {
+                    background-color: black;
+
+                    /* img {
                         width: 16px;
                         height: 16px;
                         object-fit: contain;
-                    }
+                    } */
                 }
 
                 .scl-text {
@@ -586,13 +602,14 @@ body {
             font-size: 0.78em;
             font-weight: 600;
             letter-spacing: 0.5px;
-            color: #2563eb;
+            /* color: #2563eb; */
+            color: #04af98;
             transition: all 0.3s ease;
 
-            background-image: url("../../Universal/Icons/arrow_right_blue.svg");
+            /* background-image: url("../../Universal/Icons/arrow_right_blue.svg");
             background-repeat: no-repeat;
             background-position: right 12px center;
-            background-size: 18px 18px;
+            background-size: 18px 18px; */
             cursor: pointer;
 
             &:hover {
@@ -687,6 +704,7 @@ body {
                 height: 60%;
                 object-fit: contain;
                 transition: all 0.35s ease;
+                mix-blend-mode: multiply;
             }
 
             span {
@@ -740,14 +758,12 @@ body {
         .sc-five,
         .sc-eight {
             img {
-                /* background-color: red; */
                 scale: 1.5;
             }
         }
 
         .sc-nine {
             img {
-                /* background-color: red; */
                 scale: 1.8;
             }
 
@@ -773,7 +789,8 @@ body {
     width: 90%;
     height: 315px;
     border-radius: 20px;
-    background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+    /* background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); */
+    background-color: #04af98;
 
     .tbc-header {
         display: flex;
@@ -841,22 +858,45 @@ body {
             border-radius: 9999px;
             overflow: hidden;
 
-            gap: 15px;
+            gap: 20px;
 
             font-family: 'Poppins', Arial, sans-serif;
             font-size: 0.95em;
             font-weight: bold;
-            color: #2563eb;
+            color: #160f36;
             letter-spacing: 0.5px;
             background-color: #fff;
             transition: all 0.3s ease;
 
             /* background: url("../../Universal/Icons/arrow_right_blue_2.svg") no-repeat 10px center; */
 
-            img {
-                width: 27px;
-                height: 27px;
-                object-fit: contain;
+            .btn-ic {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: max-content;
+                height: max-content;
+                padding: 5px;
+                border-radius: 5px;
+                /* background-color: red; */
+                transition: all 0.25s ease;
+                pointer-events: auto;
+
+                img {
+                    width: 27px;
+                    height: 27px;
+                    object-fit: contain;
+                }
+
+                &:hover {
+                    transform: scale(1.01);
+                    cursor: pointer;
+                    background-color: rgba(22, 15, 54, 0.15);
+                }
+
+                &:active {
+                    transform: scale(0.98);
+                }
             }
 
 
@@ -892,6 +932,17 @@ body {
             }
         }
 
+        .tbc-gst-btn.icons-shown {
+            &:hover {
+                transform: scale(1);
+                cursor: default;
+            }
+
+            &:hover::before {
+                animation: none;
+            }
+        }
+
         .tbc-vop-btn {
             display: flex;
             align-items: center;
@@ -914,7 +965,7 @@ body {
             &:hover {
                 transform: scale(1.01);
                 background-color: #fff;
-                color: #2563eb;
+                color: #160f36;
                 cursor: pointer;
                 transition: all 0.3s ease;
             }
@@ -1742,7 +1793,7 @@ body {
     .second-sec {
         display: flex;
         width: 98%;
-        height: 1300px;
+        /* height: 1300px; */
         background-color: transparent;
 
         .sc-header {
@@ -1762,7 +1813,8 @@ body {
         .services-display-container {
             flex-direction: column;
             justify-content: space-between;
-            height: 75%;
+            /* height: 75%; */
+            width: 92%;
             background-color: transparent;
 
             .service-card {

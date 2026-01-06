@@ -248,6 +248,41 @@
     window.addEventListener('pageshow', (e) => { if (e.persisted) animateCounters(); });
 })();
 
+// Explore button scroll to services
+(() => {
+    const exploreBtn = document.querySelector('.explore-btn');
+    if (!exploreBtn) return;
+
+    exploreBtn.addEventListener('click', () => {
+        const servicesSection = document.querySelector('.second-sec');
+        if (servicesSection) {
+            servicesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+})();
+
+// Learn button route to /learn page
+(() => {
+    const learnBtn = document.querySelector('.learn-btn');
+    if (!learnBtn) return;
+
+    learnBtn.addEventListener('click', () => {
+        window.location.href = '/learn';
+    });
+})();
+
+// Get Started button: replace text with WhatsApp, Gmail, and Chatbot icons on click
+(() => {
+    const getStartedBtn = document.querySelector('.tbc-gst-btn');
+    if (!getStartedBtn) return;
+
+    getStartedBtn.addEventListener('click', () => {
+        getStartedBtn.innerHTML = '<div class="btn-ic" title="WhatsApp"><img src="../../Universal/Icons/whatsapp.png" alt="WhatsApp Icon" /></div><div class="btn-ic" title="Gmail"><img src="../../Universal/Icons/email.png" alt="Gmail Icon" /></div><div class="btn-ic" title="Chatbot"><img src="../../Universal/Icons/chatbot1.png" alt="Chatbot Icon" /></div>';
+        getStartedBtn.classList.add('icons-shown');
+        getStartedBtn.style.pointerEvents = 'none';
+    });
+})();
+
 // Image galleries: auto-rotate and manual controls for .fsbc-gallery
 (function setupFsbcGalleries() {
     const GALLERY_INTERVAL_MS = 4000; // 4 seconds

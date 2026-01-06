@@ -318,12 +318,13 @@ nav {
         font-weight: 600;
         color: #fff;
         letter-spacing: 0.5px;
-        background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
+        /* background: linear-gradient(90deg, #160f36 0%, #04af98 100%); */
+        background-color: #04af98;
         transition: all 0.3s ease;
 
         &:hover {
             transform: scale(1.02);
-            background: linear-gradient(90deg, #160f36 0%, #04af98 100%);
+            /* background: linear-gradient(90deg, #160f36 0%, #04af98 100%); */
             cursor: pointer;
         }
 
