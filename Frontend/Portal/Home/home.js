@@ -277,7 +277,7 @@
     if (!getStartedBtn) return;
 
     getStartedBtn.addEventListener('click', () => {
-        getStartedBtn.innerHTML = '<div class="btn-ic" title="WhatsApp"><img src="../../Universal/Icons/whatsapp.png" alt="WhatsApp Icon" /></div><div class="btn-ic" title="Gmail"><img src="../../Universal/Icons/email.png" alt="Gmail Icon" /></div><div class="btn-ic" title="Chatbot"><img src="../../Universal/Icons/chatbot1.png" alt="Chatbot Icon" /></div>';
+        getStartedBtn.innerHTML = '<div class="btn-ic" title="WhatsApp"><img src="../../Universal/Icons/whatsapp.png" alt="WhatsApp Icon" /></div><div class="btn-ic" title="Gmail"><img src="../../Universal/Icons/email2.png" alt="Gmail Icon" /></div><div class="btn-ic" title="Chatbot"><img src="../../Universal/Icons/chatbot1.png" alt="Chatbot Icon" /></div>';
         getStartedBtn.classList.add('icons-shown');
         getStartedBtn.style.pointerEvents = 'none';
     });
