@@ -241,6 +241,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const readStoryButtons = document.querySelectorAll('#read-story');
     const blogContainer = document.querySelector('.blog-container');
     const blogInner = document.querySelector('.bc-inner');
+    const bcNavbar = document.querySelector('.bc-navbar');
+    const bciHead = document.querySelector('.bci-head');
+    const blogTitle = blogContainer.querySelector('.blog-title');
+    const blogInnerRight = document.querySelector('.sic-right');
     readStoryButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             if (blogContainer) {
@@ -264,13 +268,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Populate blog container
                     const navBlogTitle = blogContainer.querySelector('.bcn-blog-title');
-                    const blogTitle = blogContainer.querySelector('.blog-title');
                     const blogDetails = blogContainer.querySelector('.blog-details');
 
                     if (blogTitle) blogTitle.textContent = title;
                     if (blogDetails) blogDetails.textContent = `${date} | ${category}`;
                     if (navBlogTitle) navBlogTitle.textContent = title;
+
+                    // Set background-image for bci-head::before
+                    const sbImageEl = storyBlock.querySelector('.sb-image img');
+                    const bciHead = blogContainer.querySelector('.bci-head');
+                    if (bciHead) {
+                        // Add .dummy class if sb-image has .dummy
+                        const sbImage = storyBlock.querySelector('.sb-image');
+                        if (sbImage && sbImage.classList.contains('dummy')) {
+                            bciHead.classList.add('dummy');
+                        } else {
+                            bciHead.classList.remove('dummy');
+                        }
+
+                        if (sbImageEl && sbImageEl.src) {
+                            bciHead.style.setProperty('--bg-image-url', `url("${sbImageEl.src}")`);
+                        }
+                    }
                 }
+
+                // Reset navbar to initial state
+                bcNavbar.style.top = '';
+                bcNavbar.style.position = '';
+
+                // Reset blog-inner styles
+                blogInner.style.width = '';
+                blogInner.style.marginLeft = '';
+                blogInner.style.marginRight = '';
+                blogInner.style.borderRadius = '';
+
+                // Reset bci-head styles
+                if (bciHead) bciHead.style.borderRadius = '';
+
+                // Reset bci-head styles
+                blogTitle.style.fontSize = '';
 
                 blogContainer.classList.add('shown');
                 document.body.style.overflow = 'hidden';
@@ -283,8 +319,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const bcNavbar = document.querySelector('.bc-navbar');
         const bciHead = document.querySelector('.bci-head');
         const bcCloseButton = document.querySelector('.bc-close-button');
+        const blogTitle = blogContainer.querySelector('.blog-title');
+
+        let navbarStickyScrollStart = null;
+
+        // Function to update navbar progress bar width based on scroll
+        function updateNavbarProgressBar() {
+            const headRect = bciHead.getBoundingClientRect();
+
+            // Only show progress when navbar is sticky (headRect.bottom <= 0)
+            if (headRect.bottom <= 0) {
+                // Capture the scroll position when navbar first becomes sticky
+                if (navbarStickyScrollStart === null) {
+                    navbarStickyScrollStart = blogContainer.scrollTop;
+                }
+
+                const scrollTop = blogContainer.scrollTop;
+                const scrollHeight = blogContainer.scrollHeight - blogContainer.clientHeight;
+
+                // Calculate progress from when navbar became sticky to the end
+                const remainingScroll = scrollHeight - navbarStickyScrollStart;
+                if (remainingScroll > 0) {
+                    const scrollSinceSticky = scrollTop - navbarStickyScrollStart;
+                    const scrollPercent = (scrollSinceSticky / remainingScroll) * 100;
+                    const progressWidth = Math.max(1, Math.min(100, scrollPercent));
+                    bcNavbar.style.setProperty('--navbar-progress', `${progressWidth}%`);
+                }
+            } else {
+                // Before navbar is sticky, reset the capture point and keep progress at 0%
+                navbarStickyScrollStart = null;
+                bcNavbar.style.setProperty('--navbar-progress', '0%');
+            }
+        }
 
         blogContainer.addEventListener('scroll', () => {
+            // Update navbar progress bar
+            updateNavbarProgressBar();
+
             const rect = blogInner.getBoundingClientRect();
             if (rect.top <= 0) {
                 // blog-container has reached the top, make it full width
@@ -292,12 +363,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 blogInner.style.marginLeft = '0';
                 blogInner.style.marginRight = '0';
                 blogInner.style.borderRadius = '0';
+                bciHead.style.borderRadius = '0';
+                blogTitle.style.fontSize = '3em';
+                blogInnerRight.classList.add('shown');
             } else {
                 // blog-container is not at the top, reset to original width
                 blogInner.style.width = '';
                 blogInner.style.marginLeft = '';
                 blogInner.style.marginRight = '';
                 blogInner.style.borderRadius = '';
+                bciHead.style.borderRadius = '';
+                blogTitle.style.fontSize = '';
+                blogInnerRight.classList.remove('shown');
             }
 
             // Check if bci-head is no longer in view
@@ -339,15 +416,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle bc-close-button click to close the blog container
         if (bcCloseButton) {
             bcCloseButton.addEventListener('click', () => {
+                // Reset scroll position BEFORE hiding the container
+                blogContainer.scrollTop = 0;
+
+                // Then hide the container
                 blogContainer.classList.remove('shown');
                 document.body.style.overflow = '';
-                // Reset scroll position
-                blogContainer.scrollTop = 0;
-                // Reset blog-inner styles
-                blogInner.style.width = '';
-                blogInner.style.marginLeft = '';
-                blogInner.style.marginRight = '';
-                blogInner.style.borderRadius = '';
             });
         }
     }
@@ -505,6 +579,67 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (featured) featured.style.display = '';
                     if (secondSec) secondSec.style.paddingBottom = '';
                 }
+            }
+        });
+    }
+
+    // Handle share-blog-btn click
+    const shareBlogBtn = document.getElementById('share-blog-btn');
+    if (shareBlogBtn) {
+        shareBlogBtn.addEventListener('click', () => {
+            const blogTitle = document.querySelector('.bcn-blog-title')?.textContent || 'Check out this blog post';
+            const blogUrl = window.location.href;
+
+            // Check if Web Share API is available
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Create Hub Ghana - Blog',
+                    text: blogTitle,
+                    url: blogUrl,
+                }).catch(err => {
+                    if (err.name !== 'AbortError') {
+                        console.error('Error sharing:', err);
+                        fallbackShare(blogTitle, blogUrl);
+                    }
+                });
+            } else {
+                // Fallback: copy to clipboard and show notification
+                fallbackShare(blogTitle, blogUrl);
+            }
+        });
+    }
+
+    // Fallback share function - copy URL to clipboard
+    function fallbackShare(title, url) {
+        const textToCopy = `${title}\n${url}`;
+
+        navigator.clipboard.writeText(url).then(() => {
+            // Show success message
+            const btn = document.getElementById('share-blog-btn');
+            const originalText = btn.querySelector('span').textContent;
+            btn.querySelector('span').textContent = 'Copied!';
+
+            setTimeout(() => {
+                btn.querySelector('span').textContent = originalText;
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy:', err);
+            alert('Share: ' + url);
+        });
+    }
+
+    // Handle download-blog-btn click
+    const downloadBlogBtn = document.getElementById('download-blog-btn');
+    if (downloadBlogBtn) {
+        downloadBlogBtn.addEventListener('click', () => {
+            const downloadLink = downloadBlogBtn.getAttribute('data-link');
+
+            if (downloadLink) {
+                // Open the download link in a new tab
+                window.open(downloadLink, '_blank');
+            } else {
+                console.error('No download link provided');
+                alert('Download link not available');
             }
         });
     }
