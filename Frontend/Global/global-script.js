@@ -175,7 +175,21 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
     // Desktop nav buttons mirror mobile menu behavior (scroll + selection)
     (function setupDesktopNavButtons() {
         const navBtns = Array.from(document.querySelectorAll('.nav-btn'));
+        const navLogoBtn = document.querySelector('.nav-logo-container');
+        const mobileHome = document.getElementById('home-m-btn');
+        if (!navLogoBtn) return;
         if (!navBtns || navBtns.length === 0) return;
+
+        navLogoBtn.addEventListener('click', (e) => {
+            // If we're already on the home page, just scroll to top. Otherwise navigate to /home.
+            const currentPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            if (currentPath === '/' || currentPath === '/home' || currentPath === '/home.html') {
+                if (mobileHome) mobileHome.classList.add('selected');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.location.pathname = '/home';
+            }
+        });
 
         function clearDesktopSelection() {
             navBtns.forEach(b => b.classList.remove('selected'));
@@ -667,4 +681,3 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
         // ignore
     }
 })();
-

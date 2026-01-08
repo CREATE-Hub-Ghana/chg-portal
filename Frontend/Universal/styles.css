@@ -294,6 +294,7 @@ nav {
         width: 45px;
         height: 45px;
         background-color: transparent;
+        cursor: pointer;
 
         img {
             position: absolute;

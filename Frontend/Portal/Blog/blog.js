@@ -424,6 +424,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.style.overflow = '';
             });
         }
+
+        // Helper function to close the blog container
+        function closeBlogContainer() {
+            blogContainer.scrollTop = 0;
+            blogContainer.classList.remove('shown');
+            document.body.style.overflow = '';
+        }
+
+        // Handle click outside .bc-inner to close the blog container
+        if (blogContainer) {
+            blogContainer.addEventListener('click', (e) => {
+                // Only close if the click is directly on the blogContainer (the backdrop)
+                // and not on .bc-inner or its children
+                if (e.target === blogContainer) {
+                    closeBlogContainer();
+                }
+            });
+        }
     }
 
     //SEARCH INPUT EXPAND/CONTRACT
