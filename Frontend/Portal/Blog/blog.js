@@ -248,12 +248,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const bcNavbar = document.querySelector('.bc-navbar');
     const bciHead = document.querySelector('.bci-head');
     const blogTitle = blogContainer.querySelector('.blog-title');
-    const blogInnerRight = document.querySelector('.sic-right');
 
     // Track current blog ID
     let currentBlogId = null;
 
-    function openBlogStory(btn) {
+    async function openBlogStory(btn) {
         if (!blogContainer) return;
 
         // Get the parent story block (handles both standard blocks and featured)
@@ -268,68 +267,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 const newUrl = new URL(window.location);
                 newUrl.searchParams.set('id', currentBlogId);
                 window.history.pushState({ path: newUrl.href }, '', newUrl.href);
-            }
 
-            // ... rest of extraction logic ...
+                // Load content dynamically
+                try {
+                    // Simple loader
+                    blogInner.innerHTML = '<div style="padding: 100px; text-align: center;">Loading story...</div>';
 
-            if (storyBlock.classList.contains('featured-story-container')) {
-                // Extraction for featured story
-                const titleEl = storyBlock.querySelector('.fscl-main');
-                title = titleEl ? titleEl.textContent : '';
-                category = 'Featured Story';
+                    const response = await fetch(`/Portal/Blog/stories/${currentBlogId}.html`);
+                    if (response.ok) {
+                        const html = await response.text();
+                        blogInner.innerHTML = html;
 
-                const sdBlocks = storyBlock.querySelectorAll('.sd-block span');
-                if (sdBlocks.length >= 2) {
-                    author = sdBlocks[0].textContent;
-                    date = sdBlocks[1].textContent;
-                }
-                if (sdBlocks.length >= 3) {
-                    readTime = sdBlocks[2].textContent;
-                }
+                        // Attach event listener to the new bc-arrow-down button
+                        const bcArrowDown = blogInner.querySelector('.bc-arrow-down');
+                        if (bcArrowDown) {
+                            bcArrowDown.addEventListener('click', () => {
+                                const rect = blogInner.getBoundingClientRect();
+                                if (rect.top > 0) {
+                                    blogContainer.scrollBy({ top: rect.top, behavior: 'smooth' });
+                                }
+                            });
+                        }
 
-                const imgEl = storyBlock.querySelector('.fsc-right img');
-                imgSrc = imgEl ? imgEl.src : '';
-
-            } else {
-                // Extraction for standard story block
-                const titleEl = storyBlock.querySelector('.story-title span');
-                title = titleEl ? titleEl.textContent : '';
-                const categoryEl = storyBlock.querySelector('.sb-category');
-                category = categoryEl ? categoryEl.textContent : '';
-
-                const authorEl = storyBlock.querySelector('.sd-block:nth-child(1) span');
-                const dateEl = storyBlock.querySelector('.sd-block:nth-child(2) span');
-                const readTimeEl = storyBlock.querySelector('.sb-min-read');
-
-                author = authorEl ? authorEl.textContent : '';
-                date = dateEl ? dateEl.textContent : '';
-                readTime = readTimeEl ? readTimeEl.textContent : '';
-
-                const sbImageEl = storyBlock.querySelector('.sb-image img');
-                imgSrc = sbImageEl ? sbImageEl.src : '';
-            }
-
-            // Populate blog container
-            const navBlogTitle = blogContainer.querySelector('.bcn-blog-title');
-            const blogDetails = blogContainer.querySelector('.blog-details');
-
-            if (blogTitle) blogTitle.textContent = title;
-            if (blogDetails) blogDetails.textContent = `${date} | ${category}`;
-            if (navBlogTitle) navBlogTitle.textContent = title;
-
-            // Set background-image for bci-head::before
-            const bciHead = blogContainer.querySelector('.bci-head');
-            if (bciHead) {
-                // Check if it's a dummy image
-                const sbImage = storyBlock.querySelector('.sb-image');
-                if (sbImage && sbImage.classList.contains('dummy')) {
-                    bciHead.classList.add('dummy');
-                } else {
-                    bciHead.classList.remove('dummy');
-                }
-
-                if (imgSrc) {
-                    bciHead.style.setProperty('--bg-image-url', `url("${imgSrc}")`);
+                        // Retrieve dynamic elements for navbar update
+                        const newTitle = blogContainer.querySelector('.blog-title');
+                        const navBlogTitle = blogContainer.querySelector('.bcn-blog-title');
+                        if (newTitle && navBlogTitle) {
+                            navBlogTitle.textContent = newTitle.textContent;
+                        }
+                    } else {
+                        blogInner.innerHTML = '<div style="padding: 100px; text-align: center;">Story content not found.</div>';
+                    }
+                } catch (err) {
+                    console.error(err);
+                    blogInner.innerHTML = '<div style="padding: 100px; text-align: center;">Error loading story.</div>';
                 }
             }
         }
@@ -343,12 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
         blogInner.style.marginLeft = '';
         blogInner.style.marginRight = '';
         blogInner.style.borderRadius = '';
-
-        // Reset bci-head styles
-        if (bciHead) bciHead.style.borderRadius = '';
-
-        // Reset title styles
-        if (blogTitle) blogTitle.style.fontSize = '';
 
         blogContainer.classList.add('shown');
         document.body.style.overflow = 'hidden';
@@ -378,14 +343,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle scroll to make blog-container full width when it hits the top
     if (blogInner && blogContainer) {
         const bcNavbar = document.querySelector('.bc-navbar');
-        const bciHead = document.querySelector('.bci-head');
         const bcCloseButton = document.querySelector('.bc-close-button');
-        const blogTitle = blogContainer.querySelector('.blog-title');
 
         let navbarStickyScrollStart = null;
 
         // Function to update navbar progress bar width based on scroll
         function updateNavbarProgressBar() {
+            const bciHead = blogContainer.querySelector('.bci-head');
+            if (!bciHead) return;
+
             const headRect = bciHead.getBoundingClientRect();
 
             // Only show progress when navbar is sticky (headRect.bottom <= 0)
@@ -414,6 +380,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         blogContainer.addEventListener('scroll', () => {
+            const bciHead = blogContainer.querySelector('.bci-head');
+            const blogTitle = blogContainer.querySelector('.blog-title');
+            const blogInnerRight = blogContainer.querySelector('.sic-right');
+
             // Update navbar progress bar
             updateNavbarProgressBar();
 
@@ -424,18 +394,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 blogInner.style.marginLeft = '0';
                 blogInner.style.marginRight = '0';
                 blogInner.style.borderRadius = '0';
-                bciHead.style.borderRadius = '0';
-                blogTitle.style.fontSize = '3em';
-                blogInnerRight.classList.add('shown');
+                if (bciHead) bciHead.style.borderRadius = '0';
+                if (blogTitle) blogTitle.style.fontSize = '3em';
+                if (blogInnerRight) blogInnerRight.classList.add('shown');
             } else {
                 // blog-container is not at the top, reset to original width
                 blogInner.style.width = '';
                 blogInner.style.marginLeft = '';
                 blogInner.style.marginRight = '';
                 blogInner.style.borderRadius = '';
-                bciHead.style.borderRadius = '';
-                blogTitle.style.fontSize = '';
-                blogInnerRight.classList.remove('shown');
+                if (bciHead) bciHead.style.borderRadius = '';
+                if (blogTitle) blogTitle.style.fontSize = '';
+                if (blogInnerRight) blogInnerRight.classList.remove('shown');
             }
 
             // Check if bci-head is no longer in view
@@ -459,20 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Handle bc-arrow-down click to scroll down until rect.top <= 0
-        const bcArrowDown = document.querySelector('.bc-arrow-down');
-        if (bcArrowDown) {
-            bcArrowDown.addEventListener('click', () => {
-                // Scroll until rect.top <= 0
-                const scrollStep = () => {
-                    const rect = blogInner.getBoundingClientRect();
-                    if (rect.top > 0) {
-                        blogContainer.scrollBy({ top: rect.top, behavior: 'smooth' });
-                    }
-                };
-                scrollStep();
-            });
-        }
+
 
         // Handle bc-close-button click to close the blog container
         if (bcCloseButton) {
