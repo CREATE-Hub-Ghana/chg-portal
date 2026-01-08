@@ -681,3 +681,23 @@ try { setupDonateButtons(); } catch (e) { /* ignore */ }
         // ignore
     }
 })();
+
+// Clean up ID parameters from URL on load (Deep Link cleanup)
+// This ensures that if a user follows a shared link with an ID (e.g. ?id=...),
+// the page processes it (via other scripts) but then cleans the URL so that
+// a refresh does not re-trigger the deep link action.
+(function cleanIdParamOnLoad() {
+    if (!('URLSearchParams' in window) || !('history' in window)) return;
+
+    // Run this check after a short delay to ensure page-specific scripts (like blog.js)
+    // have had a chance to read the parameter and act on it.
+    setTimeout(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('id')) {
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.delete('id');
+            // Use replaceState to update the URL bar without reloading or adding to history
+            window.history.replaceState({}, document.title, newUrl.pathname + newUrl.search + newUrl.hash);
+        }
+    }, 100);
+})();

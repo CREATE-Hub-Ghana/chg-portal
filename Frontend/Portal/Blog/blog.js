@@ -234,85 +234,146 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize: show all
     // Make sure "All" is visually active on load and featured section is unaffected
+    if (searchInput) searchInput.value = ''; // Ensure search is clear on load
+    const emailSub = document.getElementById('blog-subscription-email');
+    if (emailSub) emailSub.value = '';
+
     setActiveFilterButton('filter-all');
     applyFilter('all');
 
     // Handle "Read Story" button clicks to display blog-container
-    const readStoryButtons = document.querySelectorAll('#read-story');
+    const readStoryButtons = document.querySelectorAll('#read-story, .read-story');
     const blogContainer = document.querySelector('.blog-container');
     const blogInner = document.querySelector('.bc-inner');
     const bcNavbar = document.querySelector('.bc-navbar');
     const bciHead = document.querySelector('.bci-head');
     const blogTitle = blogContainer.querySelector('.blog-title');
     const blogInnerRight = document.querySelector('.sic-right');
-    readStoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (blogContainer) {
-                // Get the parent story block
-                const storyBlock = btn.closest('.story-block');
-                if (storyBlock) {
-                    // Extract title and category
-                    const titleEl = storyBlock.querySelector('.story-title span');
-                    const title = titleEl ? titleEl.textContent : '';
-                    const categoryEl = storyBlock.querySelector('.sb-category');
-                    const category = categoryEl ? categoryEl.textContent : '';
 
-                    // Extract author, date, and read time
-                    const authorEl = storyBlock.querySelector('.sd-block:nth-child(1) span');
-                    const dateEl = storyBlock.querySelector('.sd-block:nth-child(2) span');
-                    const readTimeEl = storyBlock.querySelector('.sb-min-read');
+    // Track current blog ID
+    let currentBlogId = null;
 
-                    const author = authorEl ? authorEl.textContent : '';
-                    const date = dateEl ? dateEl.textContent : '';
-                    const readTime = readTimeEl ? readTimeEl.textContent : '';
+    function openBlogStory(btn) {
+        if (!blogContainer) return;
 
-                    // Populate blog container
-                    const navBlogTitle = blogContainer.querySelector('.bcn-blog-title');
-                    const blogDetails = blogContainer.querySelector('.blog-details');
+        // Get the parent story block (handles both standard blocks and featured)
+        const storyBlock = btn.closest('.story-block') || btn.closest('.featured-story-container');
 
-                    if (blogTitle) blogTitle.textContent = title;
-                    if (blogDetails) blogDetails.textContent = `${date} | ${category}`;
-                    if (navBlogTitle) navBlogTitle.textContent = title;
+        if (storyBlock) {
+            // Get ID
+            currentBlogId = storyBlock.dataset.id;
 
-                    // Set background-image for bci-head::before
-                    const sbImageEl = storyBlock.querySelector('.sb-image img');
-                    const bciHead = blogContainer.querySelector('.bci-head');
-                    if (bciHead) {
-                        // Add .dummy class if sb-image has .dummy
-                        const sbImage = storyBlock.querySelector('.sb-image');
-                        if (sbImage && sbImage.classList.contains('dummy')) {
-                            bciHead.classList.add('dummy');
-                        } else {
-                            bciHead.classList.remove('dummy');
-                        }
+            // Update URL without reloading
+            if (currentBlogId) {
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.set('id', currentBlogId);
+                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+            }
 
-                        if (sbImageEl && sbImageEl.src) {
-                            bciHead.style.setProperty('--bg-image-url', `url("${sbImageEl.src}")`);
-                        }
-                    }
+            // ... rest of extraction logic ...
+
+            if (storyBlock.classList.contains('featured-story-container')) {
+                // Extraction for featured story
+                const titleEl = storyBlock.querySelector('.fscl-main');
+                title = titleEl ? titleEl.textContent : '';
+                category = 'Featured Story';
+
+                const sdBlocks = storyBlock.querySelectorAll('.sd-block span');
+                if (sdBlocks.length >= 2) {
+                    author = sdBlocks[0].textContent;
+                    date = sdBlocks[1].textContent;
+                }
+                if (sdBlocks.length >= 3) {
+                    readTime = sdBlocks[2].textContent;
                 }
 
-                // Reset navbar to initial state
-                bcNavbar.style.top = '';
-                bcNavbar.style.position = '';
+                const imgEl = storyBlock.querySelector('.fsc-right img');
+                imgSrc = imgEl ? imgEl.src : '';
 
-                // Reset blog-inner styles
-                blogInner.style.width = '';
-                blogInner.style.marginLeft = '';
-                blogInner.style.marginRight = '';
-                blogInner.style.borderRadius = '';
+            } else {
+                // Extraction for standard story block
+                const titleEl = storyBlock.querySelector('.story-title span');
+                title = titleEl ? titleEl.textContent : '';
+                const categoryEl = storyBlock.querySelector('.sb-category');
+                category = categoryEl ? categoryEl.textContent : '';
 
-                // Reset bci-head styles
-                if (bciHead) bciHead.style.borderRadius = '';
+                const authorEl = storyBlock.querySelector('.sd-block:nth-child(1) span');
+                const dateEl = storyBlock.querySelector('.sd-block:nth-child(2) span');
+                const readTimeEl = storyBlock.querySelector('.sb-min-read');
 
-                // Reset bci-head styles
-                blogTitle.style.fontSize = '';
+                author = authorEl ? authorEl.textContent : '';
+                date = dateEl ? dateEl.textContent : '';
+                readTime = readTimeEl ? readTimeEl.textContent : '';
 
-                blogContainer.classList.add('shown');
-                document.body.style.overflow = 'hidden';
+                const sbImageEl = storyBlock.querySelector('.sb-image img');
+                imgSrc = sbImageEl ? sbImageEl.src : '';
             }
-        });
+
+            // Populate blog container
+            const navBlogTitle = blogContainer.querySelector('.bcn-blog-title');
+            const blogDetails = blogContainer.querySelector('.blog-details');
+
+            if (blogTitle) blogTitle.textContent = title;
+            if (blogDetails) blogDetails.textContent = `${date} | ${category}`;
+            if (navBlogTitle) navBlogTitle.textContent = title;
+
+            // Set background-image for bci-head::before
+            const bciHead = blogContainer.querySelector('.bci-head');
+            if (bciHead) {
+                // Check if it's a dummy image
+                const sbImage = storyBlock.querySelector('.sb-image');
+                if (sbImage && sbImage.classList.contains('dummy')) {
+                    bciHead.classList.add('dummy');
+                } else {
+                    bciHead.classList.remove('dummy');
+                }
+
+                if (imgSrc) {
+                    bciHead.style.setProperty('--bg-image-url', `url("${imgSrc}")`);
+                }
+            }
+        }
+
+        // Reset navbar to initial state
+        bcNavbar.style.top = '';
+        bcNavbar.style.position = '';
+
+        // Reset blog-inner styles
+        blogInner.style.width = '';
+        blogInner.style.marginLeft = '';
+        blogInner.style.marginRight = '';
+        blogInner.style.borderRadius = '';
+
+        // Reset bci-head styles
+        if (bciHead) bciHead.style.borderRadius = '';
+
+        // Reset title styles
+        if (blogTitle) blogTitle.style.fontSize = '';
+
+        blogContainer.classList.add('shown');
+        document.body.style.overflow = 'hidden';
+    }
+
+    readStoryButtons.forEach(btn => {
+        btn.addEventListener('click', () => openBlogStory(btn));
     });
+
+    // Check for ID parameter on load
+    const params = new URLSearchParams(window.location.search);
+    const initialId = params.get('id');
+    if (initialId) {
+        const targetBlock = document.querySelector(`.story-block[data-id="${initialId}"], .featured-story-container[data-id="${initialId}"]`);
+        if (targetBlock) {
+            // Find the read-story button inside it
+            const btn = targetBlock.querySelector('#read-story, .read-story');
+            if (btn) {
+                // If it's a featured story, make sure to show the section if it was hidden by search (though on load it should be visible unless filter applied instantly)
+                // Just trigger click
+                openBlogStory(btn);
+            }
+        }
+    }
+
 
     // Handle scroll to make blog-container full width when it hits the top
     if (blogInner && blogContainer) {
@@ -430,6 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
             blogContainer.scrollTop = 0;
             blogContainer.classList.remove('shown');
             document.body.style.overflow = '';
+
+            // Clean up URL
+            currentBlogId = null;
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.delete('id');
+            window.history.pushState({ path: newUrl.href }, '', newUrl.href);
         }
 
         // Handle click outside .bc-inner to close the blog container
@@ -606,7 +673,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (shareBlogBtn) {
         shareBlogBtn.addEventListener('click', () => {
             const blogTitle = document.querySelector('.bcn-blog-title')?.textContent || 'Check out this blog post';
-            const blogUrl = window.location.href;
+            let blogUrl = window.location.href;
+
+            if (currentBlogId) {
+                const urlObj = new URL(window.location.origin + window.location.pathname);
+                urlObj.searchParams.set('id', currentBlogId);
+                blogUrl = urlObj.toString();
+            }
 
             // Check if Web Share API is available
             if (navigator.share) {

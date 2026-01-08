@@ -1172,6 +1172,18 @@
                             color: #444444;
                             letter-spacing: 0.5px;
                             line-height: 1.8;
+
+                            a {
+                                text-decoration: none;
+                                color: inherit;
+                                border-bottom: 1.5px solid #0000EE;
+                                transition: all 0.4s ease;
+
+                                &:hover {
+                                    background-color: #0000EE;
+                                    color: #fff;
+                                }
+                            }
                         }
 
                         ul {
