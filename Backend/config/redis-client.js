@@ -67,19 +67,9 @@ redisClient.on("reconnecting", (delay) => {
 });
 
 // Graceful shutdown
-const shutdownRedis = async () => {
-  try {
-    await redisClient.quit();
-    console.log("Redis connection closed through app termination");
-    process.exit(0);
-  } catch (error) {
-    console.error("Error closing Redis connection:", error);
-    process.exit(1);
-  }
-};
-
-process.on("SIGINT", shutdownRedis);
-process.on("SIGTERM", shutdownRedis);
+// Removed to avoid conflict with server.js shutdown handling
+// process.on("SIGINT", shutdownRedis);
+// process.on("SIGTERM", shutdownRedis);
 
 // Add pipeline support for batch operations
 const redisPipeline = redisClient.pipeline.bind(redisClient);

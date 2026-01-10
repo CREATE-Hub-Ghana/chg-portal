@@ -29,14 +29,23 @@ async function startServer() {
         });
 
         // Handle graceful shutdown
-        process.on("SIGINT", async () => {
-            console.log("Shutting down server...");
-            await redisClient.quit();
-            server.close(() => {
-                console.log("Server shut down gracefully.");
-                process.exit(0);
+        const shutdown = async (signal) => {
+            console.log(`${signal} received. Shutting down server...`);
+            server.close(async () => {
+                console.log("HTTP server closed.");
+                try {
+                    await redisClient.quit();
+                    console.log("Redis client disconnected.");
+                    process.exit(0);
+                } catch (err) {
+                    console.error("Error during Redis disconnection", err);
+                    process.exit(1);
+                }
             });
-        });
+        };
+
+        process.on("SIGINT", () => shutdown("SIGINT"));
+        process.on("SIGTERM", () => shutdown("SIGTERM"));
     } catch (error) {
         console.error("Error starting server:", error);
         process.exit(1);

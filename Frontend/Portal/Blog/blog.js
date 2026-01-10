@@ -320,7 +320,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     readStoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => openBlogStory(btn));
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openBlogStory(btn);
+        });
+    });
+
+    // Make entire story blocks clickable
+    if (featured) {
+        featured.addEventListener('click', () => openBlogStory(featured));
+    }
+    storyBlocks.forEach(block => {
+        block.addEventListener('click', () => openBlogStory(block));
     });
 
     // Check for ID parameter on load
