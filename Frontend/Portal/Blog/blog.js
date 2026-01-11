@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Track current blog ID
     let currentBlogId = null;
 
-    async function openBlogStory(btn) {
+    async function openBlogStory(btn, updateHistory = true) {
         if (!blogContainer) return;
 
         // Get the parent story block (handles both standard blocks and featured)
@@ -420,9 +420,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update URL without reloading
             if (currentBlogId) {
-                const newUrl = new URL(window.location);
-                newUrl.searchParams.set('id', currentBlogId);
-                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+                if (updateHistory) {
+                    const newUrl = new URL(window.location);
+                    newUrl.searchParams.set('id', currentBlogId);
+                    window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+                }
 
                 // Load content dynamically
                 try {
@@ -480,6 +482,27 @@ document.addEventListener('DOMContentLoaded', () => {
         block.addEventListener('click', () => openBlogStory(block));
     });
 
+    // Handle Browser Back/Forward Navigation
+    window.addEventListener('popstate', (e) => {
+        const p = new URLSearchParams(window.location.search);
+        const id = p.get('id');
+        
+        if (id) {
+            if (currentBlogId !== id) {
+                 const targetBlock = document.querySelector(`.story-block[data-id="${id}"], .featured-story-container[data-id="${id}"]`);
+                 if (targetBlock) {
+                     const btn = targetBlock.querySelector('#read-story, .read-story') || targetBlock;
+                     if (btn) openBlogStory(btn, false);
+                 }
+            }
+        } else {
+            // No ID -> Close if open
+            if (blogContainer.classList.contains('shown')) {
+                closeBlogContainer(false);
+            }
+        }
+    });
+
     // Check for ID parameter on load
     const params = new URLSearchParams(window.location.search);
     const initialId = params.get('id');
@@ -487,11 +510,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetBlock = document.querySelector(`.story-block[data-id="${initialId}"], .featured-story-container[data-id="${initialId}"]`);
         if (targetBlock) {
             // Find the read-story button inside it
-            const btn = targetBlock.querySelector('#read-story, .read-story');
+            const btn = targetBlock.querySelector('#read-story, .read-story') || targetBlock;
             if (btn) {
                 // If it's a featured story, make sure to show the section if it was hidden by search (though on load it should be visible unless filter applied instantly)
                 // Just trigger click
-                openBlogStory(btn);
+                openBlogStory(btn, false);
             }
         }
     }
@@ -536,66 +559,76 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        let isScrollTicking = false;
+
         blogContainer.addEventListener('scroll', () => {
-            const bciHead = blogContainer.querySelector('.bci-head');
-            const blogTitle = blogContainer.querySelector('.blog-title');
-            const blogInnerRight = blogContainer.querySelector('.sic-right');
+            if (!isScrollTicking) {
+                window.requestAnimationFrame(() => {
+                    const bciHead = blogContainer.querySelector('.bci-head');
+                    const blogTitle = blogContainer.querySelector('.blog-title');
+                    const blogInnerRight = blogContainer.querySelector('.sic-right');
 
-            // Update navbar progress bar
-            updateNavbarProgressBar();
+                    // Update navbar progress bar
+                    updateNavbarProgressBar();
 
-            // Update sidebar navigation selection
-            updateNavOnScroll();
+                    // Update sidebar navigation selection
+                    updateNavOnScroll();
 
-            const rect = blogInner.getBoundingClientRect();
-            if (rect.top <= 0) {
-                // blog-container has reached the top, make it full width
-                blogInner.style.width = '100%';
-                blogInner.style.marginLeft = '0';
-                blogInner.style.marginRight = '0';
-                blogInner.style.borderRadius = '0';
-                if (bciHead) bciHead.style.borderRadius = '0';
-                if (blogTitle) blogTitle.style.fontSize = '3em';
-                if (blogInnerRight) blogInnerRight.classList.add('shown');
-            } else {
-                // blog-container is not at the top, reset to original width
-                blogInner.style.width = '';
-                blogInner.style.marginLeft = '';
-                blogInner.style.marginRight = '';
-                blogInner.style.borderRadius = '';
-                if (bciHead) bciHead.style.borderRadius = '';
-                if (blogTitle) blogTitle.style.fontSize = '';
-                if (blogInnerRight) blogInnerRight.classList.remove('shown');
-            }
-
-            // Check if bci-head is no longer in view
-            if (bciHead && bcNavbar && bcCloseButton) {
-                const headRect = bciHead.getBoundingClientRect();
-                if (headRect.bottom <= 0) {
-                    // bci-head is no longer visible, move navbar to top
-                    bcNavbar.style.top = '0';
-                    bcNavbar.style.position = 'sticky';
-                    bcCloseButton.style.top = '15px';
-                    bcCloseButton.style.width = '36px';
-                    bcCloseButton.style.height = '36px';
-
-                    // Show side nav if available
-                    if (navMenu && typeof blogHeaders !== 'undefined' && blogHeaders.length > 0) {
-                        navMenu.classList.add('active');
+                    const rect = blogInner.getBoundingClientRect();
+                    if (rect.top <= 0) {
+                        // blog-container has reached the top, make it full width
+                        blogInner.style.width = '100%';
+                        blogInner.style.marginLeft = '0';
+                        blogInner.style.marginRight = '0';
+                        blogInner.style.borderRadius = '0';
+                        if (bciHead) bciHead.style.borderRadius = '0';
+                        if (blogTitle) blogTitle.style.fontSize = '3em';
+                        if (blogInnerRight) blogInnerRight.classList.add('shown');
+                    } else {
+                        // blog-container is not at the top, reset to original width
+                        blogInner.style.width = '';
+                        blogInner.style.marginLeft = '';
+                        blogInner.style.marginRight = '';
+                        blogInner.style.borderRadius = '';
+                        if (bciHead) bciHead.style.borderRadius = '';
+                        if (blogTitle) blogTitle.style.fontSize = '';
+                        if (blogInnerRight) blogInnerRight.classList.remove('shown');
                     }
-                } else {
-                    // bci-head is still visible, reset navbar
-                    bcNavbar.style.top = '-71px';
-                    bcNavbar.style.position = 'absolute';
-                    bcCloseButton.style.top = '20px';
-                    bcCloseButton.style.width = '40px';
-                    bcCloseButton.style.height = '40px';
 
-                    // Hide side nav
-                    if (navMenu) {
-                        navMenu.classList.remove('active', 'shown');
+                    // Check if bci-head is no longer in view
+                    if (bciHead && bcNavbar && bcCloseButton) {
+                        const headRect = bciHead.getBoundingClientRect();
+                        if (headRect.bottom <= 0) {
+                            // bci-head is no longer visible, move navbar to top
+                            bcNavbar.style.top = '0';
+                            bcNavbar.style.position = 'sticky';
+                            bcCloseButton.style.top = '15px';
+                            bcCloseButton.style.width = '36px';
+                            bcCloseButton.style.height = '36px';
+
+                            // Show side nav if available
+                            if (navMenu && typeof blogHeaders !== 'undefined' && blogHeaders.length > 0) {
+                                navMenu.classList.add('active');
+                            }
+                        } else {
+                            // bci-head is still visible, reset navbar
+                            bcNavbar.style.top = '-71px';
+                            bcNavbar.style.position = 'absolute';
+                            bcCloseButton.style.top = '20px';
+                            bcCloseButton.style.width = '40px';
+                            bcCloseButton.style.height = '40px';
+
+                            // Hide side nav
+                            if (navMenu) {
+                                navMenu.classList.remove('active', 'shown');
+                            }
+                        }
                     }
-                }
+
+                    isScrollTicking = false;
+                });
+
+                isScrollTicking = true;
             }
         });
 
@@ -614,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Helper function to close the blog container
-        function closeBlogContainer() {
+        function closeBlogContainer(updateHistory = true) {
             blogContainer.scrollTop = 0;
             blogContainer.classList.remove('shown');
             document.body.style.overflow = '';
@@ -624,9 +657,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Clean up URL
             currentBlogId = null;
-            const newUrl = new URL(window.location);
-            newUrl.searchParams.delete('id');
-            window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+            if (updateHistory) {
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.delete('id');
+                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+            }
         }
 
         // Handle click outside .bc-inner to close the blog container
