@@ -486,14 +486,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('popstate', (e) => {
         const p = new URLSearchParams(window.location.search);
         const id = p.get('id');
-        
+
         if (id) {
             if (currentBlogId !== id) {
-                 const targetBlock = document.querySelector(`.story-block[data-id="${id}"], .featured-story-container[data-id="${id}"]`);
-                 if (targetBlock) {
-                     const btn = targetBlock.querySelector('#read-story, .read-story') || targetBlock;
-                     if (btn) openBlogStory(btn, false);
-                 }
+                const targetBlock = document.querySelector(`.story-block[data-id="${id}"], .featured-story-container[data-id="${id}"]`);
+                if (targetBlock) {
+                    const btn = targetBlock.querySelector('#read-story, .read-story') || targetBlock;
+                    if (btn) openBlogStory(btn, false);
+                }
             }
         } else {
             // No ID -> Close if open
