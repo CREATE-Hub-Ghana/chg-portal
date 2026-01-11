@@ -963,21 +963,23 @@
     }
 
     .bc-nav-menu {
-        position: sticky;
+        position: absolute;
+        left: -205px;
+        margin-left: -180px;
         top: 50%;
         transform: translateY(-50%);
-        display: none;
+        display: flex;
         flex-direction: column;
-        width: 180px;
+        width: 200px;
         height: max-content;
         background-color: transparent;
         z-index: 99999;
-        gap: 2px;
+        gap: 3px;
         transition: all 0.3s ease-out;
 
         .bcnm-close-btn {
             position: relative;
-            right: 5px;
+            right: 1px;
             margin-left: auto;
             display: flex;
             justify-content: center;
@@ -995,11 +997,11 @@
                 width: 18px;
                 height: 18px;
                 object-fit: contain;
-                opacity: 0.8;
+                opacity: 0.5;
             }
 
             &:hover {
-                background-color: rgba(0, 0, 0, 0.05);
+                background-color: rgba(0, 0, 0, 0.15);
                 transition: all 0.3s ease-out;
             }
         }
@@ -1007,7 +1009,7 @@
         .bcnm-list {
             display: flex;
             flex-direction: column;
-            width: 100%;
+            width: max-content;
             height: max-content;
             background-color: transparent;
             transition: all 0.3s ease-out;
@@ -1015,7 +1017,7 @@
 
             .nm-list-bar {
                 display: flex;
-                width: 100%;
+                width: 205px;
                 height: 70px;
                 background-color: transparent;
                 cursor: pointer;
@@ -1023,35 +1025,144 @@
 
                 .nmlb-left {
                     display: flex;
-                    width: 87%;
+                    align-items: center;
+                    justify-content: center;
+                    width: 180px;
                     height: 100%;
                     background-color: white;
                     transition: all 0.3s ease-out;
                     box-shadow: 0px 2px 4px -1px #051c2c33, 0px 0px 1px 0px #051c2c33;
+
+                    span {
+                        display: flex;
+                        align-items: center;
+                        width: calc(100% - 40px);
+                        height: 75%;
+                        background-color: transparent;
+                        cursor: pointer;
+
+                        font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                        font-size: 0.75em;
+                        font-weight: 400;
+                        color: #444444;
+                        letter-spacing: 0.5px;
+                        line-height: 1.6;
+
+                        /* color: #2563eb; */
+                    }
                 }
 
                 .nmlb-right {
                     display: flex;
-                    width: 8%;
+                    align-items: center;
+                    justify-content: center;
+                    width: calc(100% - 192px);
                     height: 100%;
                     background-color: #1e3a8a;
                     transition: all 0.2s ease-out;
+
+                    .nmlbr-inner {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: calc(100% - 2px);
+                        height: calc(100% - 2px);
+                        transition: all 0.3s ease;
+                    }
                 }
 
                 &:hover {
                     .nmlb-right {
-                        width: 13%;
+                        width: calc(100% - 185px);
                         background-color: #0000EE;
                     }
                 }
             }
 
             .nm-list-bar.selected {
+
+                .nmlb-left {
+                    span {
+                        color: #2563eb;
+                    }
+                }
+
                 .nmlb-right {
-                    width: 13%;
+                    width: calc(100% - 185px);
                     background-color: #0000EE;
+
+                    .nmlbr-inner {
+                        background-image: url("../../Universal/Icons/arrow_right_white.svg");
+                        background-size: 18px 18px;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    }
                 }
             }
+        }
+    }
+
+    .bc-nav-menu.active {
+        position: sticky;
+        margin-left: -180px;
+
+        .bcnm-close-btn {
+            display: none;
+        }
+
+        .bcnm-list {
+
+            .nm-list-bar.selected {
+
+                .nmlb-right {
+                    width: calc(100% - 180px);
+
+                    .nmlbr-inner {
+                        background-image: url("../../Universal/Icons/arrow_right_white.svg");
+                    }
+                }
+
+                .nmlb-right:hover {
+                    .nmlbr-inner {
+                        background-color: white;
+                        background-image: url("../../Universal/Icons/arrow_right_blue.svg");
+                    }
+                }
+            }
+
+            .nm-list-bar:not(.selected) {
+                pointer-events: none;
+            }
+        }
+    }
+
+    .bc-nav-menu.active.shown {
+        margin-left: 0;
+
+        .bcnm-close-btn {
+            display: flex;
+        }
+
+        .nm-list-bar.selected {
+
+            .nmlb-right {
+                width: calc(100% - 185px);
+
+                .nmlbr-inner {
+                    background-image: none;
+                }
+
+                &:hover {
+                    .nmlbr-inner {
+                        background-color: #0000EE;
+                        background-image: none;
+                    }
+                }
+            }
+        }
+
+        .nm-list-bar:not(.selected) {
+            pointer-events: auto;
         }
     }
 
@@ -1271,7 +1382,7 @@
                             margin: 30px 0 0 0;
 
                             font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
-                            font-size: 1.8em;
+                            font-size: 2.7em;
                             /* font-weight: 400; */
                             color: #444444;
                             letter-spacing: 1px;

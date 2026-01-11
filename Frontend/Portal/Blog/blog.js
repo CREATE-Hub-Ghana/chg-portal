@@ -249,6 +249,145 @@ document.addEventListener('DOMContentLoaded', () => {
     const bciHead = document.querySelector('.bci-head');
     const blogTitle = blogContainer.querySelector('.blog-title');
 
+    // --- Side Navigation Menu Setup ---
+    const navMenu = document.querySelector('.bc-nav-menu');
+    const navList = document.querySelector('.bcnm-list');
+    const navCloseBtn = document.querySelector('.bcnm-close-btn');
+    let blogHeaders = [];
+
+    // Generate TOC based on story-chapter-section or h1, h2 in content
+    function generateBlogNavigation() {
+        if (!navList || !navMenu || !blogInner) return;
+
+        navList.innerHTML = '';
+
+        let targets = [];
+        const chapterSections = Array.from(blogInner.querySelectorAll('.story-chapter-section'));
+
+        if (chapterSections.length > 0) {
+            // Use chapter sections
+            targets = chapterSections.map(section => {
+                const titleEl = section.querySelector('.chapter-title');
+                // fallback to header text if no title span
+                const text = titleEl ? titleEl.textContent : (section.querySelector('.chapter-header')?.textContent || 'Section');
+                return { element: section, text: text };
+            });
+            // Force active state if at least one chapter section exists
+            // navMenu.classList.add('active'); // Changed: controlled by scroll
+        } else {
+            // Fallback to H1/H2
+            const headers = Array.from(blogInner.querySelectorAll('h1, h2'));
+            if (headers.length >= 2) {
+                targets = headers.map(h => ({ element: h, text: h.textContent }));
+                // navMenu.classList.add('active'); // Changed: controlled by scroll
+            } else {
+                navMenu.classList.remove('active', 'shown');
+                return;
+            }
+        }
+
+        // Just in case targets is empty despite logic above
+        if (targets.length === 0) {
+            navMenu.classList.remove('active', 'shown');
+            return;
+        }
+
+        // Initially hide the expanded menu and ensure not active until scroll
+        navMenu.classList.remove('shown');
+        navMenu.classList.remove('active'); // Reset state
+
+        blogHeaders = targets.map(t => t.element); // Update global for scroll spy
+
+        targets.forEach((target, idx) => {
+            const { element, text } = target;
+            if (!element.id) element.id = `blog-section-${idx}`;
+
+            const item = document.createElement('div');
+            item.className = 'nm-list-bar';
+            if (idx === 0) item.classList.add('selected');
+
+            const left = document.createElement('div');
+            left.className = 'nmlb-left';
+            const span = document.createElement('span');
+            span.textContent = text;
+            left.appendChild(span);
+
+            const right = document.createElement('div');
+            right.className = 'nmlb-right';
+
+            const rightInner = document.createElement('div');
+            rightInner.className = 'nmlbr-inner';
+            right.appendChild(rightInner);
+
+            item.appendChild(left);
+            item.appendChild(right);
+
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                // Toggle menu only when clicking the inner handle of the selected item
+                if (item.classList.contains('selected') && e.target.closest('.nmlbr-inner')) {
+                    navMenu.classList.toggle('shown');
+                    return;
+                }
+
+                // Calculate scroll position - account for sticky navbar e.g. 100px
+                const offset = 100;
+                // Using blogContainer as the scrollable context
+                const containerRect = blogContainer.getBoundingClientRect();
+                const elementRect = element.getBoundingClientRect();
+                const relativeTop = elementRect.top - containerRect.top + blogContainer.scrollTop;
+
+                blogContainer.scrollTo({
+                    top: relativeTop - offset,
+                    behavior: 'smooth'
+                });
+            });
+
+            navList.appendChild(item);
+        });
+    }
+
+    // Highlight menu item on scroll
+    function updateNavOnScroll() {
+        if (!blogHeaders.length || !navMenu || !navMenu.classList.contains('active')) return;
+
+        const offset = 180; // Distance from top to consider "active"
+        const containerTop = blogContainer.getBoundingClientRect().top;
+        let activeIdx = 0;
+
+        for (let i = 0; i < blogHeaders.length; i++) {
+            const rect = blogHeaders[i].getBoundingClientRect();
+            // Check if header is at or above the "reading line"
+            if (rect.top < containerTop + offset) {
+                activeIdx = i;
+            }
+        }
+
+        const items = navList.querySelectorAll('.nm-list-bar');
+        items.forEach((item, i) => {
+            if (i === activeIdx) item.classList.add('selected');
+            else item.classList.remove('selected');
+        });
+    }
+
+    // Event Listeners for Menu Toggle
+    if (navMenu) {
+        navMenu.addEventListener('click', (e) => {
+            // Prevent propagation but do not toggle on generic background clicks
+            // Strict Toggle: Only via .nmlbr-inner of selected item (handled in item click)
+            e.stopPropagation();
+        });
+    }
+
+    if (navCloseBtn) {
+        navCloseBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (navMenu) navMenu.classList.remove('shown');
+        });
+    }
+    // ----------------------------------
+
     // Track current blog ID
     let currentBlogId = null;
 
@@ -257,6 +396,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Get the parent story block (handles both standard blocks and featured)
         const storyBlock = btn.closest('.story-block') || btn.closest('.featured-story-container');
+
+        // Reset navbar to initial state
+        bcNavbar.style.top = '';
+        bcNavbar.style.position = '';
+
+        // Reset sidebar menu
+        if (navList) navList.innerHTML = '';
+        if (navMenu) navMenu.classList.remove('active', 'shown');
+
+        // Reset blog-inner styles
+        blogInner.style.width = '';
+        blogInner.style.marginLeft = '';
+        blogInner.style.marginRight = '';
+        blogInner.style.borderRadius = '';
+
+        blogContainer.classList.add('shown');
+        document.body.style.overflow = 'hidden';
 
         if (storyBlock) {
             // Get ID
@@ -277,6 +433,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         const html = await response.text();
                         blogInner.innerHTML = html;
+
+                        // Generate Navigation Menu for new content
+                        generateBlogNavigation();
 
                         // Attach event listener to the new bc-arrow-down button
                         const bcArrowDown = blogInner.querySelector('.bc-arrow-down');
@@ -304,19 +463,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-
-        // Reset navbar to initial state
-        bcNavbar.style.top = '';
-        bcNavbar.style.position = '';
-
-        // Reset blog-inner styles
-        blogInner.style.width = '';
-        blogInner.style.marginLeft = '';
-        blogInner.style.marginRight = '';
-        blogInner.style.borderRadius = '';
-
-        blogContainer.classList.add('shown');
-        document.body.style.overflow = 'hidden';
     }
 
     readStoryButtons.forEach(btn => {
@@ -398,6 +544,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update navbar progress bar
             updateNavbarProgressBar();
 
+            // Update sidebar navigation selection
+            updateNavOnScroll();
+
             const rect = blogInner.getBoundingClientRect();
             if (rect.top <= 0) {
                 // blog-container has reached the top, make it full width
@@ -429,6 +578,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     bcCloseButton.style.top = '15px';
                     bcCloseButton.style.width = '36px';
                     bcCloseButton.style.height = '36px';
+
+                    // Show side nav if available
+                    if (navMenu && typeof blogHeaders !== 'undefined' && blogHeaders.length > 0) {
+                        navMenu.classList.add('active');
+                    }
                 } else {
                     // bci-head is still visible, reset navbar
                     bcNavbar.style.top = '-71px';
@@ -436,6 +590,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     bcCloseButton.style.top = '20px';
                     bcCloseButton.style.width = '40px';
                     bcCloseButton.style.height = '40px';
+
+                    // Hide side nav
+                    if (navMenu) {
+                        navMenu.classList.remove('active', 'shown');
+                    }
                 }
             }
         });
@@ -459,6 +618,9 @@ document.addEventListener('DOMContentLoaded', () => {
             blogContainer.scrollTop = 0;
             blogContainer.classList.remove('shown');
             document.body.style.overflow = '';
+
+            // Clean up sidebar menu
+            if (navMenu) navMenu.classList.remove('active', 'shown');
 
             // Clean up URL
             currentBlogId = null;
