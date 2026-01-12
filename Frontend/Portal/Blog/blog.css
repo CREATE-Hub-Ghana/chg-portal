@@ -842,7 +842,7 @@
             justify-content: center;
             width: max-content;
             height: max-content;
-            font-family: "DM Sans", Georgia, "Times New Roman", serif;
+            font-family: "Inter", Georgia, "Times New Roman", serif;
             font-size: 1.15em;
             font-weight: 400;
             color: rgba(22, 15, 54, 0.9);
@@ -1048,7 +1048,7 @@
                         background-color: transparent;
                         cursor: pointer;
 
-                        font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                        font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                         font-size: 0.75em;
                         font-weight: 400;
                         color: #444444;
@@ -1267,7 +1267,7 @@
                 height: max-content;
                 margin-top: 20px;
 
-                font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                 font-size: 0.8em;
                 font-weight: 300;
                 color: #fff;
@@ -1373,7 +1373,7 @@
                     text-align: left;
                     width: calc(55% + 40px);
                     height: max-content;
-                    font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                    font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                     font-size: 1.75rem;
                     font-weight: 200;
                     /* font-style: italic; */
@@ -1426,7 +1426,7 @@
                             height: max-content;
                             margin: 30px 0 0 0;
 
-                            font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                            font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                             font-size: 2.7em;
                             /* font-weight: 400; */
                             color: #444444;
@@ -1442,7 +1442,7 @@
                             margin-top: 20px;
 
 
-                            font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                            font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                             font-size: 1em;
                             font-weight: 400;
                             color: #444444;
@@ -1471,7 +1471,7 @@
                             width: 100%;
                             height: max-content;
 
-                            font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                            font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                             font-size: 1em;
                             font-weight: 400;
                             color: #444444;
@@ -1551,7 +1551,7 @@
                             justify-content: center;
                             width: max-content;
                             height: max-content;
-                            font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                            font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                             font-size: 1em;
                             font-weight: 600;
                             color: #160f36e6;
@@ -1600,7 +1600,7 @@
                                     text-align: left;
                                     width: 100%;
                                     height: max-content;
-                                    font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                                    font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                                     font-size: 1.3em;
                                     font-weight: 250;
                                     /* font-style: italic; */
@@ -1740,7 +1740,7 @@
                                     justify-content: center;
                                     width: max-content;
                                     height: max-content;
-                                    font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                                    font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                                     font-size: 0.875rem;
                                     font-weight: 350;
                                     color: white;
@@ -1791,7 +1791,7 @@
 
 
 
-                                        font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                                        font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                                         font-size: 1.8em;
                                         /* font-weight: 400; */
                                         color: #444444;
@@ -1811,7 +1811,7 @@
                                         margin-top: 20px;
 
 
-                                        font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                                        font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                                         font-size: 1em;
                                         font-weight: 400;
                                         color: #444444;
@@ -1840,7 +1840,7 @@
                                         /* width: 100%; */
                                         height: max-content;
 
-                                        font-family: "DM Sans", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
+                                        font-family: "Inter", "Helvetica Neue", Calibri, Corbel, Helvetica, Roboto, Droid, sans-serif;
                                         font-size: 1em;
                                         font-weight: 400;
                                         color: #444444;
