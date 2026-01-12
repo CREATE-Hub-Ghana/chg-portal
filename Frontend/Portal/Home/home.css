@@ -500,6 +500,7 @@ body {
                 letter-spacing: 0.3px;
                 line-height: 1.2;
                 background-color: transparent;
+                cursor: pointer;
             }
         }
 
@@ -521,6 +522,7 @@ body {
                 letter-spacing: 0.2px;
                 line-height: 1.6;
                 background-color: transparent;
+                cursor: pointer;
             }
         }
 

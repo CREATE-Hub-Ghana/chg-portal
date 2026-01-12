@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
 
                 // Toggle menu only when clicking the inner handle of the selected item
-                if (item.classList.contains('selected') && e.target.closest('.nmlbr-inner')) {
+                if (item.classList.contains('selected') && e.target.closest('.nmlb-right')) {
                     navMenu.classList.toggle('shown');
                     return;
                 }
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navMenu) {
         navMenu.addEventListener('click', (e) => {
             // Prevent propagation but do not toggle on generic background clicks
-            // Strict Toggle: Only via .nmlbr-inner of selected item (handled in item click)
+            // Strict Toggle: Only via .nmlb-right of selected item (handled in item click)
             e.stopPropagation();
         });
     }
@@ -608,7 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             // Show side nav if available
                             if (navMenu && typeof blogHeaders !== 'undefined' && blogHeaders.length > 0) {
-                                navMenu.classList.add('active');
+                                navMenu.classList.add('active', 'shown');
                             }
                         } else {
                             // bci-head is still visible, reset navbar

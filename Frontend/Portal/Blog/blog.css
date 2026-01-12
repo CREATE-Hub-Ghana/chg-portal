@@ -415,6 +415,7 @@
     padding-bottom: 80px;
 
     .story-block {
+        position: relative;
         display: flex;
         cursor: pointer;
         flex-direction: column;
@@ -523,6 +524,8 @@
         }
 
         .sb-bottom {
+            position: relative;
+            bottom: 0;
             display: flex;
             align-items: center;
             width: calc(100% - 40px);
@@ -532,9 +535,10 @@
 
             .story-details {
                 display: flex;
-                flex-direction: column;
-                justify-content: center;
-                width: max-content;
+                /* flex-direction: column; */
+                justify-content: space-between;
+                align-content: center;
+                width: 100%;
                 height: max-content;
                 gap: 8px;
                 background-color: transparent;
@@ -575,7 +579,7 @@
 
             button {
                 margin-left: auto;
-                display: flex;
+                display: none;
                 align-items: center;
                 justify-content: center;
                 width: max-content;
@@ -993,6 +997,9 @@
             border: none;
             cursor: pointer;
 
+            opacity: 1;
+            pointer-events: auto;
+
             img {
                 width: 18px;
                 height: 18px;
@@ -1107,7 +1114,8 @@
         margin-left: -180px;
 
         .bcnm-close-btn {
-            display: none;
+            opacity: 0;
+            pointer-events: none;
         }
 
         .bcnm-list {
@@ -1140,7 +1148,8 @@
         margin-left: 0;
 
         .bcnm-close-btn {
-            display: flex;
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .nm-list-bar.selected {
