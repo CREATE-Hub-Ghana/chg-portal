@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initially hide the expanded menu and ensure not active until scroll
         navMenu.classList.remove('shown');
-        navMenu.classList.remove('active'); // Reset state
+        navMenu.classList.remove('active');
 
         blogHeaders = targets.map(t => t.element); // Update global for scroll spy
 
@@ -608,7 +608,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             // Show side nav if available
                             if (navMenu && typeof blogHeaders !== 'undefined' && blogHeaders.length > 0) {
-                                navMenu.classList.add('active', 'shown');
+                                // Only auto-expand if it wasn't already active (first appearance)
+                                if (!navMenu.classList.contains('active')) {
+                                    navMenu.classList.add('shown');
+                                }
+                                navMenu.classList.add('active');
                             }
                         } else {
                             // bci-head is still visible, reset navbar
