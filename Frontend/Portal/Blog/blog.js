@@ -411,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         blogInner.style.marginLeft = '';
         blogInner.style.marginRight = '';
         blogInner.style.borderRadius = '';
+        blogInner.style.top = '';
 
         blogContainer.classList.add('shown');
         document.body.style.overflow = 'hidden';
@@ -915,6 +916,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('No download link provided');
                 alert('Download link not available');
             }
+        });
+    }
+
+    // Handle back-to-top in blog container
+    const bcBackToTopBtn = document.getElementById('bc-back-to-top');
+
+    if (blogContainer && bcBackToTopBtn) {
+        // Show/hide button on scroll
+        blogContainer.addEventListener('scroll', () => {
+            if (blogContainer.scrollTop > 300) {
+                bcBackToTopBtn.classList.add('visible');
+            } else {
+                bcBackToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Scroll to top on click
+        bcBackToTopBtn.addEventListener('click', () => {
+            blogContainer.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            blogInner.style.top = '0';
         });
     }
 });
