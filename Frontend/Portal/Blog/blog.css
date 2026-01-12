@@ -1247,9 +1247,9 @@
                 width: 65%;
                 min-width: 700px;
                 height: max-content;
-                font-family: "Bower", Georgia, "Times New Roman", serif;
+                font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
                 font-size: 2.5em;
-                font-weight: 300;
+                font-weight: 500;
                 color: #fff;
                 letter-spacing: 0.5px;
                 text-shadow: rgba(0, 0, 0, .2) 1px 1px 0;
@@ -1362,7 +1362,7 @@
                 /* justify-content: center; */
                 width: 100%;
                 height: max-content;
-                /* font-family: "Bower", Georgia, "Times New Roman", serif; */
+                /* font-family: "Source Serif 4", Georgia, "Times New Roman", serif; */
                 background-color: transparent;
 
 
@@ -1755,9 +1755,9 @@
                                     text-align: center;
                                     width: max-content;
                                     height: max-content;
-                                    font-family: "Bower", Georgia, "Times New Roman", serif;
+                                    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
                                     font-size: 2.3em;
-                                    font-weight: 300;
+                                    font-weight: 500;
                                     color: #fff;
                                     letter-spacing: 1px;
                                     text-shadow: rgba(0, 0, 0, .2) 1px 1px 0;

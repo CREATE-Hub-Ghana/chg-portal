@@ -925,7 +925,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (blogContainer && bcBackToTopBtn) {
         // Show/hide button on scroll
         blogContainer.addEventListener('scroll', () => {
-            if (blogContainer.scrollTop > 300) {
+            // Show only when side nav is active and navbar is visible (sticky)
+            const isNavActive = navMenu && navMenu.classList.contains('active');
+            const isNavbarSeen = bcNavbar && bcNavbar.style.top === '0';
+
+            if (isNavActive && isNavbarSeen) {
                 bcBackToTopBtn.classList.add('visible');
             } else {
                 bcBackToTopBtn.classList.remove('visible');
