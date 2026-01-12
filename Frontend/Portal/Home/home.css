@@ -1453,7 +1453,8 @@ body {
         width: 90%;
         height: 380px;
         border-radius: 20px;
-        background: linear-gradient(135deg, #dc2626 0%, #db2777 100%);
+        /* background: linear-gradient(135deg, #dc2626 0%, #db2777 100%); */
+        background: #04af98;
 
         gap: 26px;
 
@@ -1529,7 +1530,8 @@ body {
                 font-family: 'Poppins', Arial, sans-serif;
                 font-size: 0.95em;
                 font-weight: bold;
-                color: #dc2626;
+                /* color: #dc2626; */
+                color: #160f36;
                 letter-spacing: 0.5px;
                 background-color: #fff;
                 transition: all 0.3s ease;
@@ -1597,7 +1599,8 @@ body {
                 &:hover {
                     transform: scale(1.01);
                     background-color: #fff;
-                    color: #dc2626;
+                    /* color: #dc2626; */
+                    color: #160f36;
                     cursor: pointer;
                     transition: all 0.3s ease;
                 }

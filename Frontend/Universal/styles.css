@@ -650,7 +650,8 @@ footer {
                     &:hover {
                         transform: translateY(-1px);
                         scale: 1.025;
-                        background-color: rgb(37 99 235);
+                        /* background-color: rgb(37 99 235); */
+                        background-color: #04af98;
                         cursor: pointer;
                     }
 
@@ -721,8 +722,8 @@ footer {
                         bottom: -4px;
                         width: 0px;
                         height: 3px;
-                        /* background-color: #04af98; */
-                        background-color: hsl(224, 100%, 55%);
+                        background-color: #04af98;
+                        /* background-color: hsl(224, 100%, 55%); */
                         transition: all 0.4s ease;
                     }
 
@@ -889,10 +890,10 @@ footer {
                     width: 50px;
                     height: 40px;
                     border-radius: 0 10px 10px 0;
-                    border: 1px solid #1d4ed8;
-                    background-color: #1d4ed8;
-                    /* border: 1px solid #04af98;
-                    background-color: #04af98; */
+                    /* border: 1px solid #1d4ed8;
+                    background-color: #1d4ed8; */
+                    border: 1px solid #04af98;
+                    background-color: #04af98;
 
                     img {
                         width: 20px;
