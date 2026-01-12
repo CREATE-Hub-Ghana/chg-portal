@@ -260,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!navList || !navMenu || !blogInner) return;
 
         navList.innerHTML = '';
+        blogHeaders = [];
 
         let targets = [];
         const chapterSections = Array.from(blogInner.querySelectorAll('.story-chapter-section'));
@@ -435,6 +436,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         const html = await response.text();
                         blogInner.innerHTML = html;
+
+                        // Update download button based on story content
+                        const downloadBtnEl = document.getElementById('download-blog-btn');
+                        if (downloadBtnEl) {
+                            const linkEl = blogInner.querySelector('#story-download-link');
+                            if (linkEl && linkEl.dataset.link) {
+                                downloadBtnEl.setAttribute('data-link', linkEl.dataset.link);
+                                downloadBtnEl.style.display = ''; // Restore default display
+                            } else {
+                                downloadBtnEl.removeAttribute('data-link');
+                                downloadBtnEl.style.display = 'none'; // Hide button
+                            }
+                        }
 
                         // Generate Navigation Menu for new content
                         generateBlogNavigation();
