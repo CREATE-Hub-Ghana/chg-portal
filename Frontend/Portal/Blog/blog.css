@@ -408,13 +408,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    /* align-items: center; */
     gap: 15px;
-    width: max-content;
+    width: 100%;
     max-width: 910px;
     margin: 0 auto;
-    height: max-content;
-    max-height: 1120px;
+    height: auto;
+    max-height: 1260px;
     background-color: transparent;
     padding-bottom: 100px;
 
@@ -425,7 +424,7 @@
         flex-direction: column;
         align-items: center;
         width: 265px;
-        height: -webkit-fit-content;
+        height: auto;
         background-color: #f9fafb;
         /* border-radius: 20px; */
         overflow: hidden;
@@ -561,6 +560,7 @@
     .story-block:nth-child(4) {
         width: 350px;
         left: -85px;
+        height: 480px;
 
         .sb-image {
             height: 100%;
@@ -574,7 +574,7 @@
     .story-block:nth-child(5) {
         left: -85px;
         top: -55px;
-        height: 500px;
+        height: 400px;
 
         .sb-image {
             height: 100%;
@@ -587,8 +587,9 @@
 
     .story-block:nth-child(6) {
         left: -85px;
-        top: -135px;
+        top: -69px;
         width: 265px;
+        height: 600px;
 
         .sb-image {
             height: 100%;
@@ -600,10 +601,11 @@
     }
 
     .story-block:nth-child(7) {
-        top: -209px;
         width: 265px;
-        height: 290px;
+        height: 350px;
+
         left: -10px;
+        top: -120px;
 
         .sb-image {
             height: 100%;
@@ -616,7 +618,8 @@
 
     .story-block:nth-child(8) {
         width: 265px;
-        top: -55px;
+        height: 485px;
+        top: -255px;
         left: -10px;
 
         .sb-image {
@@ -629,9 +632,8 @@
     }
 
     .story-block:nth-child(9) {
-        top: -392px;
-        height: 400px;
-
+        top: -70px;
+        height: 300px;
         width: 330px;
         left: -10px;
 
