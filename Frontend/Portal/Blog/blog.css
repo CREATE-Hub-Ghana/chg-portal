@@ -426,10 +426,7 @@
         width: 265px;
         height: auto;
         background-color: #f9fafb;
-        /* border-radius: 20px; */
         overflow: hidden;
-        /* padding-bottom: 30px; */
-
         transition: all 0.25s ease;
 
         .sb-image {
@@ -526,7 +523,7 @@
             height: 100%;
 
             img {
-                object-fit: inherit;
+                object-fit: cover;
             }
         }
     }
@@ -1717,7 +1714,7 @@
                         .scc-left {
                             display: flex;
                             width: 20%;
-                            height: -webkit-fill-available;
+                            height: auto;
                             background-color: transparent;
 
                             .sccl-inner {
@@ -1740,7 +1737,7 @@
                             align-items: center;
                             width: 60%;
                             min-width: 680px;
-                            height: -webkit-fill-available;
+                            height: auto;
                             background-color: transparent;
                             /* padding: 0 0 0 25px; */
 
@@ -1795,7 +1792,7 @@
                                     display: flex;
                                     flex-direction: column;
                                     width: calc(84.44% + 0.03px);
-                                    height: -webkit-fill-available;
+                                    height: auto;
                                     background-color: transparent;
                                     margin-top: 60px;
                                     margin-left: 20px;
@@ -1908,7 +1905,7 @@
                             display: flex;
                             width: 20%;
                             min-width: 300px;
-                            height: -webkit-fill-available;
+                            height: auto;
                             background-color: transparent;
                             margin-left: auto;
 
