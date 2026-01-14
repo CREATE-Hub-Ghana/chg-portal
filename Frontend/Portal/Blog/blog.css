@@ -603,6 +603,7 @@
         top: -209px;
         width: 265px;
         height: 290px;
+        left: -10px;
 
         .sb-image {
             height: 100%;
@@ -616,6 +617,7 @@
     .story-block:nth-child(8) {
         width: 265px;
         top: -55px;
+        left: -10px;
 
         .sb-image {
             height: 100%;
@@ -630,7 +632,8 @@
         top: -392px;
         height: 400px;
 
-        width: 350px;
+        width: 330px;
+        left: -10px;
 
         .sb-image {
             height: 100%;
